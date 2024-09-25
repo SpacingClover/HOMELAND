@@ -1,0 +1,741 @@
+[gd_scene load_steps=30 format=3 uid="uid://c84jwenigb4p3"]
+
+[ext_resource type="Script" path="res://scripts/ui_scripts/titlescreen.gd" id="1_g6dcv"]
+[ext_resource type="Script" path="res://scripts/ui_scripts/cursor.gd" id="2_x2uka"]
+[ext_resource type="PackedScene" uid="uid://4hls5yhc7can" path="res://ui/GameView.tscn" id="3_ksmll"]
+[ext_resource type="PackedScene" uid="uid://c4e2ehsrm1opl" path="res://scenes/tscn/2_point_5d.tscn" id="4_qe4dl"]
+[ext_resource type="Script" path="res://scripts/ui_scripts/title.gd" id="5_grq5e"]
+[ext_resource type="Texture2D" uid="uid://b18s7s46v30pi" path="res://visuals/spritesheets/ui/title2.png" id="6_qperw"]
+[ext_resource type="Shader" path="res://visuals/shaders/overlay.gdshader" id="7_fqb0w"]
+[ext_resource type="Texture2D" uid="uid://cec8ciklin8ok" path="res://visuals/spritesheets/ui/subtitle.png" id="8_hsgpq"]
+[ext_resource type="Script" path="res://ui/pausescreen.gd" id="9_myjrj"]
+[ext_resource type="PackedScene" uid="uid://tw37dldaisdv" path="res://scenes/tscn/circuitboard.tscn" id="10_o6hli"]
+[ext_resource type="Script" path="res://scripts/ui_scripts/lists.gd" id="11_syu00"]
+[ext_resource type="Theme" uid="uid://3ijvhmp2ffkw" path="res://visuals/themes/new_theme.tres" id="12_k1pjk"]
+[ext_resource type="FontFile" uid="uid://dwyueijbfacs3" path="res://visuals/fonts/PixeloidSans.ttf" id="13_3wi7r"]
+[ext_resource type="Texture2D" uid="uid://byeccdr3sgofy" path="res://visuals/spritesheets/ui/listslines.png" id="14_ovj8m"]
+[ext_resource type="PackedScene" uid="uid://ch5ifg15rdpl5" path="res://scenes/tscn/3d_view.tscn" id="15_or3fd"]
+[ext_resource type="Script" path="res://scripts/ui_scripts/buttons.gd" id="16_bwl38"]
+[ext_resource type="Texture2D" uid="uid://clgw7lwx6wysw" path="res://visuals/spritesheets/ui/meu.png" id="17_xaylg"]
+[ext_resource type="PackedScene" uid="uid://c2la75hc0d25e" path="res://scenes/scn/map_view.scn" id="18_72ip8"]
+[ext_resource type="Script" path="res://scripts/ui_scripts/extra.gd" id="19_3l68v"]
+[ext_resource type="Texture2D" uid="uid://ckpsxewlt1t7w" path="res://visuals/spritesheets/ui/buttonss.png" id="20_hinjx"]
+[ext_resource type="PackedScene" uid="uid://dlvp4vkjg4we" path="res://ui/transition.tscn" id="21_v0n60"]
+[ext_resource type="Script" path="res://scripts/ui_scripts/dev_output.gd" id="22_ok02m"]
+[ext_resource type="Script" path="res://scripts/Game/Main/MusicManager.gd" id="23_ldrbm"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_wvrte"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tq0sg"]
+bg_color = Color(1, 0.376471, 0, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_glvoe"]
+shader = ExtResource("7_fqb0w")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ybgyt"]
+bg_color = Color(0.952941, 0.294118, 0, 1)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_v3qwv"]
+shader = ExtResource("7_fqb0w")
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4r8kd"]
+bg_color = Color(0, 0, 0, 0.333333)
+
+[node name="main" type="Control"]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+script = ExtResource("1_g6dcv")
+
+[node name="cursor" type="MeshInstance2D" parent="."]
+process_mode = 3
+self_modulate = Color(1, 0.52549, 0, 1)
+top_level = true
+position = Vector2(155.75, 53.7602)
+scale = Vector2(18.5204, 18.5204)
+mesh = SubResource("SphereMesh_wvrte")
+script = ExtResource("2_x2uka")
+
+[node name="cursor2" type="MeshInstance2D" parent="cursor"]
+modulate = Color(0.952941, 0.294118, 0, 1)
+show_behind_parent = true
+scale = Vector2(1.215, 1.215)
+mesh = SubResource("SphereMesh_wvrte")
+
+[node name="Panel" type="Panel" parent="."]
+layout_mode = 0
+offset_left = 374.0
+offset_top = 114.0
+offset_right = 436.0
+offset_bottom = 176.0
+scale = Vector2(19.5552, 13.3319)
+theme_override_styles/panel = SubResource("StyleBoxFlat_tq0sg")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="."]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 399.0
+offset_top = 183.0
+offset_right = 1571.0
+offset_bottom = 955.0
+grow_horizontal = 2
+grow_vertical = 2
+scale = Vector2(0.374972, 0.374972)
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="GameView1" parent="HBoxContainer/VBoxContainer" instance=ExtResource("3_ksmll")]
+layout_mode = 2
+shooterscene = true
+
+[node name="2point5D" parent="HBoxContainer/VBoxContainer/GameView1" instance=ExtResource("4_qe4dl")]
+
+[node name="title" type="ScrollContainer" parent="HBoxContainer/VBoxContainer/GameView1"]
+process_mode = 3
+layout_mode = 2
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 0
+script = ExtResource("5_grq5e")
+
+[node name="BackBufferCopy" type="BackBufferCopy" parent="HBoxContainer/VBoxContainer/GameView1/title"]
+position = Vector2(740.724, 274.023)
+scale = Vector2(24.2943, 24.2943)
+
+[node name="effect" type="Sprite2D" parent="HBoxContainer/VBoxContainer/GameView1/title/BackBufferCopy"]
+texture = ExtResource("6_qperw")
+hframes = 3
+vframes = 8
+frame = 21
+
+[node name="text" type="Sprite2D" parent="HBoxContainer/VBoxContainer/GameView1/title/BackBufferCopy"]
+material = SubResource("ShaderMaterial_glvoe")
+texture = ExtResource("6_qperw")
+region_enabled = true
+region_rect = Rect2(0, 0, 41, 12)
+
+[node name="effect2" type="Sprite2D" parent="HBoxContainer/VBoxContainer/GameView1/title/BackBufferCopy"]
+position = Vector2(0.73463, 12.6354)
+rotation = 3.14159
+scale = Vector2(0.83, 0.32)
+texture = ExtResource("6_qperw")
+hframes = 3
+vframes = 8
+frame = 21
+
+[node name="text2" type="Sprite2D" parent="HBoxContainer/VBoxContainer/GameView1/title/BackBufferCopy"]
+material = SubResource("ShaderMaterial_glvoe")
+position = Vector2(0.73463, 12.6387)
+scale = Vector2(0.83, 0.8)
+texture = ExtResource("8_hsgpq")
+region_enabled = true
+region_rect = Rect2(0, 0, 41, 5)
+
+[node name="effect3" type="Sprite2D" parent="HBoxContainer/VBoxContainer/GameView1/title/BackBufferCopy"]
+position = Vector2(-1.05281, 17.8593)
+rotation = 3.14159
+scale = Vector2(0.261655, 0.32)
+texture = ExtResource("6_qperw")
+hframes = 3
+vframes = 8
+frame = 21
+
+[node name="text3" type="Sprite2D" parent="HBoxContainer/VBoxContainer/GameView1/title/BackBufferCopy"]
+material = SubResource("ShaderMaterial_glvoe")
+position = Vector2(-1.05269, 17.7968)
+scale = Vector2(0.83, 0.8)
+texture = ExtResource("8_hsgpq")
+region_enabled = true
+region_rect = Rect2(0, 6, 13, 5)
+
+[node name="pausetopleft" type="PanelContainer" parent="HBoxContainer/VBoxContainer/GameView1"]
+visible = false
+light_mask = 0
+layout_mode = 2
+script = ExtResource("9_myjrj")
+
+[node name="Panel" type="Panel" parent="HBoxContainer/VBoxContainer/GameView1/pausetopleft"]
+light_mask = 0
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_ybgyt")
+
+[node name="Label" type="Label" parent="HBoxContainer/VBoxContainer/GameView1/pausetopleft/Panel"]
+layout_mode = 0
+offset_right = 401.0
+offset_bottom = 124.0
+theme_override_font_sizes/font_size = 151
+text = "paused"
+
+[node name="GameView2" parent="HBoxContainer/VBoxContainer" instance=ExtResource("3_ksmll")]
+layout_mode = 2
+omniscroll = true
+clicking2d = true
+
+[node name="circuitboard" parent="HBoxContainer/VBoxContainer/GameView2" instance=ExtResource("10_o6hli")]
+
+[node name="lists" type="ScrollContainer" parent="HBoxContainer/VBoxContainer/GameView2"]
+process_mode = 3
+layout_mode = 2
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 0
+script = ExtResource("11_syu00")
+
+[node name="Control" type="Control" parent="HBoxContainer/VBoxContainer/GameView2/lists"]
+material = SubResource("ShaderMaterial_v3qwv")
+layout_mode = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="HBoxContainer/VBoxContainer/GameView2/lists/Control"]
+process_mode = 1
+layout_mode = 0
+offset_left = 180.682
+offset_top = 268.758
+offset_right = 1021.68
+offset_bottom = 714.758
+scale = Vector2(1.11422, 1.11422)
+horizontal_scroll_mode = 3
+vertical_scroll_mode = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/VBoxContainer/GameView2/lists/Control/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Button" type="Button" parent="HBoxContainer/VBoxContainer/GameView2/lists/Control/ScrollContainer/VBoxContainer"]
+layout_mode = 2
+theme = ExtResource("12_k1pjk")
+theme_override_fonts/font = ExtResource("13_3wi7r")
+theme_override_font_sizes/font_size = 80
+text = "SAMPLETEXT"
+alignment = 0
+clip_text = true
+
+[node name="Marker2D" type="Marker2D" parent="HBoxContainer/VBoxContainer/GameView2/lists/Control/ScrollContainer/VBoxContainer/Button"]
+position = Vector2(-83.6154, 46.5385)
+
+[node name="Sprite2D" type="Sprite2D" parent="HBoxContainer/VBoxContainer/GameView2/lists/Control"]
+position = Vector2(578.045, 436.771)
+scale = Vector2(27.9953, 27.9953)
+texture = ExtResource("14_ovj8m")
+region_enabled = true
+region_rect = Rect2(0, 1, 32, 26)
+
+[node name="catagory" type="Label" parent="HBoxContainer/VBoxContainer/GameView2/lists/Control"]
+texture_filter = 1
+layout_mode = 0
+offset_left = 188.683
+offset_top = 92.7452
+offset_right = 887.683
+offset_bottom = 190.745
+scale = Vector2(1.13087, 1.13684)
+theme = ExtResource("12_k1pjk")
+theme_override_colors/font_color = Color(1, 0.596078, 0, 1)
+theme_override_fonts/font = ExtResource("13_3wi7r")
+theme_override_font_sizes/font_size = 80
+text = "CATAGORY TITLE"
+vertical_alignment = 2
+
+[node name="pausebottomleft" type="PanelContainer" parent="HBoxContainer/VBoxContainer/GameView2"]
+visible = false
+self_modulate = Color(1, 1, 1, 0)
+light_mask = 0
+layout_mode = 2
+script = ExtResource("9_myjrj")
+screen_pos = 2
+
+[node name="Panel" type="Panel" parent="HBoxContainer/VBoxContainer/GameView2/pausebottomleft"]
+light_mask = 0
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_ybgyt")
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="GameView3" parent="HBoxContainer/VBoxContainer2" instance=ExtResource("3_ksmll")]
+layout_mode = 2
+orbit3d = true
+
+[node name="3d view" parent="HBoxContainer/VBoxContainer2/GameView3" instance=ExtResource("15_or3fd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00182092, 0, 0)
+
+[node name="buttons" type="Control" parent="HBoxContainer/VBoxContainer2/GameView3"]
+process_mode = 3
+layout_mode = 2
+script = ExtResource("16_bwl38")
+
+[node name="BackBufferCopy" type="BackBufferCopy" parent="HBoxContainer/VBoxContainer2/GameView3/buttons"]
+position = Vector2(643.499, 215.352)
+scale = Vector2(23.6064, 23.6064)
+
+[node name="effect2" type="Sprite2D" parent="HBoxContainer/VBoxContainer2/GameView3/buttons/BackBufferCopy"]
+modulate = Color(1, 1, 1, 0.396078)
+position = Vector2(-16.6387, -2.53621)
+rotation = 6.28318
+scale = Vector2(0.334392, 0.386492)
+texture = ExtResource("6_qperw")
+hframes = 3
+vframes = 8
+frame = 21
+region_rect = Rect2(0, 0, 123, 96)
+
+[node name="text2" type="Sprite2D" parent="HBoxContainer/VBoxContainer2/GameView3/buttons/BackBufferCopy"]
+material = SubResource("ShaderMaterial_glvoe")
+position = Vector2(-16.6511, -2.41787)
+texture = ExtResource("17_xaylg")
+region_enabled = true
+region_rect = Rect2(0, 0, 14, 5)
+
+[node name="effect3" type="Sprite2D" parent="HBoxContainer/VBoxContainer2/GameView3/buttons/BackBufferCopy"]
+position = Vector2(-8.29369, 3.86861)
+scale = Vector2(0.748183, 0.386492)
+texture = ExtResource("6_qperw")
+hframes = 3
+vframes = 8
+frame = 21
+region_rect = Rect2(0, 0, 123, 96)
+
+[node name="text3" type="Sprite2D" parent="HBoxContainer/VBoxContainer2/GameView3/buttons/BackBufferCopy"]
+material = SubResource("ShaderMaterial_glvoe")
+position = Vector2(-8.24355, 4.0298)
+texture = ExtResource("17_xaylg")
+region_enabled = true
+region_rect = Rect2(0, 15, 31, 5)
+
+[node name="effect4" type="Sprite2D" parent="HBoxContainer/VBoxContainer2/GameView3/buttons/BackBufferCopy"]
+position = Vector2(-8.5695, 10.3591)
+scale = Vector2(0.728011, 0.386492)
+texture = ExtResource("6_qperw")
+hframes = 3
+vframes = 8
+frame = 21
+region_rect = Rect2(0, 0, 123, 96)
+
+[node name="text4" type="Sprite2D" parent="HBoxContainer/VBoxContainer2/GameView3/buttons/BackBufferCopy"]
+material = SubResource("ShaderMaterial_glvoe")
+position = Vector2(-8.56593, 10.3984)
+texture = ExtResource("17_xaylg")
+region_enabled = true
+region_rect = Rect2(0, 10, 30, 5)
+
+[node name="effect5" type="Sprite2D" parent="HBoxContainer/VBoxContainer2/GameView3/buttons/BackBufferCopy"]
+position = Vector2(-17.0776, 16.4053)
+scale = Vector2(0.312983, 0.386492)
+texture = ExtResource("6_qperw")
+hframes = 3
+vframes = 8
+frame = 21
+region_rect = Rect2(0, 0, 123, 96)
+
+[node name="text5" type="Sprite2D" parent="HBoxContainer/VBoxContainer2/GameView3/buttons/BackBufferCopy"]
+material = SubResource("ShaderMaterial_glvoe")
+position = Vector2(-17.1091, 16.5237)
+texture = ExtResource("17_xaylg")
+region_enabled = true
+region_rect = Rect2(0, 20, 13, 5)
+
+[node name="effect6" type="Sprite2D" parent="HBoxContainer/VBoxContainer2/GameView3/buttons/BackBufferCopy"]
+position = Vector2(-16.5824, 22.6389)
+scale = Vector2(0.338109, 0.411189)
+texture = ExtResource("6_qperw")
+hframes = 3
+vframes = 8
+frame = 21
+region_rect = Rect2(0, 0, 123, 96)
+
+[node name="text6" type="Sprite2D" parent="HBoxContainer/VBoxContainer2/GameView3/buttons/BackBufferCopy"]
+material = SubResource("ShaderMaterial_glvoe")
+position = Vector2(-16.5824, 22.609)
+texture = ExtResource("17_xaylg")
+region_enabled = true
+region_rect = Rect2(0, 5, 14, 5)
+
+[node name="interactables" type="Control" parent="HBoxContainer/VBoxContainer2/GameView3/buttons"]
+modulate = Color(0, 0, 0, 0)
+layout_mode = 2
+anchors_preset = 0
+offset_left = -60.5532
+offset_top = -30.0
+offset_right = -60.5532
+offset_bottom = -30.0
+scale = Vector2(1.2304, 1.2304)
+
+[node name="Button" type="Button" parent="HBoxContainer/VBoxContainer2/GameView3/buttons/interactables"]
+visible = false
+layout_mode = 0
+offset_left = 88.9999
+offset_top = 102.0
+offset_right = 375.0
+offset_bottom = 207.0
+
+[node name="Marker2D" type="Marker2D" parent="HBoxContainer/VBoxContainer2/GameView3/buttons/interactables/Button"]
+position = Vector2(326.231, 52.6154)
+
+[node name="Button2" type="Button" parent="HBoxContainer/VBoxContainer2/GameView3/buttons/interactables"]
+layout_mode = 0
+offset_left = 92.0
+offset_top = 228.0
+offset_right = 689.0
+offset_bottom = 330.0
+
+[node name="Marker2D" type="Marker2D" parent="HBoxContainer/VBoxContainer2/GameView3/buttons/interactables/Button2"]
+position = Vector2(655.539, 52.7692)
+
+[node name="Button3" type="Button" parent="HBoxContainer/VBoxContainer2/GameView3/buttons/interactables"]
+layout_mode = 0
+offset_left = 95.0
+offset_top = 355.0
+offset_right = 674.0
+offset_bottom = 453.0
+
+[node name="Marker2D" type="Marker2D" parent="HBoxContainer/VBoxContainer2/GameView3/buttons/interactables/Button3"]
+position = Vector2(649.462, 45.7692)
+
+[node name="Button4" type="Button" parent="HBoxContainer/VBoxContainer2/GameView3/buttons/interactables"]
+layout_mode = 0
+offset_left = 114.876
+offset_top = 470.343
+offset_right = 370.876
+offset_bottom = 569.343
+
+[node name="Marker2D" type="Marker2D" parent="HBoxContainer/VBoxContainer2/GameView3/buttons/interactables/Button4"]
+position = Vector2(283.94, 43.3496)
+
+[node name="Button5" type="Button" parent="HBoxContainer/VBoxContainer2/GameView3/buttons/interactables"]
+layout_mode = 0
+offset_left = 121.379
+offset_top = 583.052
+offset_right = 395.379
+offset_bottom = 687.052
+
+[node name="Marker2D" type="Marker2D" parent="HBoxContainer/VBoxContainer2/GameView3/buttons/interactables/Button5"]
+position = Vector2(296.945, 56.3545)
+
+[node name="pausetopright" type="PanelContainer" parent="HBoxContainer/VBoxContainer2/GameView3"]
+visible = false
+self_modulate = Color(1, 1, 1, 0)
+light_mask = 0
+layout_mode = 2
+script = ExtResource("9_myjrj")
+screen_pos = 1
+
+[node name="Panel" type="Panel" parent="HBoxContainer/VBoxContainer2/GameView3/pausetopright"]
+light_mask = 0
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_ybgyt")
+
+[node name="Button" type="Button" parent="HBoxContainer/VBoxContainer2/GameView3/pausetopright/Panel"]
+layout_mode = 0
+offset_left = 474.615
+offset_top = 348.462
+offset_right = 870.615
+offset_bottom = 502.462
+theme_override_font_sizes/font_size = 106
+text = "resume"
+
+[node name="GameView4" parent="HBoxContainer/VBoxContainer2" instance=ExtResource("3_ksmll")]
+layout_mode = 2
+orbit3d = true
+mapview = true
+
+[node name="map view" parent="HBoxContainer/VBoxContainer2/GameView4" instance=ExtResource("18_72ip8")]
+
+[node name="extra" type="ScrollContainer" parent="HBoxContainer/VBoxContainer2/GameView4"]
+process_mode = 3
+layout_mode = 2
+horizontal_scroll_mode = 0
+vertical_scroll_mode = 0
+script = ExtResource("19_3l68v")
+
+[node name="level_screen" type="Control" parent="HBoxContainer/VBoxContainer2/GameView4/extra"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/VBoxContainer2/GameView4/extra/level_screen"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 74.0
+offset_top = 64.0
+offset_right = -66.0
+offset_bottom = -58.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="title" type="Label" parent="HBoxContainer/VBoxContainer2/GameView4/extra/level_screen/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.596078, 0, 1)
+theme_override_fonts/font = ExtResource("13_3wi7r")
+theme_override_font_sizes/font_size = 65
+text = "SAMPLETEXT"
+horizontal_alignment = 1
+vertical_alignment = 2
+
+[node name="HSeparator2" type="HSeparator" parent="HBoxContainer/VBoxContainer2/GameView4/extra/level_screen/VBoxContainer"]
+modulate = Color(1, 1, 1, 0)
+light_mask = 0
+visibility_layer = 0
+layout_mode = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="HBoxContainer/VBoxContainer2/GameView4/extra/level_screen/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 19.25
+horizontal_scroll_mode = 3
+vertical_scroll_mode = 3
+
+[node name="description" type="Label" parent="HBoxContainer/VBoxContainer2/GameView4/extra/level_screen/VBoxContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_colors/font_color = Color(1, 0.596078, 0, 1)
+theme_override_fonts/font = ExtResource("13_3wi7r")
+theme_override_font_sizes/font_size = 50
+text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
+autowrap_mode = 2
+
+[node name="HSeparator3" type="HSeparator" parent="HBoxContainer/VBoxContainer2/GameView4/extra/level_screen/VBoxContainer"]
+modulate = Color(1, 1, 1, 0)
+light_mask = 0
+visibility_layer = 0
+layout_mode = 2
+
+[node name="datetime" type="Label" parent="HBoxContainer/VBoxContainer2/GameView4/extra/level_screen/VBoxContainer"]
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.596078, 0, 1)
+theme_override_fonts/font = ExtResource("13_3wi7r")
+theme_override_font_sizes/font_size = 60
+text = "Datetime: mm/dd/yy"
+horizontal_alignment = 1
+
+[node name="HSeparator" type="HSeparator" parent="HBoxContainer/VBoxContainer2/GameView4/extra/level_screen/VBoxContainer"]
+modulate = Color(1, 1, 1, 0)
+light_mask = 0
+visibility_layer = 0
+layout_mode = 2
+
+[node name="buttons" type="HBoxContainer" parent="HBoxContainer/VBoxContainer2/GameView4/extra/level_screen/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Button" type="Button" parent="HBoxContainer/VBoxContainer2/GameView4/extra/level_screen/VBoxContainer/buttons"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("12_k1pjk")
+text = " "
+
+[node name="playbutton" type="Sprite2D" parent="HBoxContainer/VBoxContainer2/GameView4/extra/level_screen/VBoxContainer/buttons/Button"]
+position = Vector2(117, 45.1538)
+scale = Vector2(13.8258, 13.8258)
+texture = ExtResource("20_hinjx")
+region_enabled = true
+region_rect = Rect2(0, 0, 14, 5)
+
+[node name="Marker2D" type="Marker2D" parent="HBoxContainer/VBoxContainer2/GameView4/extra/level_screen/VBoxContainer/buttons/Button"]
+position = Vector2(273.539, 46.6155)
+
+[node name="VSeparator" type="VSeparator" parent="HBoxContainer/VBoxContainer2/GameView4/extra/level_screen/VBoxContainer/buttons"]
+modulate = Color(1, 1, 1, 0)
+light_mask = 0
+visibility_layer = 0
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_stretch_ratio = 0.4
+
+[node name="Button2" type="Button" parent="HBoxContainer/VBoxContainer2/GameView4/extra/level_screen/VBoxContainer/buttons"]
+layout_mode = 2
+size_flags_horizontal = 3
+theme = ExtResource("12_k1pjk")
+theme_override_font_sizes/font_size = 60
+text = " "
+
+[node name="backbutton" type="Sprite2D" parent="HBoxContainer/VBoxContainer2/GameView4/extra/level_screen/VBoxContainer/buttons/Button2"]
+position = Vector2(237.462, 48.2307)
+scale = Vector2(13.8258, 13.8258)
+texture = ExtResource("20_hinjx")
+region_enabled = true
+region_rect = Rect2(22, 5, 12, 5)
+
+[node name="Marker2D" type="Marker2D" parent="HBoxContainer/VBoxContainer2/GameView4/extra/level_screen/VBoxContainer/buttons/Button2"]
+position = Vector2(76.6925, 49.6924)
+
+[node name="pausebottomright" type="PanelContainer" parent="HBoxContainer/VBoxContainer2/GameView4"]
+visible = false
+self_modulate = Color(1, 1, 1, 0)
+light_mask = 0
+layout_mode = 2
+script = ExtResource("9_myjrj")
+screen_pos = 3
+
+[node name="Panel" type="Panel" parent="HBoxContainer/VBoxContainer2/GameView4/pausebottomright"]
+light_mask = 0
+layout_mode = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_ybgyt")
+
+[node name="Button" type="Button" parent="HBoxContainer/VBoxContainer2/GameView4/pausebottomright/Panel"]
+layout_mode = 0
+offset_left = 501.385
+offset_top = 387.231
+offset_right = 975.385
+offset_bottom = 500.231
+theme_override_font_sizes/font_size = 76
+text = "exit to menu"
+
+[node name="animations" type="Control" parent="."]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="transition" parent="animations" instance=ExtResource("21_v0n60")]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 388.0
+offset_top = 174.0
+offset_right = 947.0
+offset_bottom = 498.0
+
+[node name="transition2" parent="animations" instance=ExtResource("21_v0n60")]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 969.0
+offset_top = 174.0
+offset_right = 1528.0
+offset_bottom = 498.0
+corner = 2
+
+[node name="transition3" parent="animations" instance=ExtResource("21_v0n60")]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 388.0
+offset_top = 522.0
+offset_right = 947.0
+offset_bottom = 846.0
+corner = 1
+
+[node name="transition4" parent="animations" instance=ExtResource("21_v0n60")]
+visible = false
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = 969.0
+offset_top = 522.0
+offset_right = 1528.0
+offset_bottom = 846.0
+corner = 3
+
+[node name="dev_output" type="Control" parent="."]
+process_mode = 3
+visible = false
+anchors_preset = 0
+offset_left = 60.0
+offset_top = 795.0
+offset_right = 289.0
+offset_bottom = 987.0
+script = ExtResource("22_ok02m")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="dev_output"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 44.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="ScrollContainer" type="ScrollContainer" parent="dev_output/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_4r8kd")
+horizontal_scroll_mode = 0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="dev_output/VBoxContainer/ScrollContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="TextEdit" type="LineEdit" parent="dev_output/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+size_flags_stretch_ratio = 0.31
+theme_override_font_sizes/font_size = 20
+placeholder_text = "dev input"
+
+[node name="credits" type="Control" parent="."]
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="opening1" type="Label" parent="credits"]
+z_index = -1
+layout_mode = 1
+anchors_preset = -1
+anchor_left = 24.387
+anchor_top = 12.9
+anchor_right = 24.387
+anchor_bottom = 12.9
+offset_left = -368.48
+offset_top = -37.0
+offset_right = 368.52
+offset_bottom = 37.0
+pivot_offset = Vector2(368, 37.5)
+theme_override_colors/font_color = Color(1, 0.596078, 0, 1)
+theme_override_fonts/font = ExtResource("13_3wi7r")
+theme_override_font_sizes/font_size = 60
+text = "A SpacingClover Game"
+horizontal_alignment = 1
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="titlecredits" type="Label" parent="credits"]
+layout_mode = 0
+offset_left = 938.0
+offset_top = 947.0
+offset_right = 2178.0
+offset_bottom = 1098.0
+scale = Vector2(0.502591, 0.502591)
+theme_override_colors/font_color = Color(1, 0.596078, 0, 1)
+theme_override_fonts/font = ExtResource("13_3wi7r")
+theme_override_font_sizes/font_size = 60
+text = "Made by SpacingClover
+Music by Xanaxbvby
+© 2024"
+horizontal_alignment = 2
+vertical_alignment = 1
+autowrap_mode = 2
+
+[node name="25d_topbar_root" type="Node2D" parent="."]
+position = Vector2(441, 155)
+
+[node name="MusicManager" type="Node" parent="."]
+script = ExtResource("23_ldrbm")
+
+[node name="stream_1" type="AudioStreamPlayer" parent="MusicManager"]
+process_mode = 3
+autoplay = true
+max_polyphony = 10

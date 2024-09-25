@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://i576t2datei2"]
+
+[ext_resource type="Script" path="res://scripts/Game/2.5D/player3d.gd" id="1_svniy"]
+
+[node name="chracter3d" type="CharacterBody3D"]
+script = ExtResource("1_svniy")

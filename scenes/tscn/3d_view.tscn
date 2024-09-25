@@ -1,0 +1,119 @@
+[gd_scene load_steps=7 format=3 uid="uid://ch5ifg15rdpl5"]
+
+[ext_resource type="Script" path="res://scripts/Game/3D/3d_view.gd" id="1_53gsa"]
+[ext_resource type="PackedScene" uid="uid://dbgnslkr5gh21" path="res://scenes/scn/axis_marker.scn" id="2_yll8m"]
+
+[sub_resource type="Environment" id="Environment_bpx2u"]
+background_mode = 1
+background_color = Color(1, 0.376471, 0, 1)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_bd1t3"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_cdayo"]
+no_depth_test = true
+shading_mode = 2
+albedo_color = Color(0.905882, 0, 0.380392, 1)
+emission_enabled = true
+emission = Color(0.905882, 0, 0.380392, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_y6y5b"]
+
+[node name="3d view" type="Node3D"]
+script = ExtResource("1_53gsa")
+
+[node name="camera_root" type="Node3D" parent="."]
+transform = Transform3D(0.529919, -0.398134, 0.748782, 0, 0.882948, 0.469471, -0.848048, -0.248782, 0.467891, 0, 0, 0)
+
+[node name="Camera3D" type="Camera3D" parent="camera_root"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.15, 7)
+cull_mask = 1
+environment = SubResource("Environment_bpx2u")
+projection = 1
+near = 0.001
+
+[node name="raycast" type="RayCast3D" parent="camera_root/Camera3D"]
+process_mode = 4
+exclude_parent = false
+target_position = Vector3(0, 0, -100)
+collision_mask = 32
+hit_from_inside = true
+
+[node name="SubViewportContainer" type="SubViewportContainer" parent="camera_root/Camera3D"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+stretch = true
+
+[node name="SubViewport" type="SubViewport" parent="camera_root/Camera3D/SubViewportContainer"]
+transparent_bg = true
+handle_input_locally = false
+canvas_cull_mask = 4293918728
+size = Vector2i(1920, 1080)
+render_target_update_mode = 4
+
+[node name="Camera3D" type="Camera3D" parent="camera_root/Camera3D/SubViewportContainer/SubViewport"]
+cull_mask = 8
+environment = SubResource("Environment_bpx2u")
+projection = 1
+
+[node name="axis_marker" parent="camera_root/Camera3D/SubViewportContainer/SubViewport/Camera3D" instance=ExtResource("2_yll8m")]
+transform = Transform3D(0.529919, -0.398134, 0.748782, 0, 0.882948, 0.469471, -0.848048, -0.248782, 0.467891, 0.65, -0.325, -0.22)
+
+[node name="axis marker\'s friend" type="MeshInstance3D" parent="camera_root/Camera3D/SubViewportContainer/SubViewport/Camera3D"]
+transform = Transform3D(0.106219, -0.0493523, 0.0854806, 0, 0.125574, 0.0725, -0.0987045, -0.0531094, 0.0919881, 0, 0, -0.66)
+visible = false
+layers = 8
+mesh = SubResource("CylinderMesh_bd1t3")
+
+[node name="root3d" type="Node3D" parent="."]
+transform = Transform3D(0.171, 2.58203e-08, 0, -2.58203e-08, 0.171, 0, 0, 0, 0.171, 0, 0, 0)
+
+[node name="bounds_raycast" type="RayCast3D" parent="."]
+enabled = false
+target_position = Vector3(0.35, 0, 0)
+hit_from_inside = true
+debug_shape_custom_color = Color(0, 1, 0, 1)
+debug_shape_thickness = 5
+
+[node name="playermarker" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.0717528, 1.08344e-08, 0, -1.08344e-08, 0.0717528, 0, 0, 0, 0.0717528, 0, 0, 0)
+material_override = SubResource("StandardMaterial3D_cdayo")
+mesh = SubResource("SphereMesh_y6y5b")
+skeleton = NodePath("../root3d")
+
+[node name="lights" type="Node3D" parent="."]
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="lights"]
+transform = Transform3D(1, 1.50996e-07, 0, -1.50996e-07, 1, 0, 0, 0, 1, 0, 0, 0)
+light_color = Color(0.933333, 0.32549, 0, 1)
+light_energy = 2.045
+sky_mode = 1
+
+[node name="DirectionalLight3D2" type="DirectionalLight3D" parent="lights"]
+transform = Transform3D(-1, 1.50996e-07, 8.74228e-08, 1.50996e-07, 1, -1.32005e-14, -8.74228e-08, 0, -1, 0, 0, 0)
+light_color = Color(0.933333, 0.32549, 0, 1)
+sky_mode = 1
+
+[node name="DirectionalLight3D3" type="DirectionalLight3D" parent="lights"]
+transform = Transform3D(-4.37114e-08, 1.50996e-07, 1, 6.60024e-15, 1, -1.50996e-07, -1, 0, -4.37114e-08, 0, 0, 0)
+light_color = Color(1, 0.67451, 0, 1)
+sky_mode = 1
+
+[node name="DirectionalLight3D4" type="DirectionalLight3D" parent="lights"]
+transform = Transform3D(-4.37114e-08, 1.50996e-07, -1, 6.60024e-15, 1, 1.50996e-07, 1, 0, -4.37114e-08, 0, 0, 0)
+light_color = Color(1, 0.67451, 0, 1)
+sky_mode = 1
+
+[node name="DirectionalLight3D5" type="DirectionalLight3D" parent="lights"]
+transform = Transform3D(-4.68955e-15, -1, 1.07285e-07, -4.37114e-08, 1.07285e-07, 1, -1, -6.3673e-21, -4.37114e-08, 0, 0, 0)
+light_color = Color(1, 0.498039, 0.0470588, 1)
+sky_mode = 1
+
+[node name="DirectionalLight3D6" type="DirectionalLight3D" parent="lights"]
+transform = Transform3D(-4.68955e-15, -1, -1.07285e-07, -4.37114e-08, 1.07285e-07, -1, 1, 6.3673e-21, -4.37114e-08, 0, 0, 0)
+light_color = Color(1, 0.498039, 0.0470588, 1)
+sky_mode = 1

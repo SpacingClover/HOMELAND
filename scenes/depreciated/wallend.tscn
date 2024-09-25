@@ -1,0 +1,98 @@
+[gd_scene load_steps=9 format=3 uid="uid://cv5b80hnfrl88"]
+
+[ext_resource type="Script" path="res://scripts/depreciated/wallend.gd" id="1_i08yi"]
+[ext_resource type="Shader" path="res://visuals/shaders/overlay.gdshader" id="2_6hxwy"]
+[ext_resource type="Texture2D" uid="uid://cnhupnge7affu" path="res://visuals/spritesheets/misc/new_doors_spritesheet.png" id="2_q21i6"]
+[ext_resource type="PackedScene" uid="uid://bpgt8f807lrnt" path="res://scenes/depreciated/interaction_box.tscn" id="3_i3ohf"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rdreb"]
+shader = ExtResource("2_6hxwy")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_gsjqk"]
+shader = ExtResource("2_6hxwy")
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_88hns"]
+size = Vector2(12.5, 48)
+
+[sub_resource type="SegmentShape2D" id="SegmentShape2D_50k7r"]
+a = Vector2(-10, -3)
+b = Vector2(-11, 22)
+
+[node name="wallend" type="StaticBody2D"]
+y_sort_enabled = true
+position = Vector2(8, 0)
+script = ExtResource("1_i08yi")
+
+[node name="MeshInstance2D" type="Polygon2D" parent="."]
+position = Vector2(-8, -47)
+scale = Vector2(6.37273, 25.565)
+color = Color(0, 0, 0, 0.470588)
+polygon = PackedVector2Array(1.09843, 1.25171, 1.2907, 0.217391, 0.162791, 0.455072, 0.313837, 1.64287)
+
+[node name="BackBufferCopy" type="BackBufferCopy" parent="."]
+position = Vector2(-8, -16)
+scale = Vector2(6.37273, 25.565)
+copy_mode = 2
+
+[node name="texture" type="Sprite2D" parent="BackBufferCopy"]
+position = Vector2(0.705, -0.274)
+scale = Vector2(0.156919, 0.039116)
+texture = ExtResource("2_q21i6")
+region_enabled = true
+region_rect = Rect2(133, 1, 9, 46)
+
+[node name="spriteback" type="Sprite2D" parent="BackBufferCopy"]
+material = SubResource("ShaderMaterial_rdreb")
+position = Vector2(0.784593, -0.58674)
+scale = Vector2(0.156919, 0.039116)
+texture = ExtResource("2_q21i6")
+hframes = 3
+frame = 1
+region_enabled = true
+region_rect = Rect2(0, 0, 27, 48)
+
+[node name="overlay" type="BackBufferCopy" parent="."]
+position = Vector2(-8, -16)
+scale = Vector2(6.37273, 25.565)
+copy_mode = 2
+
+[node name="texture" type="Sprite2D" parent="overlay"]
+z_index = 1
+z_as_relative = false
+position = Vector2(0.156919, -0.312928)
+scale = Vector2(0.156919, 0.039116)
+texture = ExtResource("2_q21i6")
+region_enabled = true
+region_rect = Rect2(133, 0, 2, 48)
+
+[node name="spritefront" type="Sprite2D" parent="overlay"]
+material = SubResource("ShaderMaterial_gsjqk")
+position = Vector2(0.156919, -0.312928)
+scale = Vector2(0.156919, 0.039116)
+texture = ExtResource("2_q21i6")
+region_enabled = true
+region_rect = Rect2(9, 0, 2, 48)
+
+[node name="door" type="Sprite2D" parent="."]
+modulate = Color(0.85098, 0.2, 0, 1)
+position = Vector2(-3.55, -24)
+texture = ExtResource("2_q21i6")
+hframes = 6
+region_enabled = true
+region_rect = Rect2(27, 0, 54, 48)
+
+[node name="interaction_box" parent="." instance=ExtResource("3_i3ohf")]
+visible = false
+position = Vector2(-8, -16)
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="interaction_box"]
+position = Vector2(5, -8)
+shape = SubResource("RectangleShape2D_88hns")
+
+[node name="tp_box" type="Area2D" parent="."]
+position = Vector2(5, -31)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="tp_box"]
+shape = SubResource("SegmentShape2D_50k7r")

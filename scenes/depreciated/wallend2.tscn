@@ -1,0 +1,74 @@
+[gd_scene load_steps=8 format=3 uid="uid://bbwj4mhiuk0vv"]
+
+[ext_resource type="Script" path="res://scripts/depreciated/wallend2.gd" id="1_20rf8"]
+[ext_resource type="Texture2D" uid="uid://cnhupnge7affu" path="res://visuals/spritesheets/misc/new_doors_spritesheet.png" id="2_jn5fn"]
+[ext_resource type="Shader" path="res://visuals/shaders/overlay.gdshader" id="3_edqnm"]
+[ext_resource type="PackedScene" uid="uid://bpgt8f807lrnt" path="res://scenes/depreciated/interaction_box.tscn" id="3_q7ddy"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_rdreb"]
+shader = ExtResource("3_edqnm")
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_88hns"]
+size = Vector2(16, 32)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_k0jo0"]
+size = Vector2(16, 4)
+
+[node name="wallend" type="StaticBody2D"]
+y_sort_enabled = true
+position = Vector2(8, 0)
+script = ExtResource("1_20rf8")
+
+[node name="BackBufferCopy" type="BackBufferCopy" parent="."]
+position = Vector2(-8, 0)
+scale = Vector2(6.37273, 25.565)
+copy_mode = 2
+
+[node name="texture" type="Sprite2D" parent="BackBufferCopy"]
+position = Vector2(0, -0.625856)
+scale = Vector2(0.156919, 0.039116)
+texture = ExtResource("2_jn5fn")
+region_enabled = true
+region_rect = Rect2(144, 48, 16, 32)
+
+[node name="spriteback" type="Sprite2D" parent="BackBufferCopy"]
+material = SubResource("ShaderMaterial_rdreb")
+position = Vector2(0, -0.625856)
+scale = Vector2(0.156919, 0.039116)
+texture = ExtResource("2_jn5fn")
+hframes = 10
+region_enabled = true
+region_rect = Rect2(0, 48, 160, 32)
+
+[node name="shadow" type="Polygon2D" parent="."]
+position = Vector2(-8, 0)
+scale = Vector2(6.37273, 25.565)
+color = Color(0, 0, 0, 0.466667)
+polygon = PackedVector2Array(1.09843, -0.039116, 1.09843, -1.01702, -1.09843, -1.01702, -1.09843, -0.039116)
+
+[node name="door" type="Sprite2D" parent="."]
+modulate = Color(0.85098, 0.2, 0, 1)
+z_index = 1
+position = Vector2(-8, -16)
+texture = ExtResource("2_jn5fn")
+hframes = 10
+frame = 2
+region_enabled = true
+region_rect = Rect2(0, 48, 160, 32)
+
+[node name="interaction_box" parent="." instance=ExtResource("3_q7ddy")]
+visible = false
+position = Vector2(-8, -16)
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="interaction_box"]
+visible = false
+shape = SubResource("RectangleShape2D_88hns")
+
+[node name="tp_box" type="Area2D" parent="."]
+position = Vector2(0, 2)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="tp_box"]
+position = Vector2(-8, -3)
+shape = SubResource("RectangleShape2D_k0jo0")

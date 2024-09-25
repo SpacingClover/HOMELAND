@@ -1,0 +1,39 @@
+[gd_scene load_steps=7 format=3 uid="uid://chj3nhn14gks5"]
+
+[ext_resource type="Script" path="res://scripts/2dworld.gd" id="1_dlmqk"]
+[ext_resource type="TileSet" uid="uid://bcot05ow5gi2j" path="res://visuals/tiles.tres" id="2_wn8fk"]
+[ext_resource type="PackedScene" uid="uid://pm684mmnmyd2" path="res://scenes/player.tscn" id="3_53rw4"]
+[ext_resource type="Script" path="res://scripts/sizescrollerTiles.gd" id="4_qg2t6"]
+[ext_resource type="PackedScene" uid="uid://cv5b80hnfrl88" path="res://scenes/wallend.tscn" id="4_u2fkl"]
+[ext_resource type="PackedScene" uid="uid://beb0a4vk5jf55" path="res://scenes/pot.tscn" id="7_gfuv6"]
+
+[node name="sidescroller" type="Node2D"]
+y_sort_enabled = true
+
+[node name="world" type="CharacterBody2D" parent="."]
+script = ExtResource("1_dlmqk")
+
+[node name="TileMap" type="TileMap" parent="world"]
+texture_filter = 1
+scale = Vector2(13.495, 13.495)
+tile_set = ExtResource("2_wn8fk")
+format = 2
+layer_0/tile_data = PackedInt32Array(196608, 196608, 0, 131073, 196608, 0, 65536, 196608, 0, 1, 196608, 0, 65538, 196608, 0, 3, 196608, 0, 65540, 196608, 0, 5, 196608, 0, 131077, 196608, 0, 131075, 196608, 0, 196610, 196608, 0, 196612, 196608, 0)
+script = ExtResource("4_qg2t6")
+
+[node name="wallend" parent="world/TileMap" instance=ExtResource("4_u2fkl")]
+
+[node name="player" parent="." instance=ExtResource("3_53rw4")]
+position = Vector2(289, 556)
+
+[node name="pot" parent="." instance=ExtResource("7_gfuv6")]
+position = Vector2(554, 614)
+
+[node name="pot2" parent="." instance=ExtResource("7_gfuv6")]
+position = Vector2(644, 459)
+
+[node name="pot3" parent="." instance=ExtResource("7_gfuv6")]
+position = Vector2(854, 563)
+
+[node name="pot4" parent="." instance=ExtResource("7_gfuv6")]
+position = Vector2(954, 394)

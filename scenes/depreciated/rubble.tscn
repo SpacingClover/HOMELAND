@@ -1,0 +1,46 @@
+[gd_scene load_steps=4 format=3 uid="uid://das5okg536ayo"]
+
+[ext_resource type="Script" path="res://scripts/Game/2.5D/rubble.gd" id="1_3kb4m"]
+[ext_resource type="Texture2D" uid="uid://cdll0m7gl62ut" path="res://visuals/spritesheets/world_textures/rubble_spritesheet.png" id="2_4xb6r"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_8lo5u"]
+size = Vector3(4.0271, 3.27149, 4.00879)
+
+[node name="rubble" type="StaticBody3D"]
+transform = Transform3D(0.25, 0, 0, 0, 0.25, 0, 0, 0, 0.25, 0, 0, 0)
+rotation_order = 0
+collision_layer = 10
+collision_mask = 0
+script = ExtResource("1_3kb4m")
+
+[node name="Sprite3D" type="Sprite3D" parent="."]
+transform = Transform3D(23.3492, 0, 0, 0, 21.0922, 10.0153, 0, -10.0153, 21.0922, 0.023, -0.314641, 1.152)
+texture_filter = 0
+texture = ExtResource("2_4xb6r")
+hframes = 2
+vframes = 3
+
+[node name="Sprite3D2" type="Sprite3D" parent="."]
+transform = Transform3D(-23.3492, -8.75565e-07, 1.84393e-06, 0, 21.0922, 10.0153, -2.04125e-06, 10.0153, -21.0922, 0.023, -0.314641, -1.152)
+texture_filter = 0
+texture = ExtResource("2_4xb6r")
+hframes = 2
+vframes = 3
+
+[node name="Sprite3D3" type="Sprite3D" parent="."]
+transform = Transform3D(-1.02063e-06, 10.0153, -21.0922, 0, 21.0922, 10.0153, 23.3492, 4.37782e-07, -9.21967e-07, -1.129, -0.314641, -5.03555e-08)
+texture_filter = 0
+texture = ExtResource("2_4xb6r")
+hframes = 2
+vframes = 3
+
+[node name="Sprite3D4" type="Sprite3D" parent="."]
+transform = Transform3D(3.06188e-06, -10.0153, 21.0922, 6.0834e-14, 21.0922, 10.0153, -23.3492, -1.31335e-06, 2.7659e-06, 1.175, -0.314641, 5.03555e-08)
+texture_filter = 0
+texture = ExtResource("2_4xb6r")
+hframes = 2
+vframes = 3
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.318461, 0)
+shape = SubResource("BoxShape3D_8lo5u")

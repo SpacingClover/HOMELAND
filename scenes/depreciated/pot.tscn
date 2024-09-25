@@ -1,0 +1,63 @@
+[gd_scene load_steps=8 format=3 uid="uid://beb0a4vk5jf55"]
+
+[ext_resource type="Script" path="res://scripts/depreciated/pot.gd" id="1_88st8"]
+[ext_resource type="Texture2D" uid="uid://ccothiumippl4" path="res://visuals/spritesheets/furniture/plants spritesheet.png" id="2_wgbum"]
+[ext_resource type="Texture2D" uid="uid://dbjcsi38ecah5" path="res://visuals/spritesheets/furniture/pot shatter.png" id="3_jkgsr"]
+[ext_resource type="AudioStream" uid="uid://cujmxpxi0ad1s" path="res://audio/sound_effects/shatter.mp3" id="4_pnlk6"]
+[ext_resource type="PackedScene" uid="uid://bpgt8f807lrnt" path="res://scenes/depreciated/interaction_box.tscn" id="5_hfjdy"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_kad1k"]
+radius = 6.0
+height = 84.6667
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_7ouyi"]
+size = Vector2(87.5, 125.833)
+
+[node name="pot" type="StaticBody2D"]
+scale = Vector2(1.2, 1.2)
+script = ExtResource("1_88st8")
+
+[node name="pot" type="Sprite2D" parent="."]
+texture_filter = 1
+position = Vector2(0, -161)
+scale = Vector2(10, 10)
+texture = ExtResource("2_wgbum")
+hframes = 4
+vframes = 2
+frame = 6
+
+[node name="plant" type="Sprite2D" parent="."]
+texture_filter = 1
+position = Vector2(0, -161)
+scale = Vector2(10, 10)
+texture = ExtResource("2_wgbum")
+hframes = 4
+vframes = 2
+frame = 3
+
+[node name="shatter" type="Sprite2D" parent="."]
+visible = false
+texture_filter = 1
+position = Vector2(-40, -61)
+scale = Vector2(10, 10)
+texture = ExtResource("3_jkgsr")
+hframes = 2
+vframes = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, -7.5)
+rotation = 1.57079
+shape = SubResource("CapsuleShape2D_kad1k")
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("4_pnlk6")
+volume_db = 2.0
+pitch_scale = 0.57
+
+[node name="interaction_box" parent="." instance=ExtResource("5_hfjdy")]
+collision_layer = 2
+collision_mask = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="interaction_box"]
+position = Vector2(-0.416667, -62.9168)
+shape = SubResource("RectangleShape2D_7ouyi")

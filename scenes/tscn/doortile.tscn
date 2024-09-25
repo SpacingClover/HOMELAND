@@ -1,0 +1,214 @@
+[gd_scene load_steps=19 format=3 uid="uid://cp73kaj0h6mtq"]
+
+[ext_resource type="Script" path="res://scripts/Game/2.5D/door.gd" id="1_6gbnr"]
+[ext_resource type="Texture2D" uid="uid://cqyd7yl4w4rx4" path="res://visuals/spritesheets/icons/lock_icon.png" id="2_457ha"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_komw5"]
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_y5a42"]
+_surfaces = [{
+"aabb": AABB(0, -1.5, -1, 1e-05, 3.00001, 2.00001),
+"format": 34896613377,
+"index_count": 30,
+"index_data": PackedByteArray(11, 0, 3, 0, 7, 0, 11, 0, 9, 0, 3, 0, 8, 0, 6, 0, 1, 0, 8, 0, 10, 0, 6, 0, 5, 0, 11, 0, 10, 0, 5, 0, 4, 0, 11, 0, 0, 0, 10, 0, 8, 0, 0, 0, 5, 0, 10, 0, 4, 0, 9, 0, 11, 0, 4, 0, 2, 0, 9, 0),
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 12,
+"vertex_data": PackedByteArray(0, 0, 254, 255, 254, 255, 0, 0, 0, 0, 0, 0, 254, 255, 0, 0, 0, 0, 254, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 254, 255, 255, 15, 0, 0, 0, 0, 254, 255, 3, 240, 0, 0, 0, 0, 0, 0, 254, 239, 0, 0, 0, 0, 0, 0, 255, 15, 0, 0, 0, 0, 84, 245, 254, 255, 0, 0, 0, 0, 84, 245, 0, 0, 0, 0, 0, 0, 84, 245, 254, 239, 0, 0, 0, 0, 84, 245, 255, 15, 0, 0)
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_jrrfv"]
+resource_name = "doortile_Plane"
+_surfaces = [{
+"aabb": AABB(0, -1.5, -1, 1e-05, 3.00001, 2.00001),
+"attribute_data": PackedByteArray(0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 0, 0, 255, 255, 255, 255, 255, 239, 0, 0, 251, 15, 0, 0, 251, 15, 255, 255, 255, 239, 255, 255, 0, 0, 170, 10, 255, 255, 170, 10, 251, 15, 170, 10, 255, 239, 170, 10),
+"format": 34896613399,
+"index_count": 30,
+"index_data": PackedByteArray(11, 0, 3, 0, 7, 0, 11, 0, 9, 0, 3, 0, 8, 0, 6, 0, 1, 0, 8, 0, 10, 0, 6, 0, 5, 0, 11, 0, 10, 0, 5, 0, 4, 0, 11, 0, 0, 0, 10, 0, 8, 0, 0, 0, 5, 0, 10, 0, 4, 0, 9, 0, 11, 0, 4, 0, 2, 0, 9, 0),
+"material": SubResource("StandardMaterial3D_komw5"),
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 12,
+"vertex_data": PackedByteArray(0, 0, 254, 255, 254, 255, 255, 191, 0, 0, 0, 0, 254, 255, 255, 191, 0, 0, 254, 255, 0, 0, 255, 191, 0, 0, 0, 0, 0, 0, 255, 191, 0, 0, 254, 255, 255, 15, 255, 191, 0, 0, 254, 255, 3, 240, 255, 191, 0, 0, 0, 0, 254, 239, 255, 191, 0, 0, 0, 0, 255, 15, 255, 191, 0, 0, 84, 245, 254, 255, 255, 191, 0, 0, 84, 245, 0, 0, 255, 191, 0, 0, 84, 245, 254, 239, 255, 191, 0, 0, 84, 245, 255, 15, 255, 191, 255, 127, 0, 0, 255, 127, 0, 0, 255, 127, 0, 0, 255, 127, 0, 0, 255, 127, 0, 0, 255, 127, 0, 0, 255, 127, 0, 0, 255, 127, 0, 0, 255, 127, 0, 0, 255, 127, 0, 0, 255, 127, 0, 0, 255, 127, 0, 0)
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_y5a42")
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_prooe"]
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_mxi27"]
+resource_name = "doortile_Plane_001"
+_surfaces = [{
+"aabb": AABB(0, -2, -0.875001, 1e-05, 2.87502, 1.75001),
+"attribute_data": PackedByteArray(104, 183, 127, 61, 0, 0, 128, 63, 115, 0, 112, 63, 0, 0, 128, 63, 104, 183, 127, 61, 208, 162, 42, 61, 114, 0, 112, 63, 224, 162, 42, 61),
+"bone_aabbs": [AABB(0, -2, -0.875001, 1e-05, 2.87502, 1.75001)],
+"format": 34359745559,
+"index_count": 6,
+"index_data": PackedByteArray(2, 0, 1, 0, 0, 0, 2, 0, 3, 0, 1, 0),
+"material": SubResource("StandardMaterial3D_prooe"),
+"primitive": 3,
+"skin_data": PackedByteArray(0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 0, 0, 0, 0, 0, 0),
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 4,
+"vertex_data": PackedByteArray(0, 0, 0, 0, 0, 0, 0, 192, 14, 0, 96, 63, 0, 0, 0, 0, 0, 0, 0, 192, 14, 0, 96, 191, 0, 0, 0, 0, 122, 1, 96, 63, 14, 0, 96, 63, 0, 0, 0, 0, 122, 1, 96, 63, 14, 0, 96, 191, 255, 255, 255, 127, 255, 255, 255, 255, 255, 255, 255, 127, 255, 255, 255, 255, 255, 255, 255, 127, 255, 255, 255, 255, 255, 255, 255, 127, 254, 255, 255, 255)
+}]
+blend_shape_mode = 0
+
+[sub_resource type="Skin" id="Skin_wrhjf"]
+resource_name = "Skin"
+bind_count = 1
+bind/0/name = &"Bone"
+bind/0/bone = -1
+bind/0/pose = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -0.875001)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_xxp0i"]
+transparency = 1
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_j2xwd"]
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_36i2f"]
+_surfaces = [{
+"aabb": AABB(-2.5, -1.13247e-07, -2, 4, 1.0151e-05, 4.00001),
+"format": 34896613377,
+"index_count": 18,
+"index_data": PackedByteArray(1, 0, 4, 0, 5, 0, 1, 0, 0, 0, 4, 0, 6, 0, 3, 0, 7, 0, 6, 0, 2, 0, 3, 0, 2, 0, 4, 0, 0, 0, 2, 0, 6, 0, 4, 0),
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 8,
+"vertex_data": PackedByteArray(0, 0, 206, 3, 254, 255, 0, 0, 255, 255, 206, 3, 254, 255, 0, 0, 0, 0, 206, 3, 0, 0, 0, 0, 255, 255, 206, 3, 0, 0, 0, 0, 255, 63, 182, 5, 255, 191, 0, 0, 255, 255, 0, 0, 255, 191, 0, 0, 255, 63, 182, 5, 255, 63, 0, 0, 255, 255, 0, 0, 255, 63, 0, 0)
+}]
+blend_shape_mode = 0
+
+[sub_resource type="ArrayMesh" id="ArrayMesh_rsmxt"]
+resource_name = "doortile_Plane_002"
+_surfaces = [{
+"aabb": AABB(-2.5, -1.13247e-07, -2, 4, 1.0151e-05, 4.00001),
+"attribute_data": PackedByteArray(0, 0, 0, 0, 0, 0, 255, 255, 254, 255, 0, 0, 254, 255, 255, 255, 255, 63, 255, 63, 255, 63, 255, 255, 255, 191, 255, 63, 255, 191, 255, 255),
+"format": 34896613399,
+"index_count": 18,
+"index_data": PackedByteArray(1, 0, 4, 0, 5, 0, 1, 0, 0, 0, 4, 0, 6, 0, 3, 0, 7, 0, 6, 0, 2, 0, 3, 0, 2, 0, 4, 0, 0, 0, 2, 0, 6, 0, 4, 0),
+"material": SubResource("StandardMaterial3D_j2xwd"),
+"primitive": 3,
+"uv_scale": Vector4(0, 0, 0, 0),
+"vertex_count": 8,
+"vertex_data": PackedByteArray(0, 0, 206, 3, 254, 255, 84, 213, 255, 255, 206, 3, 254, 255, 84, 213, 0, 0, 206, 3, 0, 0, 84, 213, 255, 255, 206, 3, 0, 0, 84, 213, 255, 63, 182, 5, 255, 191, 84, 213, 255, 255, 0, 0, 255, 191, 84, 213, 255, 63, 182, 5, 255, 63, 84, 213, 255, 255, 0, 0, 255, 63, 84, 213, 84, 213, 170, 42, 84, 213, 170, 42, 84, 213, 170, 42, 84, 213, 170, 42, 84, 213, 170, 42, 84, 213, 170, 42, 84, 213, 170, 42, 84, 213, 170, 42)
+}]
+blend_shape_mode = 0
+shadow_mesh = SubResource("ArrayMesh_36i2f")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_e1pfk"]
+size = Vector3(0.088, 2.998, 2.002)
+
+[sub_resource type="Animation" id="Animation_211yn"]
+resource_name = "doorfalldownback"
+length = 1.25
+tracks/0/type = "rotation_3d"
+tracks/0/imported = true
+tracks/0/enabled = true
+tracks/0/path = NodePath("Armature/Skeleton3D:Bone")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = PackedFloat32Array(0, 1, 0, 0, 0, 1, 0.0333333, 1, 0, 0, 0, 1, 0.0666667, 1, 0, 0, 0.00382511, 0.999993, 0.1, 1, 0, 0, 0.0141043, 0.999901, 0.133333, 1, 0, 0, 0.0322635, 0.999479, 0.166667, 1, 0, 0, 0.0585155, 0.998286, 0.2, 1, 0, 0, 0.0962128, 0.995361, 0.233333, 1, 0, 0, 0.142966, 0.989728, 0.266667, 1, 0, 0, 0.198873, 0.980025, 0.3, 1, 0, 0, 0.263706, 0.964603, 0.333333, 1, 0, 0, 0.33683, 0.941566, 0.366667, 1, 0, 0, 0.419455, 0.907776, 0.4, 1, 0, 0, 0.505426, 0.86287, 0.433333, 1, 0, 0, 0.591284, 0.806463, 0.466667, 1, 0, 0, 0.660032, 0.751237, 0.5, 1, 0, 0, 0.685933, 0.727665, 0.533333, 1, 0, 0, 0.651819, 0.758375, 0.566667, 1, 0, 0, 0.621896, 0.7831, 0.6, 1, 0, 0, 0.597135, 0.802141, 0.633333, 1, 0, 0, 0.578321, 0.815809, 0.666667, 1, 0, 0, 0.566041, 0.824377, 0.7, 1, 0, 0, 0.563043, 0.826428, 0.733333, 1, 0, 0, 0.567105, 0.823646, 0.766667, 1, 0, 0, 0.578096, 0.815969, 0.8, 1, 0, 0, 0.595708, 0.803201, 0.833333, 1, 0, 0, 0.619454, 0.785033, 0.866667, 1, 0, 0, 0.650376, 0.759613, 0.9, 1, 0, 0, 0.685171, 0.728382, 0.933333, 1, 0, 0, 0.697261, 0.716817, 0.966667, 1, 0, 0, 0.686532, 0.7271, 1, 1, 0, 0, 0.677154, 0.735841, 1.03333, 1, 0, 0, 0.675393, 0.737458, 1.06667, 1, 0, 0, 0.679426, 0.733744, 1.1, 1, 0, 0, 0.68908, 0.724686, 1.13333, 1, 0, 0, 0.699467, 0.714665, 1.16667, 1, 0, 0, 0.701342, 0.712825, 1.2, 1, 0, 0, 0.700012, 0.714131, 1.23333, 1, 0, 0, 0.704145, 0.710056, 1.25, 1, 0, 0, 0.707107, 0.707107)
+
+[sub_resource type="Animation" id="Animation_wquik"]
+resource_name = "doorfalldownfront"
+length = 1.25
+tracks/0/type = "rotation_3d"
+tracks/0/imported = true
+tracks/0/enabled = true
+tracks/0/path = NodePath("Armature/Skeleton3D:Bone")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = PackedFloat32Array(0, 1, 0, 0, 0, 1, 0.0333333, 1, 0, 0, 0, 1, 0.0666667, 1, 0, 0, -0.00382511, 0.999993, 0.1, 1, 0, 0, -0.0141043, 0.999901, 0.133333, 1, 0, 0, -0.0322635, 0.999479, 0.166667, 1, 0, 0, -0.0585155, 0.998286, 0.2, 1, 0, 0, -0.0962128, 0.995361, 0.233333, 1, 0, 0, -0.142966, 0.989728, 0.266667, 1, 0, 0, -0.198873, 0.980025, 0.3, 1, 0, 0, -0.263706, 0.964603, 0.333333, 1, 0, 0, -0.33683, 0.941566, 0.366667, 1, 0, 0, -0.419454, 0.907776, 0.4, 1, 0, 0, -0.505426, 0.86287, 0.433333, 1, 0, 0, -0.591284, 0.806463, 0.466667, 1, 0, 0, -0.660032, 0.751238, 0.5, 1, 0, 0, -0.685933, 0.727665, 0.533333, 1, 0, 0, -0.651819, 0.758375, 0.566667, 1, 0, 0, -0.621896, 0.7831, 0.6, 1, 0, 0, -0.597135, 0.802141, 0.633333, 1, 0, 0, -0.578321, 0.815809, 0.666667, 1, 0, 0, -0.566041, 0.824377, 0.7, 1, 0, 0, -0.563043, 0.826428, 0.733333, 1, 0, 0, -0.567105, 0.823646, 0.766667, 1, 0, 0, -0.578096, 0.815969, 0.8, 1, 0, 0, -0.595708, 0.803201, 0.833333, 1, 0, 0, -0.619454, 0.785033, 0.866667, 1, 0, 0, -0.650376, 0.759613, 0.9, 1, 0, 0, -0.685171, 0.728382, 0.933333, 1, 0, 0, -0.697261, 0.716817, 0.966667, 1, 0, 0, -0.686532, 0.7271, 1, 1, 0, 0, -0.677154, 0.735841, 1.03333, 1, 0, 0, -0.675393, 0.737458, 1.06667, 1, 0, 0, -0.679426, 0.733744, 1.1, 1, 0, 0, -0.68908, 0.724686, 1.13333, 1, 0, 0, -0.699467, 0.714665, 1.16667, 1, 0, 0, -0.701342, 0.712825, 1.2, 1, 0, 0, -0.700012, 0.714131, 1.23333, 1, 0, 0, -0.704145, 0.710056, 1.25, 1, 0, 0, -0.707107, 0.707107)
+
+[sub_resource type="Animation" id="Animation_mic6x"]
+resource_name = "dooropenback"
+length = 0.833333
+tracks/0/type = "rotation_3d"
+tracks/0/imported = true
+tracks/0/enabled = true
+tracks/0/path = NodePath("Armature/Skeleton3D:Bone")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = PackedFloat32Array(0, 1, 0, 0, 0, 1, 0.0333333, 1, 0, 0, 0, 1, 0.0666667, 1, 0, 0.00288839, 0, 0.999996, 0.1, 1, 0, 0.0104572, 0, 0.999945, 0.133333, 1, 0, 0.0235901, 0, 0.999722, 0.166667, 1, 0, 0.0422589, 0, 0.999107, 0.2, 1, 0, 0.0686464, 0, 0.997641, 0.233333, 1, 0, 0.101284, 0, 0.994858, 0.266667, 1, 0, 0.14055, 0, 0.990074, 0.3, 1, 0, 0.186778, 0, 0.982402, 0.333333, 1, 0, 0.240217, 0, 0.970719, 0.366667, 1, 0, 0.303838, 0, 0.952724, 0.4, 1, 0, 0.374392, 0, 0.927271, 0.433333, 1, 0, 0.450486, 0, 0.892784, 0.466667, 1, 0, 0.530036, 0, 0.847975, 0.5, 1, 0, 0.610368, 0, 0.792118, 0.533333, 1, 0, 0.687993, 0, 0.725717, 0.566667, 1, 0, 0.757685, 0, 0.652621, 0.6, 1, 0, 0.817255, 0, 0.576276, 0.633333, 1, 0, 0.865735, 0, 0.500504, 0.666667, 1, 0, 0.903243, 0, 0.429128, 0.7, 1, 0, 0.929226, 0, 0.369512, 0.733333, 1, 0, 0.947193, 0, 0.320665, 0.766667, 1, 0, 0.958855, 0, 0.283896, 0.8, 1, 0, 0.965549, 0, 0.26022, 0.833333, 1, 0, 0.968136, 0, 0.250424)
+
+[sub_resource type="Animation" id="Animation_8mnsq"]
+resource_name = "dooropenfront"
+length = 0.833333
+tracks/0/type = "rotation_3d"
+tracks/0/imported = true
+tracks/0/enabled = true
+tracks/0/path = NodePath("Armature/Skeleton3D:Bone")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = PackedFloat32Array(0, 1, 0, 0, 0, 1, 0.0333333, 1, 0, 0, 0, 1, 0.0666667, 1, 0, -0.00478843, 0, 0.999989, 0.1, 1, 0, -0.0173341, 0, 0.99985, 0.133333, 1, 0, -0.0390872, 0, 0.999236, 0.166667, 1, 0, -0.0699633, 0, 0.99755, 0.2, 1, 0, -0.113347, 0, 0.993555, 0.233333, 1, 0, -0.16639, 0, 0.98606, 0.266667, 1, 0, -0.228973, 0, 0.973433, 0.3, 1, 0, -0.300533, 0, 0.953772, 0.333333, 1, 0, -0.37997, 0, 0.924999, 0.366667, 1, 0, -0.467422, 0, 0.884034, 0.4, 1, 0, -0.555832, 0, 0.831295, 0.466667, 1, 0, -0.719764, 0, 0.694219, 0.5, 1, 0, -0.788632, 0, 0.614865, 0.533333, 1, 0, -0.844264, 0, 0.535928, 0.566667, 1, 0, -0.887885, 0, 0.460066, 0.6, 1, 0, -0.9209, 0, 0.389799, 0.633333, 1, 0, -0.945038, 0, 0.326961, 0.666667, 1, 0, -0.962105, 0, 0.272678, 0.7, 1, 0, -0.97307, 0, 0.230512, 0.733333, 1, 0, -0.98036, 0, 0.197217, 0.766667, 1, 0, -0.984952, 0, 0.172831, 0.8, 1, 0, -0.987532, 0, 0.157418, 0.833333, 1, 0, -0.988517, 0, 0.15111)
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_1v0tv"]
+_data = {
+"doorfalldownback": SubResource("Animation_211yn"),
+"doorfalldownfront": SubResource("Animation_wquik"),
+"dooropenback": SubResource("Animation_mic6x"),
+"dooropenfront": SubResource("Animation_8mnsq")
+}
+
+[node name="doortile" type="Node3D"]
+rotation_order = 0
+script = ExtResource("1_6gbnr")
+
+[node name="Plane" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, 0)
+layers = 2
+mesh = SubResource("ArrayMesh_jrrfv")
+skeleton = NodePath("")
+
+[node name="Armature" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, 0.875001)
+
+[node name="Skeleton3D" type="Skeleton3D" parent="Armature"]
+bones/0/name = "Bone"
+bones/0/parent = -1
+bones/0/rest = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0)
+bones/0/enabled = true
+bones/0/position = Vector3(0, 0, 0)
+bones/0/rotation = Quaternion(0, 0, 0, 1)
+bones/0/scale = Vector3(1, 1, 1)
+
+[node name="Plane_001" type="MeshInstance3D" parent="Armature/Skeleton3D"]
+layers = 2
+mesh = SubResource("ArrayMesh_mxi27")
+skin = SubResource("Skin_wrhjf")
+
+[node name="BoneAttachment3D" type="BoneAttachment3D" parent="Armature/Skeleton3D"]
+bone_name = "Bone"
+bone_idx = 0
+
+[node name="lock_icon" type="Sprite3D" parent="Armature/Skeleton3D/BoneAttachment3D"]
+transform = Transform3D(-3.59917e-08, 0, 6.99269, 0, 6.99269, 0, -6.99269, 0, -3.59917e-08, 0.0117092, 1.64499, -0.813582)
+visible = false
+layers = 2
+modulate = Color(0, 0.635294, 0.360784, 1)
+texture_filter = 0
+texture = ExtResource("2_457ha")
+
+[node name="Plane_002" type="MeshInstance3D" parent="."]
+transform = Transform3D(0, 1, 0, -1, 0, 0, 0, 0, 1, 0, -0.5, 0)
+layers = 2
+material_override = SubResource("StandardMaterial3D_xxp0i")
+transparency = 0.53
+mesh = SubResource("ArrayMesh_rsmxt")
+skeleton = NodePath("")
+
+[node name="area" type="Area3D" parent="."]
+collision_layer = 2
+collision_mask = 2
+input_ray_pickable = false
+
+[node name="col" type="CollisionShape3D" parent="area"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.497498, 0)
+shape = SubResource("BoxShape3D_e1pfk")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="."]
+libraries = {
+"": SubResource("AnimationLibrary_1v0tv")
+}

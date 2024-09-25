@@ -1,0 +1,14 @@
+[gd_scene load_steps=2 format=3 uid="uid://tw37dldaisdv"]
+
+[ext_resource type="Script" path="res://scripts/Game/2D/circuitboard_root_node.gd" id="1_2vtpm"]
+
+[node name="circuitboard" type="Node2D"]
+script = ExtResource("1_2vtpm")
+
+[node name="camera" type="Camera2D" parent="."]
+
+[node name="Label" type="Label" parent="."]
+offset_right = 258.0
+offset_bottom = 45.0
+theme_override_font_sizes/font_size = 32
+text = "circuitboard WIP"

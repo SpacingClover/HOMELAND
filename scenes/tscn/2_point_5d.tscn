@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://c4e2ehsrm1opl"]
+
+[ext_resource type="Script" path="res://scripts/Game/2.5D/2_point_5d.gd" id="1_jja4e"]
+[ext_resource type="PackedScene" uid="uid://dr7ngarl0jew5" path="res://scenes/tscn/player3D.tscn" id="3_fu6dm"]
+
+[node name="2point5D" type="Node3D"]
+script = ExtResource("1_jja4e")
+
+[node name="root" type="Node3D" parent="."]
+transform = Transform3D(-8.74228e-08, 0, -2, 0, 2, 0, 2, 0, -8.74228e-08, 0, 0, 0)
+
+[node name="entities" type="Node3D" parent="."]
+
+[node name="player" parent="entities" instance=ExtResource("3_fu6dm")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0607989, 0, -0.104411)

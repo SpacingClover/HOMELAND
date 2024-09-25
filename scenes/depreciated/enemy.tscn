@@ -1,0 +1,42 @@
+[gd_scene load_steps=6 format=3 uid="uid://c4ob4ec0t5or4"]
+
+[ext_resource type="Script" path="res://scripts/depreciated/enemy.gd" id="1_rhf2s"]
+[ext_resource type="Texture2D" uid="uid://cqt2jkqun5q42" path="res://visuals/spritesheets/characters/enemies.png" id="2_nj3o5"]
+[ext_resource type="PackedScene" uid="uid://bpgt8f807lrnt" path="res://scenes/depreciated/interaction_box.tscn" id="3_8vyvw"]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_bfhga"]
+radius = 17.0
+height = 120.0
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_xnjl6"]
+size = Vector2(154, 254)
+
+[node name="enemy" type="CharacterBody2D"]
+y_sort_enabled = true
+floor_block_on_wall = false
+platform_floor_layers = 4294967040
+script = ExtResource("1_rhf2s")
+
+[node name="body" type="Sprite2D" parent="."]
+texture_filter = 1
+position = Vector2(0, -127.384)
+scale = Vector2(25.452, 25.452)
+texture = ExtResource("2_nj3o5")
+vframes = 2
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-2, -16.384)
+rotation = 1.5708
+shape = SubResource("CapsuleShape2D_bfhga")
+
+[node name="interaction_box" parent="." instance=ExtResource("3_8vyvw")]
+collision_layer = 2
+collision_mask = 0
+
+[node name="col" type="CollisionShape2D" parent="interaction_box"]
+position = Vector2(-1, -128)
+shape = SubResource("RectangleShape2D_xnjl6")
+
+[node name="nav" type="NavigationAgent2D" parent="."]
+
+[node name="ray" type="RayCast2D" parent="."]

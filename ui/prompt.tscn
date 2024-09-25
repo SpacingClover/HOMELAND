@@ -1,0 +1,176 @@
+[gd_scene load_steps=9 format=3 uid="uid://tf3gh0rw7i5a"]
+
+[ext_resource type="Script" path="res://scripts/ui_scripts/prompt.gd" id="1_vs4st"]
+[ext_resource type="FontFile" uid="uid://dwyueijbfacs3" path="res://visuals/fonts/PixeloidSans.ttf" id="2_ju510"]
+[ext_resource type="Theme" uid="uid://c325trpkuimxv" path="res://visuals/themes/Prompt_Button.theme" id="3_un2ob"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_8fa5n"]
+bg_color = Color(0.952941, 0.294118, 0, 1)
+border_width_left = 30
+border_width_top = 15
+border_width_right = 30
+border_width_bottom = 25
+border_color = Color(1, 0.376471, 0, 1)
+shadow_color = Color(0.952941, 0.294118, 0, 1)
+shadow_size = 50
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_lyx6y"]
+bg_color = Color(1, 0.376471, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_2c5hk"]
+content_margin_left = 24.0
+content_margin_top = 2.0
+content_margin_right = 24.0
+content_margin_bottom = 2.0
+bg_color = Color(1, 0.501961, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_amwo3"]
+bg_color = Color(1, 0.376471, 0, 1)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_46wyn"]
+content_margin_left = 35.0
+content_margin_top = 5.0
+content_margin_right = 35.0
+content_margin_bottom = 5.0
+bg_color = Color(0.952941, 0.294118, 0, 1)
+
+[node name="prompt" type="CenterContainer"]
+process_mode = 3
+texture_filter = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = -880.0
+offset_bottom = -487.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+script = ExtResource("1_vs4st")
+
+[node name="Control" type="Control" parent="."]
+layout_mode = 2
+
+[node name="Panel" type="PanelContainer" parent="Control"]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -584.0
+offset_top = -336.0
+offset_right = 592.0
+offset_bottom = 360.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_8fa5n")
+
+[node name="MarginContainer" type="MarginContainer" parent="Control/Panel"]
+layout_mode = 2
+theme_override_constants/margin_left = 55
+theme_override_constants/margin_top = 115
+theme_override_constants/margin_right = 55
+theme_override_constants/margin_bottom = 25
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Control/Panel/MarginContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ScrollContainer" type="ScrollContainer" parent="Control/Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="body" type="Label" parent="Control/Panel/MarginContainer/VBoxContainer/ScrollContainer"]
+custom_minimum_size = Vector2(250, 80)
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+theme_override_colors/font_color = Color(1, 0.776471, 0.156863, 1)
+theme_override_fonts/font = ExtResource("2_ju510")
+theme_override_font_sizes/font_size = 46
+text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce faucibus dui eu enim cursus auctor. Sed ac risus pretium, faucibus tortor sed, facilisis quam."
+vertical_alignment = 1
+autowrap_mode = 3
+
+[node name="HSplitContainer" type="HSplitContainer" parent="Control/Panel/MarginContainer/VBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 4
+
+[node name="textinput" type="LineEdit" parent="Control/Panel/MarginContainer/VBoxContainer/HSplitContainer"]
+visible = false
+custom_minimum_size = Vector2(230, 0)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.694118, 0.156863, 1)
+theme_override_colors/font_selected_color = Color(0.67451, 0.317647, 0, 1)
+theme_override_colors/caret_color = Color(1, 0.694118, 0.156863, 1)
+theme_override_colors/selection_color = Color(0.894118, 0.431373, 0, 1)
+theme_override_fonts/font = ExtResource("2_ju510")
+theme_override_font_sizes/font_size = 45
+theme_override_styles/normal = SubResource("StyleBoxFlat_lyx6y")
+theme_override_styles/focus = SubResource("StyleBoxFlat_2c5hk")
+
+[node name="string_accept" type="Button" parent="Control/Panel/MarginContainer/VBoxContainer/HSplitContainer"]
+visible = false
+custom_minimum_size = Vector2(31, 31)
+layout_mode = 2
+theme = ExtResource("3_un2ob")
+text = " < "
+
+[node name="accept" type="Button" parent="Control/Panel/MarginContainer/VBoxContainer/HSplitContainer"]
+custom_minimum_size = Vector2(104, 31)
+layout_mode = 2
+theme = ExtResource("3_un2ob")
+text = "Continue"
+
+[node name="deny" type="Button" parent="Control/Panel/MarginContainer/VBoxContainer/HSplitContainer"]
+custom_minimum_size = Vector2(104, 31)
+layout_mode = 2
+theme = ExtResource("3_un2ob")
+text = "Exit Game"
+
+[node name="Panel2" type="Panel" parent="Control"]
+layout_mode = 2
+offset_left = -554.0
+offset_top = -321.0
+offset_right = 562.0
+offset_bottom = -216.0
+theme_override_styles/panel = SubResource("StyleBoxFlat_amwo3")
+
+[node name="PanelContainer" type="PanelContainer" parent="Control/Panel2"]
+custom_minimum_size = Vector2(180, 26.96)
+layout_mode = 2
+offset_left = 346.0
+offset_top = 9.0
+offset_right = 766.0
+offset_bottom = 77.0
+size_flags_horizontal = 4
+theme_override_styles/panel = SubResource("StyleBoxFlat_46wyn")
+
+[node name="title" type="Label" parent="Control/Panel2/PanelContainer"]
+custom_minimum_size = Vector2(350, 60)
+layout_mode = 2
+theme_override_colors/font_color = Color(1, 0.694118, 0.156863, 1)
+theme_override_fonts/font = ExtResource("2_ju510")
+theme_override_font_sizes/font_size = 55
+text = "Popup Title"
+horizontal_alignment = 1
+
+[node name="prev" type="Button" parent="Control"]
+custom_minimum_size = Vector2(104, 31)
+layout_mode = 2
+offset_left = -520.0
+offset_top = 251.0
+offset_right = -357.0
+offset_bottom = 310.0
+size_flags_horizontal = 3
+theme = ExtResource("3_un2ob")
+text = "prev"
+
+[node name="next" type="Button" parent="Control"]
+custom_minimum_size = Vector2(104, 31)
+layout_mode = 2
+offset_left = 376.0
+offset_top = 251.0
+offset_right = 534.0
+offset_bottom = 310.0
+theme = ExtResource("3_un2ob")
+text = "next"

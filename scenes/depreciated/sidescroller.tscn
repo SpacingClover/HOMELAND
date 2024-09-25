@@ -1,0 +1,107 @@
+[gd_scene load_steps=10 format=3 uid="uid://chj3nhn14gks5"]
+
+[ext_resource type="Script" path="res://scripts/depreciated/2dworld.gd" id="1_pb0jt"]
+[ext_resource type="TileSet" uid="uid://bcot05ow5gi2j" path="res://visuals/spritesheets/misc/tiles.tres" id="2_8mi5c"]
+[ext_resource type="Script" path="res://scripts/depreciated/sizescrollerTiles.gd" id="3_oom71"]
+[ext_resource type="PackedScene" uid="uid://pm684mmnmyd2" path="res://scenes/depreciated/player.tscn" id="4_0abi2"]
+[ext_resource type="PackedScene" uid="uid://beb0a4vk5jf55" path="res://scenes/depreciated/pot.tscn" id="5_h64dl"]
+[ext_resource type="PackedScene" uid="uid://c4ob4ec0t5or4" path="res://scenes/depreciated/enemy.tscn" id="6_dhgke"]
+
+[sub_resource type="WorldBoundaryShape2D" id="WorldBoundaryShape2D_b074w"]
+distance = -0.416305
+
+[sub_resource type="QuadMesh" id="QuadMesh_g5k8e"]
+center_offset = Vector3(-0.5, 0, 0)
+
+[sub_resource type="NavigationPolygon" id="NavigationPolygon_qipns"]
+outlines = Array[PackedVector2Array]([PackedVector2Array(-109, -31, 1153, -28, 1142, 873, -142, 894)])
+source_geometry_group_name = &"navigation_polygon_source_group"
+
+[node name="sidescroller" type="Node2D"]
+y_sort_enabled = true
+
+[node name="world" type="CharacterBody2D" parent="."]
+script = ExtResource("1_pb0jt")
+
+[node name="TileMap" type="TileMap" parent="world"]
+z_index = -1
+texture_filter = 1
+scale = Vector2(13.495, 13.495)
+tile_set = ExtResource("2_8mi5c")
+format = 2
+layer_0/y_sort_enabled = true
+layer_0/tile_data = PackedInt32Array(196608, 196608, 0, 131073, 196608, 0, 1, 196608, 0, 65538, 196608, 0, 3, 196608, 0, 65540, 196608, 0, 5, 196608, 0, 131077, 196608, 0, 131075, 196608, 0, 196610, 196608, 0, 196612, 196608, 0, 65536, 196608, 0)
+script = ExtResource("3_oom71")
+
+[node name="border" type="StaticBody2D" parent="world"]
+visible = false
+
+[node name="col1" type="CollisionShape2D" parent="world/border"]
+rotation = 1.57079
+shape = SubResource("WorldBoundaryShape2D_b074w")
+
+[node name="col2" type="CollisionShape2D" parent="world/border"]
+rotation = -1.57079
+shape = SubResource("WorldBoundaryShape2D_b074w")
+disabled = true
+
+[node name="col3" type="CollisionShape2D" parent="world/border"]
+shape = SubResource("WorldBoundaryShape2D_b074w")
+disabled = true
+
+[node name="col4" type="CollisionShape2D" parent="world/border"]
+rotation = -3.14159
+shape = SubResource("WorldBoundaryShape2D_b074w")
+disabled = true
+
+[node name="frame" type="MeshInstance2D" parent="world/border"]
+modulate = Color(0, 0.670588, 0.231373, 1)
+z_index = 2
+position = Vector2(-184, -139)
+scale = Vector2(398, 374.5)
+mesh = SubResource("QuadMesh_g5k8e")
+
+[node name="frame2" type="MeshInstance2D" parent="world/border"]
+modulate = Color(0.47451, 0.615686, 0.156863, 1)
+z_index = 2
+position = Vector2(-184, -139)
+rotation = -3.14159
+scale = Vector2(398, 374.5)
+mesh = SubResource("QuadMesh_g5k8e")
+
+[node name="frame3" type="MeshInstance2D" parent="world/border"]
+modulate = Color(0.45098, 0.619608, 0.14902, 1)
+z_index = 2
+position = Vector2(-184, -139)
+rotation = -1.57079
+scale = Vector2(398, 374.5)
+mesh = SubResource("QuadMesh_g5k8e")
+
+[node name="frame4" type="MeshInstance2D" parent="world/border"]
+modulate = Color(0.47451, 0.615686, 0.0666667, 1)
+z_index = 2
+position = Vector2(-184, -139)
+rotation = -4.71238
+scale = Vector2(398, 374.5)
+mesh = SubResource("QuadMesh_g5k8e")
+
+[node name="NavigationRegion2D" type="NavigationRegion2D" parent="world"]
+navigation_polygon = SubResource("NavigationPolygon_qipns")
+
+[node name="player" parent="." instance=ExtResource("4_0abi2")]
+position = Vector2(289, 556)
+
+[node name="pot" parent="." instance=ExtResource("5_h64dl")]
+position = Vector2(554, 614)
+
+[node name="pot2" parent="." instance=ExtResource("5_h64dl")]
+position = Vector2(644, 459)
+
+[node name="pot3" parent="." instance=ExtResource("5_h64dl")]
+position = Vector2(854, 563)
+
+[node name="pot4" parent="." instance=ExtResource("5_h64dl")]
+position = Vector2(954, 394)
+
+[node name="enemy" parent="." instance=ExtResource("6_dhgke")]
+position = Vector2(430, 308)

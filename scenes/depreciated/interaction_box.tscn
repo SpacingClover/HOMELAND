@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://bpgt8f807lrnt"]
+
+[ext_resource type="Script" path="res://scripts/depreciated/interaction_box.gd" id="1_rcs5a"]
+
+[node name="interaction_box" type="StaticBody2D"]
+script = ExtResource("1_rcs5a")

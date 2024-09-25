@@ -1,0 +1,22 @@
+[remap]
+
+importer="wavefront_obj"
+importer_version=1
+type="Mesh"
+uid="uid://lickyreku7pd"
+path="res://.godot/imported/endtable.obj-da4e252507f7c8b78a24187a13931133.mesh"
+
+[deps]
+
+files=["res://.godot/imported/endtable.obj-da4e252507f7c8b78a24187a13931133.mesh"]
+
+source_file="res://geometry/endtable.obj"
+dest_files=["res://.godot/imported/endtable.obj-da4e252507f7c8b78a24187a13931133.mesh", "res://.godot/imported/endtable.obj-da4e252507f7c8b78a24187a13931133.mesh"]
+
+[params]
+
+generate_tangents=true
+scale_mesh=Vector3(1, 1, 1)
+offset_mesh=Vector3(0, 0, 0)
+optimize_mesh=true
+force_disable_mesh_compression=false

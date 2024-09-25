@@ -1,0 +1,23 @@
+[gd_scene load_steps=5 format=3 uid="uid://uio04jlrf46n"]
+
+[ext_resource type="Script" path="res://scripts/depreciated/wirenode.gd" id="1_rwcfb"]
+[ext_resource type="Texture2D" uid="uid://n20yabmiqykc" path="res://visuals/materials/new_gradient_texture_1d.tres" id="2_jed38"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_ah5uq"]
+radius = 25.0
+height = 50.0
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_mqdqe"]
+radius = 37.0135
+
+[node name="wirenode" type="StaticBody2D"]
+collision_layer = 2
+collision_mask = 2
+script = ExtResource("1_rwcfb")
+
+[node name="MeshInstance2D" type="MeshInstance2D" parent="."]
+mesh = SubResource("SphereMesh_ah5uq")
+texture = ExtResource("2_jed38")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_mqdqe")

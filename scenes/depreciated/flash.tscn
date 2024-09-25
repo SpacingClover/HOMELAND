@@ -1,0 +1,20 @@
+[gd_scene load_steps=4 format=3 uid="uid://dsldu4gwo8ps2"]
+
+[ext_resource type="Texture2D" uid="uid://cu0u2cy6lmv3u" path="res://visuals/spritesheets/world_textures/tilesheet.png" id="1_51dlu"]
+[ext_resource type="Script" path="res://scripts/depreciated/flash.gd" id="2_fytqe"]
+[ext_resource type="AudioStream" uid="uid://3gx26ksgmy0f" path="res://audio/sound_effects/shot.wav" id="3_rf7jq"]
+
+[node name="flash" type="Sprite2D"]
+texture_filter = 1
+scale = Vector2(25, 25)
+texture = ExtResource("1_51dlu")
+region_enabled = true
+region_rect = Rect2(0, 48, 16, 16)
+script = ExtResource("2_fytqe")
+
+[node name="AudioStreamPlayer2D" type="AudioStreamPlayer" parent="."]
+stream = ExtResource("3_rf7jq")
+pitch_scale = 1.5
+autoplay = true
+
+[node name="Timer" type="Timer" parent="."]
