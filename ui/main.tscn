@@ -97,9 +97,11 @@ layout_mode = 2
 shooterscene = true
 
 [node name="2point5D" parent="HBoxContainer/VBoxContainer/GameView1" instance=ExtResource("4_qe4dl")]
+visible = false
 
 [node name="title" type="ScrollContainer" parent="HBoxContainer/VBoxContainer/GameView1"]
 process_mode = 3
+visible = false
 layout_mode = 2
 horizontal_scroll_mode = 0
 vertical_scroll_mode = 0
@@ -179,9 +181,11 @@ omniscroll = true
 clicking2d = true
 
 [node name="circuitboard" parent="HBoxContainer/VBoxContainer/GameView2" instance=ExtResource("10_o6hli")]
+visible = false
 
 [node name="lists" type="ScrollContainer" parent="HBoxContainer/VBoxContainer/GameView2"]
 process_mode = 3
+visible = false
 layout_mode = 2
 horizontal_scroll_mode = 0
 vertical_scroll_mode = 0
@@ -264,9 +268,11 @@ orbit3d = true
 
 [node name="3d view" parent="HBoxContainer/VBoxContainer2/GameView3" instance=ExtResource("15_or3fd")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00182092, 0, 0)
+visible = false
 
 [node name="buttons" type="Control" parent="HBoxContainer/VBoxContainer2/GameView3"]
 process_mode = 3
+visible = false
 layout_mode = 2
 script = ExtResource("16_bwl38")
 
@@ -445,9 +451,11 @@ orbit3d = true
 mapview = true
 
 [node name="map view" parent="HBoxContainer/VBoxContainer2/GameView4" instance=ExtResource("18_72ip8")]
+visible = false
 
 [node name="extra" type="ScrollContainer" parent="HBoxContainer/VBoxContainer2/GameView4"]
 process_mode = 3
+visible = false
 layout_mode = 2
 horizontal_scroll_mode = 0
 vertical_scroll_mode = 0

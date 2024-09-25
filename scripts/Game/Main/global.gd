@@ -115,6 +115,11 @@ func enter_game_transition(game:GameData)->void:
 	circuitboard.load_board()
 	world3D.room_movement_axis = current_game.current_axis
 	
+	mapview.show()
+	shooterscene.show()
+	circuitboard.show()
+	world3D.show()
+	
 	hide_menu.emit()
 	menu_hidden = true
 	
