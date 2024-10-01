@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://by3508djlmxpk"
-path="res://.godot/imported/24x24_player.png-9cfec2166afafda5d99beb933302fd23.ctex"
+uid="uid://ymfms1vtlpue"
+path="res://.godot/imported/brown_sandals.png-53038e66b1aaf189f8ca97a0c2d46a28.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://visuals/spritesheets/characters/24x24_player.png"
-dest_files=["res://.godot/imported/24x24_player.png-9cfec2166afafda5d99beb933302fd23.ctex"]
+source_file="res://visuals/spritesheets/characters/brown_sandals.png"
+dest_files=["res://.godot/imported/brown_sandals.png-53038e66b1aaf189f8ca97a0c2d46a28.ctex"]
 
 [params]
 

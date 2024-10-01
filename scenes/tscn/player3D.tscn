@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://dr7ngarl0jew5"]
 
 [ext_resource type="Script" path="res://scripts/Game/2.5D/player3d.gd" id="1_yqkw8"]
-[ext_resource type="Texture2D" uid="uid://by3508djlmxpk" path="res://visuals/spritesheets/characters/24x24_player.png" id="2_eh1l3"]
+[ext_resource type="Texture2D" uid="uid://ymfms1vtlpue" path="res://visuals/spritesheets/characters/brown_sandals.png" id="2_xq4cx"]
 [ext_resource type="Shape3D" uid="uid://ctdv55soccak8" path="res://geometry/2point5Dcollider.shape" id="3_4simt"]
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_muk8t"]
@@ -14,28 +14,28 @@ collision_mask = 2
 script = ExtResource("1_yqkw8")
 
 [node name="legs" type="Sprite3D" parent="."]
-transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 10, 0, 0.5, 0)
+transform = Transform3D(6.19144, 0, 0, 0, 6.19144, 0, 0, 0, 6.19144, 0, 0.557489, 0)
 layers = 2
 sorting_offset = -0.01
 billboard = 2
 texture_filter = 0
-texture = ExtResource("2_eh1l3")
+texture = ExtResource("2_xq4cx")
 hframes = 2
 vframes = 3
 
 [node name="body" type="Sprite3D" parent="."]
-transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 10, 0, 0.5, 0)
+transform = Transform3D(6.19144, 0, 0, 0, 6.19144, 0, 0, 0, 6.19144, 0, 0.557489, 0)
 layers = 2
 billboard = 2
 texture_filter = 0
-texture = ExtResource("2_eh1l3")
+texture = ExtResource("2_xq4cx")
 hframes = 2
 vframes = 3
-frame = 17
+frame = 4
 region_rect = Rect2(0, 0, 16, 16)
 
 [node name="col" type="CollisionShape3D" parent="."]
-transform = Transform3D(1.585, 0, 0, 0, 2, 0, 0, 0, 1.15372, 0, 0, 0)
+transform = Transform3D(1.9061, 0, 0, 0, 2.40518, 0, 0, 0, 1.38745, 0, 0, 0)
 shape = ExtResource("3_4simt")
 
 [node name="cam" type="Camera3D" parent="."]
