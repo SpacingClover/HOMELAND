@@ -8,8 +8,11 @@ enum SPRITE_SECTIONS{ ##this will be an offset in the spritesheet depending on w
 var sprite_section : int = SPRITE_SECTIONS.DEFAULT
 
 const CAMERACENTER : Vector3 = Vector3(0,2.36,5.795)
-const LEGSMINFRAME : int = 13
-const LEGSMAXFRAME : int = 16
+const BODYIDLEFRAME : int = 4
+const BODY_BOBFRAME : int = 5
+const LEGSIDLEFRAME : int = 0
+const LEGSMINFRAME : int = 1
+const LEGSMAXFRAME : int = 3
 
 static var textureatlas : CompressedTexture2D = preload("res://visuals/spritesheets/characters/player.png")
 
@@ -176,18 +179,21 @@ func player_motion()->void:
 		if not legs_tweening:
 			legs_tweening = true
 			legs.frame = LEGSMINFRAME
-			legstween = create_tween()
+			legstween = create_tween().set_parallel()
 			legstween.set_trans(Tween.TRANS_LINEAR)
 			legstween.tween_property(legs,"frame",LEGSMAXFRAME,0.5)
+			legstween.tween_property(sprite,"frame",BODY_BOBFRAME,0.5)
 			legstween.finished.connect(
 				func()->void:
 					legs_tweening=false
 					legs.frame=LEGSMINFRAME
+					sprite.frame=BODYIDLEFRAME
 					player_motion()
 			)
 	else:
 		walking = false
-		legs.frame = LEGSMINFRAME
+		legs.frame = LEGSIDLEFRAME
+		sprite.frame = BODYIDLEFRAME
 		if legs_tweening:
 			legs_tweening = false
 			legstween.stop()

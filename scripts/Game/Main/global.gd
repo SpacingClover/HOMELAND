@@ -198,6 +198,8 @@ func unload_game_and_exit_to_menu()->void:
 	circuitboard.clear_board()
 	mapview.reset_map()
 	debug_reset()
+	#titlescreen.extra.hide()
+	#titlescreen.lists.hide()
 	
 	open_menu.emit()
 	

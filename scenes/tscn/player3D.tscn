@@ -1,7 +1,7 @@
 [gd_scene load_steps=5 format=3 uid="uid://dr7ngarl0jew5"]
 
 [ext_resource type="Script" path="res://scripts/Game/2.5D/player3d.gd" id="1_yqkw8"]
-[ext_resource type="Texture2D" uid="uid://bvmhfeugnmy2t" path="res://visuals/spritesheets/characters/player.png" id="2_xvn26"]
+[ext_resource type="Texture2D" uid="uid://by3508djlmxpk" path="res://visuals/spritesheets/characters/24x24_player.png" id="2_eh1l3"]
 [ext_resource type="Shape3D" uid="uid://ctdv55soccak8" path="res://geometry/2point5Dcollider.shape" id="3_4simt"]
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_muk8t"]
@@ -19,19 +19,18 @@ layers = 2
 sorting_offset = -0.01
 billboard = 2
 texture_filter = 0
-texture = ExtResource("2_xvn26")
-hframes = 4
-vframes = 5
-frame = 13
+texture = ExtResource("2_eh1l3")
+hframes = 2
+vframes = 3
 
 [node name="body" type="Sprite3D" parent="."]
 transform = Transform3D(10, 0, 0, 0, 10, 0, 0, 0, 10, 0, 0.5, 0)
 layers = 2
 billboard = 2
 texture_filter = 0
-texture = ExtResource("2_xvn26")
-hframes = 4
-vframes = 5
+texture = ExtResource("2_eh1l3")
+hframes = 2
+vframes = 3
 frame = 17
 region_rect = Rect2(0, 0, 16, 16)
 
