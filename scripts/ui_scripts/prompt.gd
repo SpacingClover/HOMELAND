@@ -28,8 +28,10 @@ func _ready()->void:
 	next.pressed.connect(next_button)
 	prev.pressed.connect(prev_button)
 
-func show_prompt(prompt_type:Prompt.PROMPT_MODES,body_text:String=&"",title_text:String=&"",accept_button_text:String=&"",accept_callable:Callable=Global.null_call,deny_button_text:String=&"",deny_callable:Callable=Global.null_call,string_input_placeholder_text:String=&"")->void:
+func show_prompt(prompt_type:Prompt.PROMPT_MODES,prev_next_visible:bool=false,body_text:String=&"",title_text:String=&"",accept_button_text:String=&"",accept_callable:Callable=Global.null_call,deny_button_text:String=&"",deny_callable:Callable=Global.null_call,string_input_placeholder_text:String=&"")->void:
 	mode = prompt_type
+	next.visible = prev_next_visible
+	prev.visible = prev_next_visible
 	match mode:
 		PROMPT_MODES.NOTIFY:
 			if title_text == &"":
@@ -48,15 +50,16 @@ func show_prompt(prompt_type:Prompt.PROMPT_MODES,body_text:String=&"",title_text
 			accept.show()
 			deny.hide()
 			accept_call = accept_callable
-			if Tutorials.tutorial_enabled:
-				saved_prompt_id = Tutorials.next_tutorial_popup
-				accept.pressed.connect(func()->void:Global.tutorial_closed.emit(Tutorials.next_tutorial_popup),CONNECT_ONE_SHOT)
-				if Global.in_game:
-					next.hide()
-				if saved_prompt_id > 0:
-					prev.show()
-				else:
-					prev.hide()
+			if PopUps.tutorial_enabled:
+				saved_prompt_id = PopUps.next_tutorial_popup
+				accept.pressed.connect(func()->void:Global.tutorial_closed.emit(PopUps.next_tutorial_popup),CONNECT_ONE_SHOT)
+				if prev_next_visible:
+					if Global.in_game:
+						next.hide()
+					if saved_prompt_id > 0:
+						prev.show()
+					else:
+						prev.hide()
 		PROMPT_MODES.ACCEPT_DENY:
 			pass
 		PROMPT_MODES.INPUT_STRING:
@@ -85,19 +88,19 @@ func prompt_closed()->void:
 	get_parent().remove_child(self)
 
 func next_button()->void:
-	if Tutorials.tutorial_enabled or not Global.in_game:
-		if (saved_prompt_id + 1 < Tutorials.next_tutorial_popup and Global.in_game) or (saved_prompt_id + 1 < Global.TUTORIAL.TUTORIAL_OVER and not Global.in_game):
+	if PopUps.tutorial_enabled or not Global.in_game:
+		if (saved_prompt_id + 1 < PopUps.next_tutorial_popup and Global.in_game) or (saved_prompt_id + 1 < PopUps.TUTORIAL.TUTORIAL_OVER and not Global.in_game):
 			saved_prompt_id += 1
-			body.text = Tutorials.get_tutorial_text(saved_prompt_id)
-			if saved_prompt_id + 1 >= Tutorials.next_tutorial_popup:
+			body.text = PopUps.get_tutorial_text(saved_prompt_id)
+			if saved_prompt_id + 1 >= PopUps.next_tutorial_popup:
 				next.hide()
 			prev.show()
 
 func prev_button()->void:
-	if Tutorials.tutorial_enabled or not Global.in_game:
+	if PopUps.tutorial_enabled or not Global.in_game:
 		if saved_prompt_id - 1 >= 0:
 			saved_prompt_id -= 1
-			body.text = Tutorials.get_tutorial_text(saved_prompt_id)
+			body.text = PopUps.get_tutorial_text(saved_prompt_id)
 			if saved_prompt_id - 1 < 0:
 				prev.hide()
 			next.show()

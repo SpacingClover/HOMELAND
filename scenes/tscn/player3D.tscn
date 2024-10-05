@@ -35,7 +35,7 @@ frame = 4
 region_rect = Rect2(0, 0, 16, 16)
 
 [node name="col" type="CollisionShape3D" parent="."]
-transform = Transform3D(1.9061, 0, 0, 0, 2.40518, 0, 0, 0, 1.38745, 0, 0, 0)
+transform = Transform3D(1.28839, 0, 0, 0, 2.36057, 0, 0, 0, 0.937815, 0, 0, 0)
 shape = ExtResource("3_4simt")
 
 [node name="cam" type="Camera3D" parent="."]

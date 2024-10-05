@@ -800,5 +800,4 @@ muted = true
 
 [node name="stream_1" type="AudioStreamPlayer" parent="MusicManager"]
 process_mode = 3
-autoplay = true
 max_polyphony = 10

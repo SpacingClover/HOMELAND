@@ -1,21 +1,5 @@
 extends Node
 
-enum SCREENS{
-	SHOOTER,
-	CIRCUITBOARD,
-	ROOM_MOVE,
-	MAP
-}
-enum TUTORIAL{
-	MOVEMENT,#wasd
-	INTERACT_DOOR,#e
-	MOVE_ROOM,#lclick
-	DROP_ROOM,#rclick
-	SWITCH_AXIS,#space
-	PAN_VIEW,#centerclick/ctrl
-	TUTORIAL_OVER
-}
-
 const current_debug_load : String = "res://demos/demo_levels_1.res"
 
 var screenroots : Array[GameViewExports]
@@ -31,7 +15,7 @@ var player : Player3D
 var player_controlling : GameView
 var mouse_over_view : GameView
 
-var selected_game_dir : String
+var selected_game_dir : String #MUST be set or saving will not work
 
 var current_game : GameData
 var current_region : City
@@ -63,7 +47,7 @@ func _init()->void:
 
 func _ready()->void:
 	screenroots = titlescreen.get_screen_roots()
-	Tutorials.global_ready()
+	PopUps.global_ready()
 	get_window().grab_focus()
 
 func lock()->void:
@@ -178,16 +162,16 @@ func null_call()->void:
 
 func pause()->void:
 	get_tree().paused = true
-	Tutorials.prompt.hide()
+	PopUps.prompt.hide()
 
 func resume()->void:
 	get_tree().paused = false
-	Tutorials.prompt.show()
+	PopUps.prompt.show()
 
 func unload_game_and_exit_to_menu()->void:
 	
 	resume_game.emit()
-	Tutorials.prompt.hide()
+	PopUps.prompt.hide()
 	
 	current_game = null
 	current_region = null

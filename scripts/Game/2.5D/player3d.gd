@@ -142,7 +142,7 @@ func e_interaction()->void:
 		Global.shooterscene.room3d.add_child(obj)
 		Global.shooterscene.room3d.objects.append(obj)
 		obj.global_position = get_cursor_position()
-		obj.rotation_degrees.y += float(randi_range(0,1))*90
+		#obj.rotation_degrees.y += float(randi_range(0,1))*90
 		interacted_this_frame = true
 		DEV_OUTPUT.push_message(DEBUG_place_item_type+" created")
 		return

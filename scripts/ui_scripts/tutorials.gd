@@ -1,5 +1,22 @@
 extends Node
 
+enum SCREENS{
+	SHOOTER,
+	CIRCUITBOARD,
+	ROOM_MOVE,
+	MAP
+}
+
+enum TUTORIAL{
+	MOVEMENT,#wasd
+	INTERACT_DOOR,#e
+	MOVE_ROOM,#lclick
+	DROP_ROOM,#rclick
+	SWITCH_AXIS,#space
+	PAN_VIEW,#centerclick/ctrl
+	TUTORIAL_OVER
+}
+
 const tutorials_text : Dictionary = {
 	"0":"    To move your character, press the WASD keys, and point the cursor where youre looking (or aiming)",
 	"1":"    To interact with a door, stand near it and press E",
@@ -13,10 +30,10 @@ func get_tutorial_text(idx:int)->String:
 
 var prompt : Prompt = preload("res://ui/prompt.tscn").instantiate()
 
-var next_tutorial_popup : int = Global.TUTORIAL.TUTORIAL_OVER
+var next_tutorial_popup : int = PopUps.TUTORIAL.TUTORIAL_OVER
 
 var tutorial_enabled : bool = false:
-	set(x):tutorial_enabled=x;if(x):next_tutorial_popup=Global.TUTORIAL.MOVEMENT
+	set(x):tutorial_enabled=x;if(x):next_tutorial_popup=PopUps.TUTORIAL.MOVEMENT
 
 func global_ready()->void:
 	Global.loading_finished.connect(call_tutorial.bind(0))
@@ -27,28 +44,28 @@ func call_tutorial(which:int)->void: ##you might want to add tutorial values do 
 	
 	if next_tutorial_popup == which:
 		match next_tutorial_popup:
-			Global.TUTORIAL.MOVEMENT:
-				create_prompt(Global.SCREENS.SHOOTER,Prompt.PROMPT_MODES.NOTIFY,
+			PopUps.TUTORIAL.MOVEMENT:
+				create_prompt(PopUps.SCREENS.SHOOTER,Prompt.PROMPT_MODES.NOTIFY,true,
 				get_tutorial_text(next_tutorial_popup),&"Tutorial")
 				next_tutorial_popup += 1
-			Global.TUTORIAL.INTERACT_DOOR:
-				create_prompt(Global.SCREENS.SHOOTER,Prompt.PROMPT_MODES.NOTIFY,
+			PopUps.TUTORIAL.INTERACT_DOOR:
+				create_prompt(PopUps.SCREENS.SHOOTER,Prompt.PROMPT_MODES.NOTIFY,true,
 				get_tutorial_text(next_tutorial_popup),&"Tutorial")
 				next_tutorial_popup += 1
-			Global.TUTORIAL.MOVE_ROOM:
-				create_prompt(Global.SCREENS.ROOM_MOVE,Prompt.PROMPT_MODES.NOTIFY,
+			PopUps.TUTORIAL.MOVE_ROOM:
+				create_prompt(PopUps.SCREENS.ROOM_MOVE,Prompt.PROMPT_MODES.NOTIFY,true,
 				get_tutorial_text(next_tutorial_popup),&"Tutorial")
 				next_tutorial_popup += 1
-			Global.TUTORIAL.DROP_ROOM:
-				create_prompt(Global.SCREENS.ROOM_MOVE,Prompt.PROMPT_MODES.NOTIFY,
+			PopUps.TUTORIAL.DROP_ROOM:
+				create_prompt(PopUps.SCREENS.ROOM_MOVE,Prompt.PROMPT_MODES.NOTIFY,true,
 				get_tutorial_text(next_tutorial_popup),&"Tutorial")
 				next_tutorial_popup += 1
-			Global.TUTORIAL.SWITCH_AXIS:
-				create_prompt(Global.SCREENS.ROOM_MOVE,Prompt.PROMPT_MODES.NOTIFY,
+			PopUps.TUTORIAL.SWITCH_AXIS:
+				create_prompt(PopUps.SCREENS.ROOM_MOVE,Prompt.PROMPT_MODES.NOTIFY,true,
 				get_tutorial_text(next_tutorial_popup),&"Tutorial")
 				next_tutorial_popup += 1
-			Global.TUTORIAL.PAN_VIEW:
-				create_prompt(Global.SCREENS.ROOM_MOVE,Prompt.PROMPT_MODES.NOTIFY,
+			PopUps.TUTORIAL.PAN_VIEW:
+				create_prompt(PopUps.SCREENS.ROOM_MOVE,Prompt.PROMPT_MODES.NOTIFY,true,
 				get_tutorial_text(next_tutorial_popup),&"Tutorial")
 				next_tutorial_popup += 1
 				
@@ -60,11 +77,12 @@ func get_screen_by_int(screen:int)->Node:
 func tutorial_closed_recieved(which:int)->void:
 	if tutorial_enabled:
 		match which:
-			Global.TUTORIAL.SWITCH_AXIS:
-				call_tutorial(Global.TUTORIAL.SWITCH_AXIS)
+			PopUps.TUTORIAL.SWITCH_AXIS:
+				call_tutorial(PopUps.TUTORIAL.SWITCH_AXIS)
 
 func create_prompt( on_screen:int,
 					type:int,
+					prev_next:bool=false,
 					body_text:String=&"",
 					title_text:String=&"",
 					accept_button_text:String=&"",
@@ -76,4 +94,4 @@ func create_prompt( on_screen:int,
 	if prompt.is_inside_tree():
 		prompt.get_parent().remove_child(prompt)
 	get_screen_by_int(on_screen).add_child(prompt)
-	prompt.show_prompt(type,body_text,title_text,accept_button_text,accept_callable,deny_button_text,deny_callable,string_input_placeholder_text)
+	prompt.show_prompt(type,prev_next,body_text,title_text,accept_button_text,accept_callable,deny_button_text,deny_callable,string_input_placeholder_text)

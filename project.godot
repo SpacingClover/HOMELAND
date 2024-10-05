@@ -26,7 +26,7 @@ config/icon="res://visuals/spritesheets/misc/icon.svg"
 
 Global="*res://scripts/Game/Main/global.gd"
 SortedScripts="*res://scripts/editormodifications/SortedScripts.gd"
-Tutorials="*res://scripts/ui_scripts/tutorials.gd"
+PopUps="*res://scripts/ui_scripts/tutorials.gd"
 
 [debug]
 

@@ -171,5 +171,5 @@ func drop()->void:
 	room_instance_dropped.emit()
 
 func embedded_tutorial_setup()->void:
-	if Tutorials.tutorial_enabled and Tutorials.next_tutorial_popup <= Global.TUTORIAL.MOVE_ROOM:
-		room_instance_placed.connect(Tutorials.call_tutorial.bind(Global.TUTORIAL.DROP_ROOM),CONNECT_ONE_SHOT)
+	if PopUps.tutorial_enabled and PopUps.next_tutorial_popup <= PopUps.TUTORIAL.MOVE_ROOM:
+		room_instance_placed.connect(PopUps.call_tutorial.bind(PopUps.TUTORIAL.DROP_ROOM),CONNECT_ONE_SHOT)

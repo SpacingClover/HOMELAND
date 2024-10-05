@@ -31,14 +31,7 @@ func _input(event:InputEvent)->void:
 							push_message("invalid item id"); return
 						Global.player.DEBUG_place_item_type = typename
 						push_message("set type to "+typename)
-						Global.player.DEBUG_place_item_args = []
-						if msg_parts.size() >= 4:
-							var args : Array
-							var i : int = 3
-							while i < msg_parts.size():
-								args.append(msg_parts[i].to_int())
-								i+=1
-							Global.player.DEBUG_place_item_args = args
+						Global.player.DEBUG_place_item_args = get_args_int(msg_parts,3)
 					"mode":
 						match msg_parts[2]:
 							"place":
@@ -102,6 +95,15 @@ func _input(event:InputEvent)->void:
 				match msg_parts[1]:
 					"3d":
 						CityView.current.display_rooms()
+			"what":
+				match msg_parts[1]:
+					"type":
+						var idx : int = -INF
+						if msg_parts[2].is_valid_int(): idx = msg_parts[2].to_int()
+						if idx >= RoomItem.item_ids.size():
+							push_message("no item with index \"%s\"" % str(idx))
+						else:
+							push_message(RoomItem.item_ids[idx])
 			"breakpoint":
 				breakpoint
 			"its my birthday":
@@ -115,3 +117,12 @@ static func push_message(text:String)->void:
 	current.message_container.add_child(label)
 	await current.get_tree().create_timer(0.01).timeout
 	current.scroll_container.scroll_vertical = current.scroll_container.get_v_scroll_bar().max_value
+
+func get_args_int(msg_parts:PackedStringArray,start_at_pos:int)->PackedInt64Array:
+	if msg_parts.size() <= start_at_pos: return PackedInt64Array()
+	var args : Array
+	var i : int = start_at_pos
+	while i < msg_parts.size():
+		if msg_parts[i].is_valid_int(): args.append(msg_parts[i].to_int())
+		i+=1
+	return PackedInt64Array(args)

@@ -58,8 +58,8 @@ func display_list(type:modes)->void:
 				add_button(catagoryname)
 		
 		modes.tips:
-			Tutorials.create_prompt(Global.SCREENS.CIRCUITBOARD,Prompt.PROMPT_MODES.NOTIFY,
-			Tutorials.get_tutorial_text(0),&"Tutorial")
+			PopUps.create_prompt(PopUps.SCREENS.CIRCUITBOARD,Prompt.PROMPT_MODES.NOTIFY,true,
+			PopUps.get_tutorial_text(0),&"Tutorial")
 			return
 	
 	title.show()
