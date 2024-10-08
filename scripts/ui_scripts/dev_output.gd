@@ -42,6 +42,16 @@ func _input(event:InputEvent)->void:
 								push_message("mode normal")
 							_:
 								push_message("invalid mode at pos 2")
+					"all":
+						match msg_parts[2]:
+							"npc":
+								match msg_parts[3]:
+									"target_pos":
+										match msg_parts[4]:
+											"random":
+												for object : RoomItemInstance in Global.shooterscene.room3d.objects:
+													if object is StaticNPC:
+														object.go_to(object.position + Vector3(randf_range(-1,1),0,randf_range(-1,1)))
 					_:
 						push_message("invalid target at pos 1")
 			"save":
@@ -108,7 +118,6 @@ func _input(event:InputEvent)->void:
 				breakpoint
 			"its my birthday":
 				push_message("omg happy birthday!!")
-			_:
 				push_message("invalid keyword at pos 0")
 
 static func push_message(text:String)->void:

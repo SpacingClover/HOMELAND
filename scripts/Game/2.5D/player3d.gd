@@ -55,7 +55,7 @@ func _init()->void:
 func _process(delta:float)->void:
 	interacted_this_frame = false
 	if not is_on_floor():
-		walking_direction.y -= 2 * delta
+		walking_direction.y -= 2
 	velocity = Vector3(walking_direction.x,walking_direction.y,walking_direction.z)
 	move_and_slide()
 	if walking:
