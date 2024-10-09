@@ -10,7 +10,7 @@ config_version=5
 
 [application]
 
-config/name="four square (backup restored to current)"
+config/name="HOMELAND (movementdemo)"
 config/tags=PackedStringArray("2d", "3d", "in_dev")
 run/main_scene="res://ui/main.tscn"
 config/features=PackedStringArray("4.2", "GL Compatibility")
