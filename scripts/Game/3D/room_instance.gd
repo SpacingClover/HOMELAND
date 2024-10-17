@@ -8,8 +8,10 @@ static var pinkglow : Color = Color("e70061")
 static var doormaterial : StandardMaterial3D = preload("res://visuals/materials/3dDoor.tres")
 static var staticfeaturematerial : StandardMaterial3D
 static var cityexitdoorroommaterial : StandardMaterial3D = preload("res://visuals/materials/city_exit_door.tres")
+static var featureroommaterial : StandardMaterial3D = preload("res://visuals/materials/3D_feature.tres")
 static var rubbleboxmaterial : StandardMaterial3D = preload("res://visuals/materials/rubbleicom.tres")
 static var lock_icon : CompressedTexture2D = preload("res://visuals/spritesheets/icons/lock_icon.png")
+static var road_visual : MeshInstance3D = preload("res://scenes/scn/road_icon.scn").instantiate()
 
 static func _static_init()->void:
 	doormaterial.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
@@ -38,7 +40,9 @@ func _init(room_resource:Room)->void:
 			mesh.material_override = rubbleboxmaterial.duplicate()
 		mesh.position = boxdata.coords
 		boxdata.set_boxvisual_reference(mesh)
-		if room_resource is CityExit: mesh.material_override = cityexitdoorroommaterial
+		if room_resource is Feature:
+			if room_resource is CityExit: mesh.material_override = cityexitdoorroommaterial
+			else: mesh.material_override = featureroommaterial
 		add_child(mesh)
 		
 		var col : CollisionShape3D = CollisionShape3D.new()
@@ -75,6 +79,16 @@ func _init(room_resource:Room)->void:
 					lock_sprite.modulate = KeyInstance.get_key_color(boxdata.get_lock(dir))
 					
 					doormesh.add_child(lock_sprite)
+			
+			if boxdata.get_door(dir) == Box.CITY_EXIT_DOOR:
+				var road_icon : MeshInstance3D = road_visual.duplicate()
+				match dir:
+					City.TOP: road_icon.rotation_degrees.y = 180
+					City.BOTTOM: road_icon.rotation_degrees.y = 0
+					City.LEFT: road_icon.rotation_degrees.y = 90
+					City.RIGHT: road_icon.rotation_degrees.y = 270
+				road_icon.scale *= 1.3
+				mesh.add_child(road_icon)
 				
 	embedded_tutorial_setup()
 

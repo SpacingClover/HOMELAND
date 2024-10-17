@@ -1,0 +1,8 @@
+[gd_resource type="StandardMaterial3D" format=3 uid="uid://cmrrc8mepphgu"]
+
+[resource]
+shading_mode = 2
+specular_mode = 2
+disable_ambient_light = true
+albedo_color = Color(0.815686, 0.917647, 0.443137, 1)
+metallic_specular = 0.0

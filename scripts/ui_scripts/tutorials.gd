@@ -95,3 +95,6 @@ func create_prompt( on_screen:int,
 		prompt.get_parent().remove_child(prompt)
 	get_screen_by_int(on_screen).add_child(prompt)
 	prompt.show_prompt(type,prev_next,body_text,title_text,accept_button_text,accept_callable,deny_button_text,deny_callable,string_input_placeholder_text)
+
+func load_prompt(popup_info:PopUpInfo)->void:
+	create_prompt(popup_info.on_screen,popup_info.type,popup_info.prev_next,popup_info.body_text,popup_info.title_text,popup_info.accept_button_text,popup_info.deny_button_text,popup_info.accept_callable,popup_info.deny_callable,popup_info.string_input_placeholder_text)

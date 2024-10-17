@@ -70,6 +70,10 @@ func _input(event:InputEvent)->void:
 									push_message(Global.selected_game_dir)
 								else:
 									push_message("not in game")
+					"room":
+						match msg_parts[2]:
+							"idx":
+								push_message("room "+str(Global.current_region.rooms.find(Global.current_room)))
 					_:
 						push_message("invalid target at pos 1")
 			"inc":

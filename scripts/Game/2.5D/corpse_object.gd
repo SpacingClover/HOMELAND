@@ -16,9 +16,9 @@ enum{
 var team : int = ENEMY
 var blood_frame : int = CHEST_SHOT
 
-func pass_args(args:Array=[])->void:
-	team = args[0]
-	blood_frame = args[1]
+#func pass_args(args:Array=[])->void:
+	#team = args[0]
+	#blood_frame = args[1]
 
 func get_data()->RoomItem:
 	return RoomItem.new(item_id,position,rotation,[team,blood_frame])
