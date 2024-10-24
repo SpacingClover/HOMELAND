@@ -91,6 +91,7 @@ func reset_map()->void:
 	for child : Node3D in map_root.get_children():
 		map_root.remove_child(child)
 		child.queue_free()
+	targeted_node = null
 
 func get_cursor_object()->CityMarker3D:
 	var mousepos : Vector2 = get_viewport().get_mouse_position()

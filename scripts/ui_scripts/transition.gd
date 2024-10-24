@@ -10,6 +10,8 @@ const MAXFRAME : int = 30
 
 @export_enum("top_left","bottom_left","top_right","bottom_right") var corner : int
 
+@onready var label : Label = $CenterContainer/Label
+
 var sprite_datas : Array[TransitionHandler.SpriteUnitData]
 var required_time : Timer ## a time buffer that garuntees the transition isnt too fast
 
@@ -37,6 +39,7 @@ func end_animation()->void:
 	tween.tween_property(self,"modulate:a",0,1).set_trans(Tween.TRANS_QUAD)
 	await tween.finished
 	set_process(false)
+	label.hide()
 	hide()
 
 func _process(_delta:float)->void:
@@ -50,3 +53,7 @@ func _process(_delta:float)->void:
 	anim_locked = true
 	await get_tree().create_timer(0.05).timeout
 	anim_locked = false
+
+func display_text(text:String)->void:
+	label.text = text
+	label.show()

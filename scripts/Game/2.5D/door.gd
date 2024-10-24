@@ -163,7 +163,10 @@ func body_entered(body:PhysicsBody3D)->void:
 					Global.set_new_city(exit.nextcity,nextexitroomsidx)
 				
 				elif exit.nextcity == -1:
-					Global.return_to_titlescreen()
+					TransitionHandler.begin_transition(TransitionHandler.MOVEMENTDEMO_COMPLETED)
+					await get_tree().create_timer(10).timeout
+					TransitionHandler.end_transition()
+					Global.unload_game_and_exit_to_menu()
 				
 				elif exit.nextcity == -2:
 					return

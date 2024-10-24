@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://c372cxq116cpd"
-path="res://.godot/imported/ally.png-5e086ebcc374e4ffa0dda759ccdaebd3.ctex"
+uid="uid://bpepnbv13cmim"
+path="res://.godot/imported/ally-1.png-66906f9a6cd0ae909ca241b89a8c3528.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://visuals/spritesheets/characters/ally.png"
-dest_files=["res://.godot/imported/ally.png-5e086ebcc374e4ffa0dda759ccdaebd3.ctex"]
+source_file="res://visuals/spritesheets/characters/ally-1.png"
+dest_files=["res://.godot/imported/ally-1.png-66906f9a6cd0ae909ca241b89a8c3528.ctex"]
 
 [params]
 
