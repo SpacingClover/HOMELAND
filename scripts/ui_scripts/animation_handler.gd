@@ -2,7 +2,8 @@ class_name TransitionHandler
 
 enum{
 	ANIM_SQUIGGLES_VERT,
-	ANIM_CITY_TRANSITION_0
+	ANIM_CITY_TRANSITION_0,
+	MOVEMENTDEMO_COMPLETED
 }
 
 static var topleft : ScrollContainer
@@ -18,15 +19,19 @@ static func begin_transition(transition:int=ANIM_SQUIGGLES_VERT)->void:
 			ANIM_CITY_TRANSITION_0:
 				if screen != bottomright: screen.show()
 				else: screen.hide()
+			MOVEMENTDEMO_COMPLETED:
+				DEV_OUTPUT.push_message("{demo over transition}")
+				pass
 			_:
 				DEV_OUTPUT.push_message("invalid animation id")
 			
 		screen.sprite_datas.clear()
-		for sprite : Node in screen.get_children():
-			if sprite is Sprite2D:
-				screen.sprite_datas.append(SpriteUnitData.new(sprite,randi_range(1,2)))
-				sprite.scale.y *= 1 if randi_range(0,1) == 0 else -1
-				sprite.frame = randi_range(screen.MINFRAME,screen.MAXFRAME)
+		if transition == ANIM_SQUIGGLES_VERT or transition == ANIM_CITY_TRANSITION_0:
+			for sprite : Node in screen.get_children():
+				if sprite is Sprite2D:
+					screen.sprite_datas.append(SpriteUnitData.new(sprite,randi_range(1,2)))
+					sprite.scale.y *= 1 if randi_range(0,1) == 0 else -1
+					sprite.frame = randi_range(screen.MINFRAME,screen.MAXFRAME)
 		screen.set_process(true)
 		var tween : Tween = screen.create_tween()
 		tween.tween_property(screen,"modulate:a",1,1).set_trans(Tween.TRANS_QUAD)

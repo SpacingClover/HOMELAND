@@ -17,6 +17,7 @@ static func _static_init()->void:
 	doormaterial.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
 
 var data_reference : Room
+var tag : Label3D
 
 var is_selected : bool = false
 
@@ -89,7 +90,20 @@ func _init(room_resource:Room)->void:
 					City.RIGHT: road_icon.rotation_degrees.y = 270
 				road_icon.scale *= 1.3
 				mesh.add_child(road_icon)
-				
+	
+	tag = Label3D.new()
+	tag.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+	tag.text = "idx missing"
+	if Global.current_region.rooms.has(room_resource):
+		tag.text = str(Global.current_region.rooms.find(room_resource))
+		tag.no_depth_test = true
+		tag.scale *= 20
+		tag.global_position = room_resource.coords
+		tag.hide()
+	add_child(tag)
+	
+	DEV_OUTPUT.current.show_roomvisual_indices.connect(show_tag)
+	
 	embedded_tutorial_setup()
 
 func highlight()->void:
@@ -187,3 +201,7 @@ func drop()->void:
 func embedded_tutorial_setup()->void:
 	if PopUps.tutorial_enabled and PopUps.next_tutorial_popup <= PopUps.TUTORIAL.MOVE_ROOM:
 		room_instance_placed.connect(PopUps.call_tutorial.bind(PopUps.TUTORIAL.DROP_ROOM),CONNECT_ONE_SHOT)
+
+func show_tag()->void:
+	print("show")
+	tag.show()

@@ -100,7 +100,7 @@ func press_play()->void:
 	playdemoselected = false
 	settingsselected = false
 	tipsselected     = false
-	PopUps.prompt.hide()
+	if PopUps.prompt: PopUps.prompt.hide()
 	Global.titlescreen.extra.levelscreen.hide()
 	Global.titlescreen.lists.display_list(Global.titlescreen.lists.modes.games)
 
@@ -114,7 +114,7 @@ func press_playdemo()->void:
 	playdemoselected = true
 	settingsselected = false
 	tipsselected     = false
-	PopUps.prompt.hide()
+	if PopUps.prompt: PopUps.prompt.hide()
 	Global.titlescreen.extra.levelscreen.hide()
 	Global.titlescreen.lists.display_list(Global.titlescreen.lists.modes.demos)
 
@@ -128,7 +128,7 @@ func press_settings()->void:
 	playdemoselected = false
 	settingsselected = true
 	tipsselected     = false
-	PopUps.prompt.hide()
+	if PopUps.prompt: PopUps.prompt.hide()
 	Global.titlescreen.extra.levelscreen.hide()
 	Global.titlescreen.lists.display_list(Global.titlescreen.lists.modes.settings)
 

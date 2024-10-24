@@ -5,11 +5,7 @@ class_name StaticNPC extends RoomItemInstance
 var walking : bool = false
 var walklock : float
 
-@export var instruction_step_idx : int
-@export var instructions : Array[InstructionStep]
-var current_step : InstructionStep:
-	get: return instructions[instruction_step_idx]
-	set(x): breakpoint
+@export var instruction_step : int = 0
 
 func _ready()->void:
 	run_instruction()
@@ -21,16 +17,14 @@ func _process(delta:float)->void:
 	animation(delta)
 
 func pass_args(args:Array=[])->void:
-	if instructions.size() > 0:
-		instructions.append_array(args[0])
-		instruction_step_idx = args[1]
+	pass
 
 func get_data()->RoomItem:
-	return RoomItem.new(item_id,position,rotation,[instructions,instruction_step_idx])
+	return RoomItem.new(item_id,position,rotation,[instruction_step])
 
 func interact()->void:
-	if current_step.has_dialogue and current_step.dialogueinfo:
-		PopUps.load_prompt(current_step.dialogueinfo)
+	pass
+	#PopUps.load_prompt(pass_dialogue,self)
 
 func go_to(pos:Vector3)->void:
 	var tween : Tween = create_tween()
@@ -41,15 +35,21 @@ func go_to(pos:Vector3)->void:
 	walking = false
 
 func inc_instruction()->void:
-	instruction_step_idx += 1
+	instruction_step += 1
 	run_instruction()
 
 func run_instruction()->void:
-	if current_step.has_movement_target:
-		DEV_OUTPUT.push_message("step: goto target")
-		go_to(current_step.movement_target_pos)
-	if current_step.has_wait_for_signal:
-		DEV_OUTPUT.push_message("step: wait for door")
+	DEV_OUTPUT.push_message("run instruction")
+	match instruction_step:
+		0:
+			pass
+		1:
+			pass
+		2:
+			pass
+
+func get_character_name()->String:
+	return "Child"
 
 func animation(delta:float)->void:
 	if walking:

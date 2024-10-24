@@ -8,6 +8,8 @@ static var current : DEV_OUTPUT
 
 var doormeshlist : Array[MeshInstance3D]
 
+signal show_roomvisual_indices
+
 func _init()->void:
 	current = self
 
@@ -52,6 +54,20 @@ func _input(event:InputEvent)->void:
 												for object : RoomItemInstance in Global.shooterscene.room3d.objects:
 													if object is StaticNPC:
 														object.go_to(object.position + Vector3(randf_range(-1,1),0,randf_range(-1,1)))
+									"step":
+										match msg_parts[4]:
+											"reset":
+												for object : RoomItemInstance in Global.shooterscene.room3d.objects:
+													if object is StaticNPC:
+														object.instruction_step_idx = 0
+									"inc_step":
+										for object : RoomItemInstance in Global.shooterscene.room3d.objects:
+											if object is StaticNPC:
+												object.inc_instruction()
+					"tags":
+						match msg_parts[2]:
+							"visible":
+								show_roomvisual_indices.emit()
 					_:
 						push_message("invalid target at pos 1")
 			"save":
@@ -123,6 +139,11 @@ func _input(event:InputEvent)->void:
 			"its my birthday":
 				push_message("omg happy birthday!!")
 				push_message("invalid keyword at pos 0")
+			"goto":
+				var args : PackedInt64Array = get_args_int(msg_parts,1)
+				if args.size() == 0: push_message("missing arguments")
+				elif args.size() == 1: push_message("missing room index")
+				else: Global.set_new_city(args[0],args[1])
 
 static func push_message(text:String)->void:
 	var label : Label = Label.new()

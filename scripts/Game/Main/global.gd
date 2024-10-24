@@ -155,7 +155,7 @@ func enter_room(room:Room,startbox:Box=null,frombox:Box=null,loading_game:bool=f
 	world3D.set_marker_position(player)
 
 func win_game()->void:
-	print("you won!!!")
+	TransitionHandler.begin_transition(TransitionHandler.MOVEMENTDEMO_COMPLETED)
 
 func null_call()->void:
 	pass
