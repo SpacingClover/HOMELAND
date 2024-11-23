@@ -122,18 +122,3 @@ func not_quite_a_lambda(args:Array[String],object:Node)->void:
 		object.inc_instruction()
 	if args.has("open"):
 		object.interact()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

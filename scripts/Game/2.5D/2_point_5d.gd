@@ -43,4 +43,3 @@ func reset()->void:
 	for child : Node3D in root.get_children():
 		child.queue_free()
 	room3d = null
-
