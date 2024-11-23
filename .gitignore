@@ -1,2 +1,10 @@
 # Godot 4+ specific ignores
 .godot/
+
+# ignore non - asset files
+.blend
+.blend1
+
+# ignore exports
+.exe
+export_movementdemo_file_size_test.exe

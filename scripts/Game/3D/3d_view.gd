@@ -27,8 +27,8 @@ var viewport : GameView
 var tween : Tween
 var selected_room : RoomInstance3D
 var hightlighted_room : RoomInstance3D
-var visual : StaticBody3D
-var room_movement_border : MeshInstance3D
+var visual : Node3D
+var room_movement_border : StaticBody3D
 
 var rooms_3D : Array[RoomInstance3D]
 
@@ -58,8 +58,8 @@ func _input(event:InputEvent)->void:
 		Lclick()
 	elif event.is_action_pressed(&"rclick"):
 		Rclick()
-	elif Input.is_action_just_pressed(&"space"):
-		switch_axis()
+	#elif Input.is_action_just_pressed(&"space"):
+		#switch_axis()
 	elif event.is_action_pressed(&"scroll_up"):
 		change_zoom_amount(-1)
 	elif event.is_action_pressed(&"scroll_down"):
@@ -91,7 +91,8 @@ func mouse_motion()->void:
 		hightlighted_room = room
 		
 	elif room is StaticBody3D and selected_room: #dragging room over axis visual
-		slide_room_along_axis(get_click_pos())
+		slide_room_along_axis(get_click_pos(),AXIS_X)
+		slide_room_along_axis(get_click_pos(),AXIS_Z)
 		
 	elif room == null and not selected_room and hightlighted_room: #unhighlight
 		hightlighted_room.disable_highlight()
@@ -148,6 +149,7 @@ func select_room(room:RoomInstance3D)->void:
 	create_room_movement_border()
 
 func switch_axis()->void:
+	breakpoint
 	if change_axis_locked: return
 	
 	room_movement_axis += 1
@@ -220,7 +222,7 @@ func place_room()->void:
 	recenter_camera()
 
 func get_room_bounds_on_axis(room:RoomInstance3D,axis:int)->RoomVisualBoundsInformation:
-	var data : RoomVisualBoundsInformation = RoomVisualBoundsInformation.new(CityView.current.room_movement_axis)
+	var data : RoomVisualBoundsInformation = RoomVisualBoundsInformation.new(axis)
 	var dir : Vector3 = Vector3.ZERO
 	var max : Vector3
 	var min : Vector3
@@ -248,19 +250,19 @@ func get_room_bounds_on_axis(room:RoomInstance3D,axis:int)->RoomVisualBoundsInfo
 			var collision_as_distance : Vector3 = bounds_raycast.get_collision_point() - bounds_raycast.global_position
 			
 			var axis_pos : float
-			match room_movement_axis:
+			match axis:
 				AXIS_X: axis_pos = collision_as_distance.x
 				AXIS_Y: axis_pos = collision_as_distance.y
 				AXIS_Z: axis_pos = collision_as_distance.z
 			
 			var current_max : float
-			match room_movement_axis:
+			match axis:
 				AXIS_X: current_max = max.x
 				AXIS_Y: current_max = max.y
 				AXIS_Z: current_max = max.z
 			
 			var current_min : float
-			match room_movement_axis:
+			match axis:
 				AXIS_X: current_min = min.x
 				AXIS_Y: current_min = min.y
 				AXIS_Z: current_min = min.z
@@ -294,93 +296,87 @@ func get_room_bounds_on_axis(room:RoomInstance3D,axis:int)->RoomVisualBoundsInfo
 func create_visual(room:RoomInstance3D)->void:
 	if not room:
 		return
-	
 	if visual:
 		visual.queue_free()
-	visual = StaticBody3D.new()
-	var vmesh : MeshInstance3D = MeshInstance3D.new()
-	vmesh.mesh = offsetcube
-	vmesh.material_override = visual_shader
-	visual.collision_layer = 4
-	visual.add_child(vmesh)
-	var vcol : CollisionShape3D = CollisionShape3D.new()
-	vcol.shape = offsetcoll
-	visual.add_child(vcol)
+	visual = Node3D.new()
 	root.add_child(visual)
-	
-	room.collision_layer = 0
-	var bounds_info : RoomVisualBoundsInformation = get_room_bounds_on_axis(room,room_movement_axis)
-	
-	var min_inf : bool = abs(bounds_info.min_position.length()) == 100
-	var max_inf : bool = abs(bounds_info.max_position.length()) == 100
-	var min_touching : bool = bounds_info.bounds().min == 0
-	var max_touching : bool = bounds_info.bounds().max == 0
-	
-	visual.global_position = room.get_center()
-	visual.scale *= Vector3(room.data_reference.scale)/2
-	
-	if min_inf and max_inf: ##both ends go into infinity
-		vmesh.mesh = BoxMesh.new()
-		vcol.shape = BoxShape3D.new()
-		visual.scale *= 2
-		match room_movement_axis:
-			AXIS_X: visual.scale.x *= 100
-			AXIS_Y: visual.scale.y *= 100
-			AXIS_Z: visual.scale.z *= 100
-	elif min_inf: ##negative end goes into infinity
-		match room_movement_axis:
-			AXIS_X:
-				visual.look_at(visual.global_position + Vector3.BACK)
-				visual.global_position.x = bounds_info.max_position.x
-			AXIS_Y:
-				visual.look_at(visual.global_position + Vector3.LEFT,Vector3.FORWARD)
-				visual.global_position.y = bounds_info.max_position.y
-			AXIS_Z:
-				visual.look_at(visual.global_position + Vector3.LEFT)
-				visual.global_position.z = bounds_info.max_position.z
-				visual.scale = Vector3(visual.scale.z,visual.scale.y,visual.scale.x)
-		visual.scale.x *= 100
-	elif max_inf: ##positive end goes into infinity
-		match room_movement_axis:
-			AXIS_X:
-				visual.look_at(visual.global_position + Vector3.FORWARD)
-				visual.global_position.x = bounds_info.min_position.x
-			AXIS_Y:
-				visual.look_at(visual.global_position + Vector3.RIGHT,Vector3.FORWARD)
-				visual.global_position.y = bounds_info.min_position.y
-			AXIS_Z:
-				visual.look_at(visual.global_position + Vector3.RIGHT)
-				visual.global_position.z = bounds_info.min_position.z
-				visual.scale = Vector3(visual.scale.z,visual.scale.y,visual.scale.x)
-		visual.scale.x *= 100
-	else: ##both ends collide
-		vmesh.mesh = BoxMesh.new()
-		vcol.shape = BoxShape3D.new()
-		visual.scale *= 2
-		if not (min_touching and max_touching):
-			var center : Vector3 = room.get_center()
-			var col_midpoint : Vector3 = bounds_info.col_midpoint()
-			print(bounds_info.length() * 5.9)
-			match room_movement_axis:
-				AXIS_X: visual.global_position = Vector3(col_midpoint.x,center.y,center.z); visual.scale.x = bounds_info.length() * 5.9
-				AXIS_Y: visual.global_position = Vector3(center.x,col_midpoint.y,center.z); visual.scale.y = bounds_info.length() * 5.9
-				AXIS_Z: visual.global_position = Vector3(center.x,center.y,col_midpoint.z); visual.scale.z = bounds_info.length() * 5.9
-		else:
-			visual.queue_free(); visual = null; return
-				
-	visual.position = round(visual.position*2)/2
-	if vcol:
-		match room_movement_axis:
-			AXIS_X: vcol.scale = Vector3(100,0.1,100)
-			#AXIS_Y: vcol.scale = Vector3(INF,0,INF)
-			AXIS_Z: vcol.scale = Vector3(100,0.1,100)
+		
+	for axis : int in [AXIS_X,AXIS_Z]:
+		
+		var vpart : StaticBody3D = StaticBody3D.new()
+		visual.add_child(vpart)
+		var vmesh : MeshInstance3D = MeshInstance3D.new()
+		vmesh.mesh = offsetcube
+		vmesh.material_override = visual_shader
+		vpart.collision_layer = 4
+		vpart.add_child(vmesh)
+		
+		room.collision_layer = 0
+		var bounds_info : RoomVisualBoundsInformation = get_room_bounds_on_axis(room,axis)
+		
+		var min_inf : bool = abs(bounds_info.min_position.length()) == 100
+		var max_inf : bool = abs(bounds_info.max_position.length()) == 100
+		var min_touching : bool = bounds_info.bounds().min == 0
+		var max_touching : bool = bounds_info.bounds().max == 0
+		
+		vpart.global_position = room.get_center()
+		vpart.scale *= Vector3(room.data_reference.scale)/2
+		
+		if min_inf and max_inf: ##both ends go into infinity
+			vmesh.mesh = BoxMesh.new()
+			vpart.scale *= 2
+			match axis:
+				AXIS_X: vpart.scale.x *= 100
+				AXIS_Y: vpart.scale.y *= 100
+				AXIS_Z: vpart.scale.z *= 100
+		elif min_inf: ##negative end goes into infinity
+			match axis:
+				AXIS_X:
+					vpart.look_at(vpart.global_position + Vector3.BACK)
+					vpart.global_position.x = bounds_info.max_position.x
+				AXIS_Y:
+					vpart.look_at(vpart.global_position + Vector3.LEFT,Vector3.FORWARD)
+					vpart.global_position.y = bounds_info.max_position.y
+				AXIS_Z:
+					vpart.look_at(vpart.global_position + Vector3.LEFT)
+					vpart.global_position.z = bounds_info.max_position.z
+					vpart.scale = Vector3(vpart.scale.z,vpart.scale.y,vpart.scale.x)
+			vpart.scale.x *= 100
+		elif max_inf: ##positive end goes into infinity
+			match axis:
+				AXIS_X:
+					vpart.look_at(vpart.global_position + Vector3.FORWARD)
+					vpart.global_position.x = bounds_info.min_position.x
+				AXIS_Y:
+					vpart.look_at(vpart.global_position + Vector3.RIGHT,Vector3.FORWARD)
+					vpart.global_position.y = bounds_info.min_position.y
+				AXIS_Z:
+					vpart.look_at(vpart.global_position + Vector3.RIGHT)
+					vpart.global_position.z = bounds_info.min_position.z
+					vpart.scale = Vector3(vpart.scale.z,vpart.scale.y,vpart.scale.x)
+			vpart.scale.x *= 100
+		else: ##both ends collide
+			vmesh.mesh = BoxMesh.new()
+			vpart.scale *= 2
+			if not (min_touching and max_touching):
+				var center : Vector3 = room.get_center()
+				var col_midpoint : Vector3 = bounds_info.col_midpoint()
+				print(bounds_info.length() * 5.9)
+				match axis:
+					AXIS_X: vpart.global_position = Vector3(col_midpoint.x,center.y,center.z); vpart.scale.x = bounds_info.length() * 5.9
+					AXIS_Y: vpart.global_position = Vector3(center.x,col_midpoint.y,center.z); vpart.scale.y = bounds_info.length() * 5.9
+					AXIS_Z: vpart.global_position = Vector3(center.x,center.y,col_midpoint.z); vpart.scale.z = bounds_info.length() * 5.9
+			else:
+				vpart.queue_free(); vpart = null; return
+					
+		vpart.position = round(vpart.position*2)/2
 
-func slide_room_along_axis(mouse_coords:Vector3)->void:
-	var bounds_info : RoomVisualBoundsInformation = get_room_bounds_on_axis(selected_room,room_movement_axis)
+func slide_room_along_axis(mouse_coords:Vector3,axis:int=room_movement_axis)->void:
+	var bounds_info : RoomVisualBoundsInformation = get_room_bounds_on_axis(selected_room,axis)
 	
 	var pos : Vector3 = mouse_coords
 	pos -= selected_room_previous_pos * root.scale
-	match room_movement_axis:
+	match axis:
 		AXIS_X: if abs(pos.x - (selected_room_previous_pos.x*root.scale.x)) < 0.05: return
 		AXIS_Y: if abs(pos.y - (selected_room_previous_pos.y*root.scale.y)) < 0.05: return
 		AXIS_Z: if abs(pos.z - (selected_room_previous_pos.z*root.scale.z)) < 0.05: return
@@ -391,7 +387,7 @@ func slide_room_along_axis(mouse_coords:Vector3)->void:
 	var disp : Vector3 = pos
 	var move_by : int
 	var direction_positive : bool #if the direction is positive / towards max
-	match room_movement_axis:
+	match axis:
 		AXIS_X:
 			if disp.x > 0: direction_positive = true
 			elif disp.x < 0: direction_positive = false
@@ -416,7 +412,7 @@ func slide_room_along_axis(mouse_coords:Vector3)->void:
 		var max : int = bounds_info.bounds().max
 		if max == 0: selected_room.position = selected_room_previous_pos; return
 		elif move_by > max:
-			match room_movement_axis:
+			match axis:
 				AXIS_X: disp = Vector3(max,0,0)
 				AXIS_Y: disp = Vector3(0,max,0)
 				AXIS_Z: disp = Vector3(0,0,max)
@@ -424,7 +420,7 @@ func slide_room_along_axis(mouse_coords:Vector3)->void:
 		var min : int = bounds_info.bounds().min
 		if min == 0: selected_room.position = selected_room_previous_pos; return
 		elif abs(move_by) > min:
-			match room_movement_axis:
+			match axis:
 				AXIS_X: disp = Vector3(-min,0,0)
 				AXIS_Y: disp = Vector3(0,-min,0)
 				AXIS_Z: disp = Vector3(0,0,-min)
@@ -432,7 +428,7 @@ func slide_room_along_axis(mouse_coords:Vector3)->void:
 	##check if room is within bounds
 	var difference : Vector3i = abs((selected_room.data_reference.coords+Vector3i(disp))-selected_room.data_reference.original_coords)
 	if direction_positive: difference += selected_room.data_reference.scale - Vector3i(1,1,1)
-	match room_movement_axis:
+	match axis:
 		AXIS_X when difference.x >= ROOM_MOVE_RANGE: return
 		AXIS_Y when difference.y >= ROOM_MOVE_RANGE: return
 		AXIS_Z when difference.z >= ROOM_MOVE_RANGE: return
@@ -444,23 +440,35 @@ func slide_room_along_axis(mouse_coords:Vector3)->void:
 	update_doors_in_moved_room(selected_room.data_reference)
 	Global.current_region.check_for_adjacient_doors()
 	
+	create_visual(selected_room)
+	
 	if Global.current_room == selected_room.data_reference:
 		Global.player.shake_camera()
 		loaded_room_marker_offset += disp
 		set_marker_position(Global.player)
 
 func create_room_movement_border()->void:
-	room_movement_border = MeshInstance3D.new()
-	room_movement_border.mesh = bordermesh
-	room_movement_border.layers = 1
-	room_movement_border.position = selected_room.data_reference.original_coords
-	room_movement_border.scale *= float(ROOM_MOVE_RANGE) - 0.5
-	room_movement_border.scale.y = 0.5
+	if room_movement_border: room_movement_border.queue_free()
+	room_movement_border = StaticBody3D.new()
+	
+	var mesh : MeshInstance3D = MeshInstance3D.new()
+	mesh.mesh = bordermesh
+	mesh.layers = 1
+	mesh.position = selected_room.data_reference.original_coords
+	mesh.scale *= float(ROOM_MOVE_RANGE) - 0.5
+	mesh.scale.y = 0.5
 	var mat : StandardMaterial3D = StandardMaterial3D.new()
 	mat.cull_mode = BaseMaterial3D.CULL_DISABLED
 	mat.albedo_color = Color(0.75,0.2,0)
 	mat.blend_mode = BaseMaterial3D.BLEND_MODE_ADD
-	room_movement_border.material_override = mat
+	mesh.material_override = mat
+	room_movement_border.add_child(mesh)
+	mesh.create_convex_collision()
+	var col : StaticBody3D = mesh.get_child(0)
+	col.collision_layer = 4
+	col.scale.y = 0.01
+	
+	#room_movement_border.collision_layer = 4
 	root.add_child(room_movement_border)
 
 func update_doors_in_moved_room(room:Room)->void:

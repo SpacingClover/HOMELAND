@@ -3,7 +3,7 @@ class_name RoomItem extends Resource
 const SCN_PATH : String = "res://scenes/scn/"
 const SCN : String = ".scn"
 
-static var item_ids : PackedStringArray = [
+static var item_ids : PackedStringArray = PackedStringArray([
 	"pot",     #0
 	"table",   #1
 	"stool",   #2
@@ -15,7 +15,8 @@ static var item_ids : PackedStringArray = [
 	"",        #8 window
 	"corpse",  #9
 	"key",     #10
-]
+	"static_npc" #11
+])
 
 enum{
 	LOAD_VERSION_BASIC ## uses the original enumerated loading system, which is hard to extend, impossible to mod, and easy to break

@@ -1,4 +1,4 @@
-[gd_scene load_steps=30 format=3 uid="uid://c84jwenigb4p3"]
+[gd_scene load_steps=31 format=3 uid="uid://c84jwenigb4p3"]
 
 [ext_resource type="Script" path="res://scripts/ui_scripts/titlescreen.gd" id="1_g6dcv"]
 [ext_resource type="Script" path="res://scripts/ui_scripts/cursor.gd" id="2_x2uka"]
@@ -9,6 +9,7 @@
 [ext_resource type="Shader" path="res://visuals/shaders/overlay.gdshader" id="7_fqb0w"]
 [ext_resource type="Texture2D" uid="uid://cec8ciklin8ok" path="res://visuals/spritesheets/ui/subtitle.png" id="8_hsgpq"]
 [ext_resource type="Script" path="res://ui/pausescreen.gd" id="9_myjrj"]
+[ext_resource type="Texture2D" uid="uid://clam76w2ghcwa" path="res://visuals/spritesheets/animations/spinny_outline.png" id="10_ibory"]
 [ext_resource type="PackedScene" uid="uid://tw37dldaisdv" path="res://scenes/tscn/circuitboard.tscn" id="10_o6hli"]
 [ext_resource type="Script" path="res://scripts/ui_scripts/lists.gd" id="11_syu00"]
 [ext_resource type="Theme" uid="uid://3ijvhmp2ffkw" path="res://visuals/themes/new_theme.tres" id="12_k1pjk"]
@@ -97,9 +98,11 @@ layout_mode = 2
 shooterscene = true
 
 [node name="2point5D" parent="HBoxContainer/VBoxContainer/GameView1" instance=ExtResource("4_qe4dl")]
+visible = false
 
 [node name="title" type="ScrollContainer" parent="HBoxContainer/VBoxContainer/GameView1"]
 process_mode = 3
+visible = false
 layout_mode = 2
 horizontal_scroll_mode = 0
 vertical_scroll_mode = 0
@@ -166,10 +169,48 @@ light_mask = 0
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_ybgyt")
 
+[node name="sprite3" type="Sprite2D" parent="HBoxContainer/VBoxContainer/GameView1/pausetopleft/Panel"]
+position = Vector2(415.815, 428.701)
+scale = Vector2(49.8562, 49.8562)
+texture = ExtResource("10_ibory")
+hframes = 5
+vframes = 7
+frame = 20
+
+[node name="sprite4" type="Sprite2D" parent="HBoxContainer/VBoxContainer/GameView1/pausetopleft/Panel"]
+position = Vector2(1013.19, 428.701)
+rotation = -3.14159
+scale = Vector2(49.8562, 49.8562)
+texture = ExtResource("10_ibory")
+hframes = 5
+vframes = 7
+frame = 20
+
+[node name="sprite1" type="Sprite2D" parent="HBoxContainer/VBoxContainer/GameView1/pausetopleft/Panel"]
+position = Vector2(538.042, 442.035)
+scale = Vector2(29.7461, 29.7461)
+texture = ExtResource("10_ibory")
+hframes = 5
+vframes = 7
+frame = 20
+
+[node name="sprite2" type="Sprite2D" parent="HBoxContainer/VBoxContainer/GameView1/pausetopleft/Panel"]
+position = Vector2(892.736, 442.035)
+rotation = -3.14159
+scale = Vector2(29.7461, 29.7461)
+texture = ExtResource("10_ibory")
+hframes = 5
+vframes = 7
+frame = 20
+
 [node name="Label" type="Label" parent="HBoxContainer/VBoxContainer/GameView1/pausetopleft/Panel"]
 layout_mode = 0
-offset_right = 401.0
-offset_bottom = 124.0
+offset_left = 468.704
+offset_top = 340.694
+offset_right = 1074.7
+offset_bottom = 547.694
+scale = Vector2(0.862978, 0.862978)
+theme = ExtResource("12_k1pjk")
 theme_override_font_sizes/font_size = 151
 text = "paused"
 
@@ -179,9 +220,11 @@ omniscroll = true
 clicking2d = true
 
 [node name="circuitboard" parent="HBoxContainer/VBoxContainer/GameView2" instance=ExtResource("10_o6hli")]
+visible = false
 
 [node name="lists" type="ScrollContainer" parent="HBoxContainer/VBoxContainer/GameView2"]
 process_mode = 3
+visible = false
 layout_mode = 2
 horizontal_scroll_mode = 0
 vertical_scroll_mode = 0
@@ -264,9 +307,11 @@ orbit3d = true
 
 [node name="3d view" parent="HBoxContainer/VBoxContainer2/GameView3" instance=ExtResource("15_or3fd")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00182092, 0, 0)
+visible = false
 
 [node name="buttons" type="Control" parent="HBoxContainer/VBoxContainer2/GameView3"]
 process_mode = 3
+visible = false
 layout_mode = 2
 script = ExtResource("16_bwl38")
 
@@ -432,12 +477,25 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_ybgyt")
 
 [node name="Button" type="Button" parent="HBoxContainer/VBoxContainer2/GameView3/pausetopright/Panel"]
 layout_mode = 0
-offset_left = 474.615
-offset_top = 348.462
-offset_right = 870.615
-offset_bottom = 502.462
+offset_left = 115.46
+offset_top = 170.015
+offset_right = 564.46
+offset_bottom = 324.015
+scale = Vector2(1.53482, 1.53482)
+theme = ExtResource("12_k1pjk")
 theme_override_font_sizes/font_size = 106
-text = "resume"
+text = "RESUME"
+
+[node name="Button2" type="Button" parent="HBoxContainer/VBoxContainer2/GameView3/pausetopright/Panel"]
+layout_mode = 0
+offset_left = 115.46
+offset_top = 442.035
+offset_right = 564.46
+offset_bottom = 596.035
+scale = Vector2(1.53482, 1.53482)
+theme = ExtResource("12_k1pjk")
+theme_override_font_sizes/font_size = 106
+text = "SETTINGS"
 
 [node name="GameView4" parent="HBoxContainer/VBoxContainer2" instance=ExtResource("3_ksmll")]
 layout_mode = 2
@@ -445,9 +503,11 @@ orbit3d = true
 mapview = true
 
 [node name="map view" parent="HBoxContainer/VBoxContainer2/GameView4" instance=ExtResource("18_72ip8")]
+visible = false
 
 [node name="extra" type="ScrollContainer" parent="HBoxContainer/VBoxContainer2/GameView4"]
 process_mode = 3
+visible = false
 layout_mode = 2
 horizontal_scroll_mode = 0
 vertical_scroll_mode = 0
@@ -582,12 +642,14 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_ybgyt")
 
 [node name="Button" type="Button" parent="HBoxContainer/VBoxContainer2/GameView4/pausebottomright/Panel"]
 layout_mode = 0
-offset_left = 501.385
-offset_top = 387.231
-offset_right = 975.385
-offset_bottom = 500.231
+offset_left = 395.481
+offset_top = 596.783
+offset_right = 963.481
+offset_bottom = 709.783
+scale = Vector2(1.69996, 1.69996)
+theme = ExtResource("12_k1pjk")
 theme_override_font_sizes/font_size = 76
-text = "exit to menu"
+text = "QUIT TO MENU"
 
 [node name="animations" type="Control" parent="."]
 anchors_preset = 0
@@ -595,7 +657,6 @@ offset_right = 40.0
 offset_bottom = 40.0
 
 [node name="transition" parent="animations" instance=ExtResource("21_v0n60")]
-visible = false
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -735,8 +796,8 @@ position = Vector2(441, 155)
 
 [node name="MusicManager" type="Node" parent="."]
 script = ExtResource("23_ldrbm")
+muted = true
 
 [node name="stream_1" type="AudioStreamPlayer" parent="MusicManager"]
 process_mode = 3
-autoplay = true
 max_polyphony = 10

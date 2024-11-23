@@ -171,8 +171,8 @@ func get_door_at(box:Box,direction:Vector3i)->Door3D:
 	return null
 
 func embedded_tutorial_setup()->void:
-	if Tutorials.tutorial_enabled and Tutorials.next_tutorial_popup == Global.TUTORIAL.PAN_VIEW:
-		Tutorials.call_tutorial(Global.TUTORIAL.PAN_VIEW)
+	if PopUps.tutorial_enabled and PopUps.next_tutorial_popup == PopUps.TUTORIAL.PAN_VIEW:
+		PopUps.call_tutorial(PopUps.TUTORIAL.PAN_VIEW)
 
 func save_room_objects()->void:
 	roomdata.items.clear()

@@ -163,7 +163,10 @@ func body_entered(body:PhysicsBody3D)->void:
 					Global.set_new_city(exit.nextcity,nextexitroomsidx)
 				
 				elif exit.nextcity == -1:
-					Global.return_to_titlescreen()
+					TransitionHandler.begin_transition(TransitionHandler.MOVEMENTDEMO_COMPLETED)
+					await get_tree().create_timer(10).timeout
+					TransitionHandler.end_transition()
+					Global.unload_game_and_exit_to_menu()
 				
 				elif exit.nextcity == -2:
 					return
@@ -184,15 +187,15 @@ func set_opacity(is_init:bool=false)->void:
 				
 
 func embedded_tutorial_setup()->void:
-	if not Tutorials.tutorial_enabled:
+	if not PopUps.tutorial_enabled:
 		return
 		
-	if Tutorials.next_tutorial_popup <= Global.TUTORIAL.INTERACT_DOOR:
-		player_near_door.connect(Tutorials.call_tutorial.bind(Global.TUTORIAL.INTERACT_DOOR),CONNECT_ONE_SHOT)
-	elif Tutorials.tutorial_enabled and Tutorials.next_tutorial_popup == Global.TUTORIAL.MOVE_ROOM:
-		var call : Callable = Tutorials.call_tutorial.bind(Global.TUTORIAL.MOVE_ROOM)
+	if PopUps.next_tutorial_popup <= PopUps.TUTORIAL.INTERACT_DOOR:
+		player_near_door.connect(PopUps.call_tutorial.bind(PopUps.TUTORIAL.INTERACT_DOOR),CONNECT_ONE_SHOT)
+	elif PopUps.tutorial_enabled and PopUps.next_tutorial_popup == PopUps.TUTORIAL.MOVE_ROOM:
+		var call : Callable = PopUps.call_tutorial.bind(PopUps.TUTORIAL.MOVE_ROOM)
 		door_interacted.connect(call,CONNECT_ONE_SHOT)
-		Global.tutorial_called.connect(func(which:int)->void:if(which)==Global.TUTORIAL.MOVE_ROOM:tried_to_open_failed.disconnect(call))
+		Global.tutorial_called.connect(func(which:int)->void:if(which)==PopUps.TUTORIAL.MOVE_ROOM:tried_to_open_failed.disconnect(call))
 
 func handle_lock_icon()->void:
 	var adj_box : Box = Global.current_region.get_box_at(box.coords + direction)

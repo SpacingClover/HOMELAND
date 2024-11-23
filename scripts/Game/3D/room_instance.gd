@@ -8,13 +8,16 @@ static var pinkglow : Color = Color("e70061")
 static var doormaterial : StandardMaterial3D = preload("res://visuals/materials/3dDoor.tres")
 static var staticfeaturematerial : StandardMaterial3D
 static var cityexitdoorroommaterial : StandardMaterial3D = preload("res://visuals/materials/city_exit_door.tres")
+static var featureroommaterial : StandardMaterial3D = preload("res://visuals/materials/3D_feature.tres")
 static var rubbleboxmaterial : StandardMaterial3D = preload("res://visuals/materials/rubbleicom.tres")
 static var lock_icon : CompressedTexture2D = preload("res://visuals/spritesheets/icons/lock_icon.png")
+static var road_visual : MeshInstance3D = preload("res://scenes/scn/road_icon.scn").instantiate()
 
 static func _static_init()->void:
 	doormaterial.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
 
 var data_reference : Room
+var tag : Label3D
 
 var is_selected : bool = false
 
@@ -38,7 +41,9 @@ func _init(room_resource:Room)->void:
 			mesh.material_override = rubbleboxmaterial.duplicate()
 		mesh.position = boxdata.coords
 		boxdata.set_boxvisual_reference(mesh)
-		if room_resource is CityExit: mesh.material_override = cityexitdoorroommaterial
+		if room_resource is Feature:
+			if room_resource is CityExit: mesh.material_override = cityexitdoorroommaterial
+			else: mesh.material_override = featureroommaterial
 		add_child(mesh)
 		
 		var col : CollisionShape3D = CollisionShape3D.new()
@@ -75,7 +80,30 @@ func _init(room_resource:Room)->void:
 					lock_sprite.modulate = KeyInstance.get_key_color(boxdata.get_lock(dir))
 					
 					doormesh.add_child(lock_sprite)
-				
+			
+			if boxdata.get_door(dir) == Box.CITY_EXIT_DOOR:
+				var road_icon : MeshInstance3D = road_visual.duplicate()
+				match dir:
+					City.TOP: road_icon.rotation_degrees.y = 180
+					City.BOTTOM: road_icon.rotation_degrees.y = 0
+					City.LEFT: road_icon.rotation_degrees.y = 90
+					City.RIGHT: road_icon.rotation_degrees.y = 270
+				road_icon.scale *= 1.3
+				mesh.add_child(road_icon)
+	
+	tag = Label3D.new()
+	tag.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+	tag.text = "idx missing"
+	if Global.current_region.rooms.has(room_resource):
+		tag.text = str(Global.current_region.rooms.find(room_resource))
+		tag.no_depth_test = true
+		tag.scale *= 20
+		tag.global_position = room_resource.coords
+		tag.hide()
+	add_child(tag)
+	
+	DEV_OUTPUT.current.show_roomvisual_indices.connect(show_tag)
+	
 	embedded_tutorial_setup()
 
 func highlight()->void:
@@ -171,5 +199,9 @@ func drop()->void:
 	room_instance_dropped.emit()
 
 func embedded_tutorial_setup()->void:
-	if Tutorials.tutorial_enabled and Tutorials.next_tutorial_popup <= Global.TUTORIAL.MOVE_ROOM:
-		room_instance_placed.connect(Tutorials.call_tutorial.bind(Global.TUTORIAL.DROP_ROOM),CONNECT_ONE_SHOT)
+	if PopUps.tutorial_enabled and PopUps.next_tutorial_popup <= PopUps.TUTORIAL.MOVE_ROOM:
+		room_instance_placed.connect(PopUps.call_tutorial.bind(PopUps.TUTORIAL.DROP_ROOM),CONNECT_ONE_SHOT)
+
+func show_tag()->void:
+	print("show")
+	tag.show()

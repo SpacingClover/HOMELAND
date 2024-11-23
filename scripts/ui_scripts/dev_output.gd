@@ -8,6 +8,8 @@ static var current : DEV_OUTPUT
 
 var doormeshlist : Array[MeshInstance3D]
 
+signal show_roomvisual_indices
+
 func _init()->void:
 	current = self
 
@@ -39,14 +41,7 @@ func _input(event:InputEvent)->void:
 							push_message("invalid item id"); return
 						Global.player.DEBUG_place_item_type = typename
 						push_message("set type to "+typename)
-						Global.player.DEBUG_place_item_args = []
-						if msg_parts.size() >= 4:
-							var args : Array
-							var i : int = 3
-							while i < msg_parts.size():
-								args.append(msg_parts[i].to_int())
-								i+=1
-							Global.player.DEBUG_place_item_args = args
+						Global.player.DEBUG_place_item_args = get_args_int(msg_parts,3)
 					"mode":
 						match msg_parts[2]:
 							"place":
@@ -57,8 +52,11 @@ func _input(event:InputEvent)->void:
 								push_message("mode normal")
 							_:
 								push_message("invalid mode at pos 2")
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 =======
+=======
+>>>>>>> movementdemo
 					"all":
 						match msg_parts[2]:
 							"npc":
@@ -83,6 +81,7 @@ func _input(event:InputEvent)->void:
 						match msg_parts[2]:
 							"visible":
 								show_roomvisual_indices.emit()
+<<<<<<< HEAD
 					"zoom":
 						if msg_parts.size() < 3 or not msg_parts[2].is_valid_int():
 							push_message("invalid screen index")
@@ -95,6 +94,8 @@ func _input(event:InputEvent)->void:
 							return
 						Global.titlescreen.zoom_on_screen(msg_parts[2].to_int())
 >>>>>>> Stashed changes
+=======
+>>>>>>> movementdemo
 					_:
 						push_message("invalid target at pos 1")
 			"save":
@@ -113,6 +114,10 @@ func _input(event:InputEvent)->void:
 									push_message(Global.selected_game_dir)
 								else:
 									push_message("not in game")
+					"room":
+						match msg_parts[2]:
+							"idx":
+								push_message("room "+str(Global.current_region.rooms.find(Global.current_room)))
 					_:
 						push_message("invalid target at pos 1")
 			"inc":
@@ -148,11 +153,14 @@ func _input(event:InputEvent)->void:
 				match msg_parts[1]:
 					"3d":
 						CityView.current.display_rooms()
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 =======
 					
 					"squiggles":
 						TransitionHandler.begin_transition(TransitionHandler.ANIM_SQUIGGLES_VERT,0)
+=======
+>>>>>>> movementdemo
 			"what":
 				match msg_parts[1]:
 					"type":
@@ -162,13 +170,20 @@ func _input(event:InputEvent)->void:
 							push_message("no item with index \"%s\"" % str(idx))
 						else:
 							push_message(RoomItem.item_ids[idx])
+<<<<<<< HEAD
 >>>>>>> Stashed changes
+=======
+>>>>>>> movementdemo
 			"breakpoint":
 				breakpoint
 			"its my birthday":
 				push_message("omg happy birthday!!")
-			_:
 				push_message("invalid keyword at pos 0")
+			"goto":
+				var args : PackedInt64Array = get_args_int(msg_parts,1)
+				if args.size() == 0: push_message("missing arguments")
+				elif args.size() == 1: push_message("missing room index")
+				else: Global.set_new_city(args[0],args[1])
 
 static func push_message(text:String)->void:
 	var label : Label = Label.new()
@@ -176,3 +191,12 @@ static func push_message(text:String)->void:
 	current.message_container.add_child(label)
 	await current.get_tree().create_timer(0.01).timeout
 	current.scroll_container.scroll_vertical = current.scroll_container.get_v_scroll_bar().max_value
+
+func get_args_int(msg_parts:PackedStringArray,start_at_pos:int)->PackedInt64Array:
+	if msg_parts.size() <= start_at_pos: return PackedInt64Array()
+	var args : Array
+	var i : int = start_at_pos
+	while i < msg_parts.size():
+		if msg_parts[i].is_valid_int(): args.append(msg_parts[i].to_int())
+		i+=1
+	return PackedInt64Array(args)

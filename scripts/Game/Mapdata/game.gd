@@ -54,7 +54,7 @@ func _init(being_generated:bool=false)->void:
 
 func open()->void:
 	
-	Tutorials.tutorial_enabled = tutorial_enabled
+	PopUps.tutorial_enabled = tutorial_enabled
 	
 	for city : City in cities:
 		if not city.validated: city.validate_city()

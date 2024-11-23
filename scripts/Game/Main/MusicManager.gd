@@ -7,10 +7,13 @@ static var songs : Dictionary = {
 	"ambience" : ResourceLoader.load("res://audio/songs/ambience.wav",&"",ResourceLoader.CACHE_MODE_IGNORE)
 }
 
+@export var muted : bool = false
+
 func _init()->void:
 	pass
 
 func _ready()->void:
+	
 	Global.pause_game.connect(change_pitch.bind(0.85))
 	Global.resume_game.connect(change_pitch.bind(1))
 	
@@ -18,6 +21,9 @@ func _ready()->void:
 	stream_1.finished.connect(stream_1.play)
 	
 	play_song("action")
+	
+	if muted and OS.is_debug_build():
+		stream_1.volume_db = -80
 
 static func play_song(name:String)->void:
 	stream_1.stream = get_song(name)

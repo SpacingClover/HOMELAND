@@ -10,7 +10,8 @@ config_version=5
 
 [application]
 
-config/name="four square (backup restored to current)"
+config/name="HOMELAND (movementdemo)"
+config/version="demo-1"
 config/tags=PackedStringArray("2d", "3d", "in_dev")
 run/main_scene="res://ui/main.tscn"
 config/features=PackedStringArray("4.2", "GL Compatibility")
@@ -20,13 +21,15 @@ boot_splash/bg_color=Color(0.952941, 0.294118, 0, 1)
 boot_splash/show_image=false
 boot_splash/fullsize=false
 boot_splash/use_filter=false
-config/icon="res://visuals/spritesheets/misc/icon.svg"
+config/icon="res://visuals/spritesheets/misc/icon-1.png"
+config/macos_native_icon="res://visuals/spritesheets/misc/icon_1_8VC_icon.ico"
+config/windows_native_icon="res://visuals/spritesheets/misc/icon_1_8VC_icon.ico"
 
 [autoload]
 
 Global="*res://scripts/Game/Main/global.gd"
 SortedScripts="*res://scripts/editormodifications/SortedScripts.gd"
-Tutorials="*res://scripts/ui_scripts/tutorials.gd"
+PopUps="*res://scripts/ui_scripts/tutorials.gd"
 
 [debug]
 
