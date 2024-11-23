@@ -14,6 +14,7 @@ var titlescreen_gui : Array[Control]:
 
 var focus_marker : Sprite2D
 var markertween : Tween
+var zoomtween : Tween
 
 func _init()->void:
 	Global.titlescreen = self
@@ -98,3 +99,25 @@ func delete_marker()->void:
 
 func get_screen_roots()->Array[GameViewExports]:
 	return [$HBoxContainer/VBoxContainer/GameView1,$HBoxContainer/VBoxContainer/GameView2,$HBoxContainer/VBoxContainer2/GameView3,$HBoxContainer/VBoxContainer2/GameView4]
+
+func zoom_on_screen(screen:int,duration:float=1)->void:
+	if zoomtween: if zoomtween.is_running():
+		zoomtween.stop()
+	zoomtween = create_tween().set_parallel()
+	var zoomsize : Vector2 = Vector2(2.087,2.087) if screen < 4 else Vector2(1.5,1.5)
+	var zoompos : Vector2 = [Vector2(-466,-201),Vector2(-1700,-201),Vector2(-466,-921),Vector2(-1700,-921),Vector2(-500,0)][screen]
+	zoomtween.tween_property(self,"scale",zoomsize,duration)
+	zoomtween.tween_property(self,"position",zoompos,duration)
+	zoomtween.set_trans(Tween.TRANS_QUAD)
+	zoomtween.set_ease(Tween.EASE_IN_OUT)
+
+func exit_zoom(duration:float=1)->void:
+	if zoomtween: if zoomtween.is_running():
+		zoomtween.stop()
+	zoomtween = create_tween().set_parallel()
+	var zoomsize : Vector2 = Vector2(1,1)
+	var zoompos : Vector2 = Vector2.ZERO
+	zoomtween.tween_property(self,"scale",zoomsize,duration)
+	zoomtween.tween_property(self,"position",zoompos,duration)
+	zoomtween.set_trans(Tween.TRANS_QUAD)
+	zoomtween.set_ease(Tween.EASE_IN_OUT)

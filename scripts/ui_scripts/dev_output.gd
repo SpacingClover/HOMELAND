@@ -12,6 +12,14 @@ func _init()->void:
 	current = self
 
 func _input(event:InputEvent)->void:
+	if event.is_action_pressed(&"1"):
+		Global.titlescreen.zoom_on_screen(0,4)
+	elif event.is_action_pressed(&"2"):
+		Global.titlescreen.zoom_on_screen(1,1.5)
+	elif event.is_action_pressed(&"3"):
+		Global.titlescreen.zoom_on_screen(0,1.5)
+	elif event.is_action_pressed(&"4"):
+		Global.titlescreen.zoom_on_screen(4)
 	if event.is_action_pressed(&"enter"):
 		var msg : String = text_edit.text; text_edit.text = &""
 		var msg_parts : PackedStringArray = msg.split(" ")
@@ -49,6 +57,44 @@ func _input(event:InputEvent)->void:
 								push_message("mode normal")
 							_:
 								push_message("invalid mode at pos 2")
+<<<<<<< Updated upstream
+=======
+					"all":
+						match msg_parts[2]:
+							"npc":
+								match msg_parts[3]:
+									"target_pos":
+										match msg_parts[4]:
+											"random":
+												for object : RoomItemInstance in Global.shooterscene.room3d.objects:
+													if object is StaticNPC:
+														object.go_to(object.position + Vector3(randf_range(-1,1),0,randf_range(-1,1)))
+									"step":
+										match msg_parts[4]:
+											"reset":
+												for object : RoomItemInstance in Global.shooterscene.room3d.objects:
+													if object is StaticNPC:
+														object.instruction_step_idx = 0
+									"inc_step":
+										for object : RoomItemInstance in Global.shooterscene.room3d.objects:
+											if object is StaticNPC:
+												object.inc_instruction()
+					"tags":
+						match msg_parts[2]:
+							"visible":
+								show_roomvisual_indices.emit()
+					"zoom":
+						if msg_parts.size() < 3 or not msg_parts[2].is_valid_int():
+							push_message("invalid screen index")
+							return
+						if msg_parts[2].to_int() == -1:
+							Global.titlescreen.exit_zoom()
+							return
+						if msg_parts[2].to_int() < -1:
+							push_message("no usability beyond -1")
+							return
+						Global.titlescreen.zoom_on_screen(msg_parts[2].to_int())
+>>>>>>> Stashed changes
 					_:
 						push_message("invalid target at pos 1")
 			"save":
@@ -102,6 +148,21 @@ func _input(event:InputEvent)->void:
 				match msg_parts[1]:
 					"3d":
 						CityView.current.display_rooms()
+<<<<<<< Updated upstream
+=======
+					
+					"squiggles":
+						TransitionHandler.begin_transition(TransitionHandler.ANIM_SQUIGGLES_VERT,0)
+			"what":
+				match msg_parts[1]:
+					"type":
+						var idx : int = -INF
+						if msg_parts[2].is_valid_int(): idx = msg_parts[2].to_int()
+						if idx >= RoomItem.item_ids.size():
+							push_message("no item with index \"%s\"" % str(idx))
+						else:
+							push_message(RoomItem.item_ids[idx])
+>>>>>>> Stashed changes
 			"breakpoint":
 				breakpoint
 			"its my birthday":
