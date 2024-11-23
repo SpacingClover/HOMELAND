@@ -4,7 +4,8 @@ enum modes{
 	games,
 	demos,
 	settings,
-	tips
+	tips,
+	dev_levels
 }
 
 const demos_dir : String = "res://demos/"
@@ -61,6 +62,16 @@ func display_list(type:modes)->void:
 			PopUps.create_prompt(PopUps.SCREENS.CIRCUITBOARD,Prompt.PROMPT_MODES.NOTIFY,true,
 			PopUps.get_tutorial_text(0),&"Tutorial")
 			return
+		
+		modes.dev_levels:
+			title.text = "Dev Levels"
+			
+			var exported_dir : String = OS.get_executable_path().get_base_dir()
+			filenames = DirAccess.get_files_at("res://dev_levels/")
+			for filename : String in filenames:
+				directories.append("res://dev_levels/"+filename)
+				add_button(filename)
+			mode = modes.demos
 	
 	title.show()
 	list.show()

@@ -1,4 +1,4 @@
-class_name RoomInterior3D extends Node3D
+class_name RoomInterior3D extends NavigationRegion3D
 
 static var rotations : Array[Vector3] = [Vector3(90,180,0),Vector3(90,0,0),Vector3(90,270,0),Vector3(90,90,0),Vector3(0,90,0),Vector3(180,90,0)]
 static var brickwall  : Rect2i = Rect2i(48,16,16,16)
@@ -27,6 +27,13 @@ func _init(room:Room)->void:
 	roomdata = room
 	is_room_one_wide = roomdata.scale.z == 1
 	Global.player.center_camera_in_room = is_room_one_wide
+	navigation_mesh = NavigationMesh.new()
+	navigation_mesh.geometry_collision_mask = 64
+	navigation_mesh.geometry_parsed_geometry_type = NavigationMesh.PARSED_GEOMETRY_STATIC_COLLIDERS
+	navigation_mesh.cell_size = 0.01
+	navigation_mesh.cell_height = 0.01
+	navigation_mesh.agent_radius = 0.1
+	navigation_mesh.agent_max_climb = 0.05
 
 func _ready()->void:
 	leftmost = -INF
@@ -46,8 +53,12 @@ func _ready()->void:
 	for item : RoomItem in roomdata.items:
 		var obj : RoomItemInstance = item.create_instance()
 		objects.append(obj); add_child(obj)
-	
+		
 	embedded_tutorial_setup()
+	
+	bake_navigation_mesh()
+	await bake_finished
+	breakpoint
 
 func create_box(box:Box)->void:
 	var faces : Array[int] = box.doors
@@ -179,3 +190,10 @@ func save_room_objects()->void:
 	for obj : RoomItemInstance in objects:
 		if not obj or not is_instance_valid(obj): continue
 		roomdata.items.append(obj.get_data())
+
+func get_nav_to(target:Vector3,from:Vector3)->PackedVector3Array:
+	bake_navigation_mesh()
+	await bake_finished
+	
+	
+	return PackedVector3Array()

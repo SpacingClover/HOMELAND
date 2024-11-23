@@ -28,7 +28,7 @@ config/windows_native_icon="res://visuals/spritesheets/misc/icon_1_8VC_icon.ico"
 [autoload]
 
 Global="*res://scripts/Game/Main/global.gd"
-SortedScripts="*res://scripts/editormodifications/SortedScripts.gd"
+SortedScripts="res://scripts/editormodifications/SortedScripts.gd"
 PopUps="*res://scripts/ui_scripts/tutorials.gd"
 
 [debug]

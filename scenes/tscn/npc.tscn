@@ -1,0 +1,58 @@
+[gd_scene load_steps=5 format=3 uid="uid://cbk7dxwq20ano"]
+
+[ext_resource type="Script" path="res://scripts/Game/2.5D/npc.gd" id="1_8gxpt"]
+[ext_resource type="Texture2D" uid="uid://ymfms1vtlpue" path="res://visuals/spritesheets/characters/brown_sandals.png" id="2_f6sff"]
+[ext_resource type="Shape3D" uid="uid://ctdv55soccak8" path="res://geometry/2point5Dcollider.shape" id="3_rnj2j"]
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_muk8t"]
+height = 1.0
+radius = 0.991456
+
+[node name="npc" type="CharacterBody3D"]
+collision_layer = 2
+collision_mask = 2
+script = ExtResource("1_8gxpt")
+
+[node name="legs" type="Sprite3D" parent="."]
+transform = Transform3D(6.19144, 0, 0, 0, 6.19144, 0, 0, 0, 6.19144, 0, 0.557489, 0)
+layers = 2
+sorting_offset = -0.01
+modulate = Color(0.443137, 1, 1, 1)
+billboard = 2
+texture_filter = 0
+texture = ExtResource("2_f6sff")
+hframes = 2
+vframes = 3
+
+[node name="body" type="Sprite3D" parent="."]
+transform = Transform3D(6.19144, 0, 0, 0, 6.19144, 0, 0, 0, 6.19144, 0, 0.557489, 0)
+layers = 2
+modulate = Color(0.443137, 1, 1, 1)
+billboard = 2
+texture_filter = 0
+texture = ExtResource("2_f6sff")
+hframes = 2
+vframes = 3
+frame = 4
+region_rect = Rect2(0, 0, 16, 16)
+
+[node name="col" type="CollisionShape3D" parent="."]
+transform = Transform3D(1.28839, 0, 0, 0, 2.36057, 0, 0, 0, 0.937815, 0, 0, 0)
+shape = ExtResource("3_rnj2j")
+
+[node name="cam" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.956305, 0.292372, 0, -0.292372, 0.956305, 0, 2.36, 5.795)
+cull_mask = 2
+fov = 30.9
+
+[node name="area" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 2
+input_ray_pickable = false
+
+[node name="col" type="CollisionShape3D" parent="area"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+shape = SubResource("CylinderShape3D_muk8t")
+
+[node name="navagent" type="NavigationAgent3D" parent="."]
+debug_enabled = true

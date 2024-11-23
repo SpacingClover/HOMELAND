@@ -21,6 +21,8 @@ static var textureatlas : CompressedTexture2D = preload("res://visuals/spriteshe
 @onready var sprite : Sprite3D = $body
 @onready var legs   : Sprite3D = $legs
 
+signal report_click_position(pos:Vector3)
+
 var legstween : Tween
 var camerashaketween : Tween
 
@@ -109,6 +111,7 @@ func left_click()->void:
 	var collider : Node3D = get_clicked_object()
 	if collider is RoomItemInstance:
 		DEBUG_selected_object = collider
+	report_click_position.emit(get_cursor_position())
 
 func mouse_motion()->void:
 	var mousepos : Vector2 = camera.unproject_position(get_cursor_position())

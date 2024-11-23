@@ -52,11 +52,6 @@ func _input(event:InputEvent)->void:
 								push_message("mode normal")
 							_:
 								push_message("invalid mode at pos 2")
-<<<<<<< HEAD
-<<<<<<< Updated upstream
-=======
-=======
->>>>>>> movementdemo
 					"all":
 						match msg_parts[2]:
 							"npc":
@@ -81,7 +76,6 @@ func _input(event:InputEvent)->void:
 						match msg_parts[2]:
 							"visible":
 								show_roomvisual_indices.emit()
-<<<<<<< HEAD
 					"zoom":
 						if msg_parts.size() < 3 or not msg_parts[2].is_valid_int():
 							push_message("invalid screen index")
@@ -93,9 +87,11 @@ func _input(event:InputEvent)->void:
 							push_message("no usability beyond -1")
 							return
 						Global.titlescreen.zoom_on_screen(msg_parts[2].to_int())
->>>>>>> Stashed changes
-=======
->>>>>>> movementdemo
+					"navtarget":
+						for child : Node3D in Global.player.get_parent().get_children():
+							if child is NPC:
+								push_message("found NPC")
+								child.update_target_location(await Global.player.report_click_position)
 					_:
 						push_message("invalid target at pos 1")
 			"save":
@@ -153,14 +149,13 @@ func _input(event:InputEvent)->void:
 				match msg_parts[1]:
 					"3d":
 						CityView.current.display_rooms()
-<<<<<<< HEAD
-<<<<<<< Updated upstream
-=======
-					
 					"squiggles":
 						TransitionHandler.begin_transition(TransitionHandler.ANIM_SQUIGGLES_VERT,0)
-=======
->>>>>>> movementdemo
+			"blockout":
+				match msg_parts[1]:
+					"room":
+						var scene : PackedScene = PackedScene.new()
+						scene.pack(Global.shooterscene.room3d)
 			"what":
 				match msg_parts[1]:
 					"type":
@@ -170,20 +165,25 @@ func _input(event:InputEvent)->void:
 							push_message("no item with index \"%s\"" % str(idx))
 						else:
 							push_message(RoomItem.item_ids[idx])
-<<<<<<< HEAD
->>>>>>> Stashed changes
-=======
->>>>>>> movementdemo
 			"breakpoint":
 				breakpoint
 			"its my birthday":
 				push_message("omg happy birthday!!")
-				push_message("invalid keyword at pos 0")
 			"goto":
 				var args : PackedInt64Array = get_args_int(msg_parts,1)
 				if args.size() == 0: push_message("missing arguments")
 				elif args.size() == 1: push_message("missing room index")
 				else: Global.set_new_city(args[0],args[1])
+			"spawn":
+				match msg_parts[1]:
+					"npc":
+						var npc : NPC = load("res://scenes/tscn/npc.tscn").instantiate()
+						Global.player.get_parent().add_child(npc)
+						npc.global_position = Global.player.global_position
+			"list":
+				match msg_parts[1]:
+					"dev_levels":
+						Global.titlescreen.lists.display_list(Global.titlescreen.lists.modes.dev_levels)
 
 static func push_message(text:String)->void:
 	var label : Label = Label.new()
