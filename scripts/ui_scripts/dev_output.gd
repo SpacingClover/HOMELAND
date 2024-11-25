@@ -88,7 +88,7 @@ func _input(event:InputEvent)->void:
 							return
 						Global.titlescreen.zoom_on_screen(msg_parts[2].to_int())
 					"navtarget":
-						for child : Node3D in Global.player.get_parent().get_children():
+						for child : Node3D in Global.shooterscene.room3d.get_children():
 							if child is NPC:
 								push_message("found NPC")
 								child.update_target_location(await Global.player.report_click_position)
@@ -178,8 +178,9 @@ func _input(event:InputEvent)->void:
 				match msg_parts[1]:
 					"npc":
 						var npc : NPC = load("res://scenes/tscn/npc.tscn").instantiate()
-						Global.player.get_parent().add_child(npc)
+						Global.shooterscene.room3d.add_child(npc)
 						npc.global_position = Global.player.global_position
+						npc.scale /= 2
 			"list":
 				match msg_parts[1]:
 					"dev_levels":

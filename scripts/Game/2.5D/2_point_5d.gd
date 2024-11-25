@@ -40,6 +40,7 @@ func load_room_interior(room:Room,player_to_box:Box=null,player_from_box:Box=nul
 	player.position.y -= 1
 
 func reset()->void:
+	room3d.queue_free()
 	for child : Node3D in root.get_children():
 		child.queue_free()
 	room3d = null

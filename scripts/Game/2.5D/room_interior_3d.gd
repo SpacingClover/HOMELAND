@@ -34,7 +34,7 @@ func _init(room:Room)->void:
 	navigation_mesh.geometry_parsed_geometry_type = NavigationMesh.PARSED_GEOMETRY_STATIC_COLLIDERS
 	
 	navigation_mesh.cell_size = 0.1
-	navigation_mesh.cell_height = 0.1
+	navigation_mesh.cell_height = 0.01
 	
 	navigation_mesh.agent_height = 1.9
 	navigation_mesh.agent_radius = 0.1
