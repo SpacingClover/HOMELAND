@@ -41,7 +41,11 @@ static var MINES : int = 16
 var mapvisual : CityMarker3D
 
 func _init(being_generated:bool=false)->void:
-	pass
+	await Global.get_tree().process_frame
+	var idx : int = 0
+	for room : Room in rooms:
+		room.index = idx
+		idx += 1
 
 func enter_city()->void:
 	if mapvisual:
@@ -120,9 +124,9 @@ func remove_doubles()->void:
 
 func get_box_at(boxcoord:Vector3i)->Box:
 	for room : Room in rooms:
-			for box : Box in room.boxes:
-				if box.coords == boxcoord:
-					return box
+		for box : Box in room.boxes:
+			if box.coords == boxcoord:
+				return box
 	return null
 
 func get_room_at(boxcoord:Vector3i)->Room:
@@ -140,7 +144,12 @@ func check_for_adjacient_doors()->void:
 	for room : Room in rooms:
 		room.check_for_adjacient_doors(self)
 
-class cityclass extends City:
-	@export var butt : bool
-	func _init()->void:
-		butt = true
+func get_rooms_as_astar()->AStar3D:
+	var astar : AStar3D = AStar3D.new()
+	for room : Room in rooms:
+		astar.add_point(room.index,room.coords)
+	for room : Room in rooms:
+		var connections : Array[int] = room.get_room_connections(self)
+		for connection : int in connections:
+			astar.connect_points(room.index,connection)
+	return astar

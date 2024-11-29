@@ -14,14 +14,6 @@ func _init()->void:
 	current = self
 
 func _input(event:InputEvent)->void:
-	if event.is_action_pressed(&"1"):
-		Global.titlescreen.zoom_on_screen(0,4)
-	elif event.is_action_pressed(&"2"):
-		Global.titlescreen.zoom_on_screen(1,1.5)
-	elif event.is_action_pressed(&"3"):
-		Global.titlescreen.zoom_on_screen(0,1.5)
-	elif event.is_action_pressed(&"4"):
-		Global.titlescreen.zoom_on_screen(4)
 	if event.is_action_pressed(&"enter"):
 		var msg : String = text_edit.text; text_edit.text = &""
 		var msg_parts : PackedStringArray = msg.split(" ")
@@ -88,10 +80,23 @@ func _input(event:InputEvent)->void:
 							return
 						Global.titlescreen.zoom_on_screen(msg_parts[2].to_int())
 					"navtarget":
-						for child : Node3D in Global.shooterscene.room3d.get_children():
-							if child is NPC:
-								push_message("found NPC")
-								child.update_target_location(await Global.player.report_click_position)
+						match msg_parts[2]:
+							"click":
+								for child : Node3D in Global.shooterscene.room3d.get_children():
+									if child is NPC:
+										push_message("found NPC")
+										child.update_target_location(await Global.player.report_click_position)
+							"room":
+								var args : PackedInt64Array = get_args_int(msg_parts,3)
+								if args.size() >= 1:
+									for child : Node3D in Global.shooterscene.room3d.get_children():
+										if child is NPC:
+											var door : Door3D = Global.current_room.roominterior.get_door_leads_to_room(args[0],Global.current_region)
+											var targetpos : Vector3 = door.global_position
+											targetpos.y -= 2
+											targetpos -= -Vector3(door.direction.z,door.direction.y,-door.direction.x)/4
+											if door: child.update_target_location(targetpos); push_message("target "+str(targetpos))
+											else: push_message("cant find door to room "+str(args[0]))
 					_:
 						push_message("invalid target at pos 1")
 			"save":
@@ -114,6 +119,14 @@ func _input(event:InputEvent)->void:
 						match msg_parts[2]:
 							"idx":
 								push_message("room "+str(Global.current_region.rooms.find(Global.current_room)))
+					"doorto":
+						var args : PackedInt64Array = get_args_int(msg_parts,2)
+						if args.size() == 1:
+							var door : Door3D = Global.current_room.roominterior.get_door_leads_to_room(args[0],Global.current_region)
+							if door: door.hide(); await get_tree().create_timer(1).timeout; door.show()
+							else: push_message("cant find door to room "+str(args[0]))
+						else:
+							push_message("to which room?")
 					_:
 						push_message("invalid target at pos 1")
 			"inc":

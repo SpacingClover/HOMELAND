@@ -94,15 +94,15 @@ func enter_game_transition(game:GameData)->void:
 	
 	in_game = true
 	current_game = game
-	mapview.display_map(current_game)
+	if mapview: mapview.display_map(current_game)
 	current_game.open()
-	circuitboard.load_board()
-	world3D.room_movement_axis = current_game.current_axis
+	if circuitboard: circuitboard.load_board()
+	if world3D: world3D.room_movement_axis = current_game.current_axis
 	
-	mapview.show()
-	shooterscene.show()
-	circuitboard.show()
-	world3D.show()
+	if mapview: mapview.show()
+	if shooterscene: shooterscene.show()
+	if circuitboard: circuitboard.show()
+	if world3D: world3D.show()
 	
 	hide_menu.emit()
 	menu_hidden = true
@@ -115,18 +115,19 @@ func enter_game_transition(game:GameData)->void:
 func set_new_city(city_idx:int,room_idx:int=-1,loading_game:bool=false)->void:
 	if not loading_game:
 		TransitionHandler.begin_transition(TransitionHandler.ANIM_CITY_TRANSITION_0)
-		var header : Label = MapView.current.header
-		header.text = "Entering " + current_game.cities[city_idx].name.capitalize()
-		header.modulate.a = 0
-		create_tween().tween_property(header,"modulate:a",1,1)
-		header.show()
+		if mapview:
+			var header : Label = MapView.current.header
+			header.text = "Entering " + current_game.cities[city_idx].name.capitalize()
+			header.modulate.a = 0
+			create_tween().tween_property(header,"modulate:a",1,1)
+			header.show()
 		await get_tree().create_timer(1).timeout
 	
 	if current_region: current_region.exit_city()
 	
-	world3D.reset_3d_view()
+	if world3D: world3D.reset_3d_view()
 	current_region = current_game.cities[city_idx]
-	world3D.display_rooms()
+	if world3D: world3D.display_rooms()
 	if room_idx < 0:
 		room_idx = 0
 	enter_room(current_region.rooms[room_idx],null,null,loading_game)
@@ -135,24 +136,27 @@ func set_new_city(city_idx:int,room_idx:int=-1,loading_game:bool=false)->void:
 	
 	if not loading_game:
 		TransitionHandler.end_transition()
-		var header : Label = MapView.current.header
-		await get_tree().create_timer(1).timeout
-		await create_tween().tween_property(header,"modulate:a",0,3).finished
-		header.hide()
+		if mapview:
+			var header : Label = MapView.current.header
+			await get_tree().create_timer(1).timeout
+			await create_tween().tween_property(header,"modulate:a",0,3).finished
+			header.hide()
 
 func enter_room(room:Room,startbox:Box=null,frombox:Box=null,loading_game:bool=false)->void:
 	current_room = room
 	if not startbox:
 		startbox = current_room.boxes[0]
-	shooterscene.load_room_interior(room,startbox,frombox)
-	if not world3D.is_inside_tree():
+	if shooterscene:
+		shooterscene.load_room_interior(room,startbox,frombox)
+	if world3D: if not world3D.is_inside_tree():
 		await world3D.tree_entered
-	if loading_game and current_game.position != Vector3.ZERO:
+	if loading_game and current_game.position != Vector3.ZERO and Global.player:
 		Global.player.global_position = current_game.position
-	world3D.loaded_room_marker_offset = Vector3.ZERO
-	world3D.loaded_room_marker_PREVIOUS_offset = Vector3.ZERO
-	world3D.recenter_camera()
-	world3D.set_marker_position(player)
+	if world3D:
+		world3D.loaded_room_marker_offset = Vector3.ZERO
+		world3D.loaded_room_marker_PREVIOUS_offset = Vector3.ZERO
+		world3D.recenter_camera()
+		world3D.set_marker_position(player)
 
 func win_game()->void:
 	TransitionHandler.begin_transition(TransitionHandler.MOVEMENTDEMO_COMPLETED)
@@ -194,7 +198,9 @@ func unload_game_and_exit_to_menu()->void:
 
 func debug_reset()->void:
 	
-	var inv : Node2D = titlescreen.get_node("25d_topbar_root")
-	for child : Node in inv.get_children():
-		child.queue_free()
-	Global.player.DEBUG_inventory.clear()
+	var inv : Node2D = titlescreen.get_node_or_null("25d_topbar_root")
+	if inv:
+		for child : Node in inv.get_children():
+			child.queue_free()
+	if Global.player:
+		Global.player.DEBUG_inventory.clear()

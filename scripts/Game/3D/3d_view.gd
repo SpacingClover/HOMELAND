@@ -124,6 +124,8 @@ func display_room(room_ref:Room)->void:
 func set_marker_position(object:Object)->void:
 	##this must be altered so that each marked object is registered with a marker,
 	##and object is looked up and the position is updated
+	if not Global.player:
+		return
 	if object == Global.player:
 		var pos : Vector3 = object.global_position
 		playermarker.position = Vector3(pos.z,Global.current_room.roomvisual.global_position.y,-pos.x)/11.75
@@ -442,7 +444,7 @@ func slide_room_along_axis(mouse_coords:Vector3,axis:int=room_movement_axis)->vo
 	
 	create_visual(selected_room)
 	
-	if Global.current_room == selected_room.data_reference:
+	if Global.current_room == selected_room.data_reference and Global.shooterscene:
 		Global.player.shake_camera()
 		loaded_room_marker_offset += disp
 		set_marker_position(Global.player)
@@ -473,7 +475,7 @@ func create_room_movement_border()->void:
 
 func update_doors_in_moved_room(room:Room)->void:
 	
-	if Global.current_room == room: #if the affected room is currently loaded in 2.5D scene
+	if Global.current_room == room and Global.shooterscene: #if the affected room is currently loaded in 2.5D scene
 		for door : Door3D in Global.shooterscene.room3d.doors:
 			if door.is_open:
 				door.close()

@@ -124,6 +124,20 @@ func open()->void: # any non-opening cases must return
 		return
 		
 	door_opened.emit()
+	
+func has_adjacient_door(city_ref:City)->bool: # any non-opening cases must return false
+	var corresponding_box : Box
+	corresponding_box = city_ref.get_box_at(box.coords+direction)
+	if not corresponding_box:
+		return false
+	return corresponding_box.has_doorway(-direction)
+
+func opens_to_room(city_ref:City)->int:
+	var corresponding_room : Room
+	corresponding_room = city_ref.get_room_at(box.coords+direction)
+	if has_adjacient_door(city_ref):
+		return corresponding_room.index
+	return -1
 
 func close()->void:
 	if state == OPENIN:

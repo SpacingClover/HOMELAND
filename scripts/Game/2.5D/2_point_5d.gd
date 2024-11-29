@@ -7,6 +7,7 @@ var player : Player3D:
 	get: return Global.player
 
 var room3d : RoomInterior3D
+var loaded_rooms : Array[RoomInterior3D]
 var camera : Camera3D:
 	get: return player.camera
 var viewport : GameView

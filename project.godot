@@ -228,7 +228,6 @@ enter={
 textures/canvas_textures/default_texture_filter=0
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
-scaling_3d/mode=1
 environment/defaults/default_clear_color=Color(0.952941, 0.294118, 0, 1)
 anti_aliasing/quality/msaa_2d=1
 anti_aliasing/quality/msaa_3d=1

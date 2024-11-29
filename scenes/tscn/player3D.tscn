@@ -11,6 +11,9 @@ radius = 0.991456
 [node name="player" type="CharacterBody3D"]
 collision_layer = 2
 collision_mask = 2
+axis_lock_angular_x = true
+axis_lock_angular_y = true
+axis_lock_angular_z = true
 script = ExtResource("1_yqkw8")
 
 [node name="legs" type="Sprite3D" parent="."]

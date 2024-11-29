@@ -60,12 +60,12 @@ func _process(delta:float)->void:
 		walking_direction.y -= 2
 	velocity = Vector3(walking_direction.x,walking_direction.y,walking_direction.z)
 	move_and_slide()
-	if walking:
+	if walking and Global.world3D:
 		Global.world3D.set_marker_position(self)
 	place_camera()
 
 func _input(event:InputEvent)->void:
-	if Global.shooterscene.viewport.has_control():
+	if Global.shooterscene: if Global.shooterscene.viewport.has_control():
 		if event.is_action_pressed(&"click"):
 			left_click()
 	

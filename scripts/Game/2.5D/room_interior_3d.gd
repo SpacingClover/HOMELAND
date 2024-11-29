@@ -25,6 +25,7 @@ var is_room_one_wide : bool = false #along x axis
 
 func _init(room:Room)->void:
 	roomdata = room
+	roomdata.roominterior = self
 	is_room_one_wide = roomdata.scale.z == 1
 	Global.player.center_camera_in_room = is_room_one_wide
 	
@@ -194,9 +195,10 @@ func save_room_objects()->void:
 		if not obj or not is_instance_valid(obj): continue
 		roomdata.items.append(obj.get_data())
 
-func get_nav_to(target:Vector3,from:Vector3)->PackedVector3Array:
-	bake_navigation_mesh()
-	await bake_finished
-	
-	
-	return PackedVector3Array()
+func get_door_leads_to_room(room:int,city_ref:City)->Door3D:
+	var connections : Array[int] = roomdata.get_room_connections(city_ref)
+	for door : Door3D in doors:
+		var leads_to : int = door.opens_to_room(city_ref)
+		if leads_to != -1 and leads_to == room:
+			return door
+	return null

@@ -23,6 +23,8 @@ static var TWOBYTWO : Vector3i   = Vector3i(2,1,2)
 			original_coords_set = true
 
 var roomvisual : RoomInstance3D
+var roominterior : RoomInterior3D
+var index : int
 
 func _init(size:Vector3i=Vector3i.ZERO,pos:Vector3i=Vector3i.ZERO,being_generated:bool=false)->void:
 	
@@ -135,6 +137,12 @@ func delete_room_visual()->void:
 func check_for_adjacient_doors(city_ref:City)->void:
 	for box : Box in boxes:
 		box.check_for_adjacient_doors(city_ref)
-	if Global.current_room == self:
+	if Global.current_room == self and is_instance_valid(Global.shooterscene):
 		for door : Door3D in Global.shooterscene.room3d.doors:
 			door.handle_lock_icon()
+
+func get_room_connections(city_ref:City)->Array[int]:
+	var adjacient_rooms : Array[int]
+	for box : Box in boxes:
+		adjacient_rooms.append_array(box.check_for_adjacient_doors(city_ref))
+	return adjacient_rooms

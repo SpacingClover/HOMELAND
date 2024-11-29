@@ -68,6 +68,10 @@ func _ready()->void:
 		get_child(0).add_child(subroot)
 		
 		if orbitable:
+			if not subroot is Node3D:
+				subroot = load("res://scenes/tscn/2_point_5d.tscn").instantiate()
+				add_child(subroot)
+				move_child(subroot,0)
 			subroot.viewport = self
 			camera_root = subroot.get_child(0)
 			subroot = subroot.get_child(1)
@@ -76,7 +80,7 @@ func _ready()->void:
 			Global.player.mouseproxy = mouseproxy
 			mouseproxy.get_child(0).collision_mask = 2
 		
-		if _2point5D:
+		if _2point5D and subroot is Node3D:
 			Global.shooterscene = subroot
 			subroot.viewport = self
 		
@@ -150,9 +154,9 @@ func pass_mouseout()->void:
 			Global.player_controlling = null
 	if hasplayer:
 		Global.player.getting_mouse = false
-	if mapview:
+	if mapview and is_instance_valid(mapview):
 		Global.mapview.markerinfo.hide()
-	if orbitable:
+	if orbitable and Global.world3D:
 		if Global.world3D.hightlighted_room and not Global.world3D.selected_room:
 			Global.world3D.hightlighted_room.disable_highlight()
 

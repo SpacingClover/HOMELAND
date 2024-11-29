@@ -1,4 +1,4 @@
-[gd_scene load_steps=19 format=3 uid="uid://cp73kaj0h6mtq"]
+[gd_scene load_steps=19 format=4 uid="uid://cp73kaj0h6mtq"]
 
 [ext_resource type="Script" path="res://scripts/Game/2.5D/door.gd" id="1_6gbnr"]
 [ext_resource type="Texture2D" uid="uid://cqyd7yl4w4rx4" path="res://visuals/spritesheets/icons/lock_icon.png" id="2_457ha"]
@@ -10,11 +10,11 @@ _surfaces = [{
 "aabb": AABB(0, -1.5, -1, 1e-05, 3.00001, 2.00001),
 "format": 34896613377,
 "index_count": 30,
-"index_data": PackedByteArray(11, 0, 3, 0, 7, 0, 11, 0, 9, 0, 3, 0, 8, 0, 6, 0, 1, 0, 8, 0, 10, 0, 6, 0, 5, 0, 11, 0, 10, 0, 5, 0, 4, 0, 11, 0, 0, 0, 10, 0, 8, 0, 0, 0, 5, 0, 10, 0, 4, 0, 9, 0, 11, 0, 4, 0, 2, 0, 9, 0),
+"index_data": PackedByteArray("CwADAAcACwAJAAMACAAGAAEACAAKAAYABQALAAoABQAEAAsAAAAKAAgAAAAFAAoABAAJAAsABAACAAkA"),
 "primitive": 3,
 "uv_scale": Vector4(0, 0, 0, 0),
 "vertex_count": 12,
-"vertex_data": PackedByteArray(0, 0, 254, 255, 254, 255, 0, 0, 0, 0, 0, 0, 254, 255, 0, 0, 0, 0, 254, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 254, 255, 255, 15, 0, 0, 0, 0, 254, 255, 3, 240, 0, 0, 0, 0, 0, 0, 254, 239, 0, 0, 0, 0, 0, 0, 255, 15, 0, 0, 0, 0, 84, 245, 254, 255, 0, 0, 0, 0, 84, 245, 0, 0, 0, 0, 0, 0, 84, 245, 254, 239, 0, 0, 0, 0, 84, 245, 255, 15, 0, 0)
+"vertex_data": PackedByteArray("AAD+//7/AAAAAAAA/v8AAAAA/v8AAAAAAAAAAAAAAAAAAP7//w8AAAAA/v8D8AAAAAAAAP7vAAAAAAAA/w8AAAAAVPX+/wAAAABU9QAAAAAAAFT1/u8AAAAAVPX/DwAA")
 }]
 blend_shape_mode = 0
 
@@ -22,15 +22,15 @@ blend_shape_mode = 0
 resource_name = "doortile_Plane"
 _surfaces = [{
 "aabb": AABB(0, -1.5, -1, 1e-05, 3.00001, 2.00001),
-"attribute_data": PackedByteArray(0, 0, 0, 0, 0, 0, 255, 255, 255, 255, 0, 0, 255, 255, 255, 255, 255, 239, 0, 0, 251, 15, 0, 0, 251, 15, 255, 255, 255, 239, 255, 255, 0, 0, 170, 10, 255, 255, 170, 10, 251, 15, 170, 10, 255, 239, 170, 10),
+"attribute_data": PackedByteArray("AAAAAAAA/////wAA///////vAAD7DwAA+w/////v//8AAKoK//+qCvsPqgr/76oK"),
 "format": 34896613399,
 "index_count": 30,
-"index_data": PackedByteArray(11, 0, 3, 0, 7, 0, 11, 0, 9, 0, 3, 0, 8, 0, 6, 0, 1, 0, 8, 0, 10, 0, 6, 0, 5, 0, 11, 0, 10, 0, 5, 0, 4, 0, 11, 0, 0, 0, 10, 0, 8, 0, 0, 0, 5, 0, 10, 0, 4, 0, 9, 0, 11, 0, 4, 0, 2, 0, 9, 0),
+"index_data": PackedByteArray("CwADAAcACwAJAAMACAAGAAEACAAKAAYABQALAAoABQAEAAsAAAAKAAgAAAAFAAoABAAJAAsABAACAAkA"),
 "material": SubResource("StandardMaterial3D_komw5"),
 "primitive": 3,
 "uv_scale": Vector4(0, 0, 0, 0),
 "vertex_count": 12,
-"vertex_data": PackedByteArray(0, 0, 254, 255, 254, 255, 255, 191, 0, 0, 0, 0, 254, 255, 255, 191, 0, 0, 254, 255, 0, 0, 255, 191, 0, 0, 0, 0, 0, 0, 255, 191, 0, 0, 254, 255, 255, 15, 255, 191, 0, 0, 254, 255, 3, 240, 255, 191, 0, 0, 0, 0, 254, 239, 255, 191, 0, 0, 0, 0, 255, 15, 255, 191, 0, 0, 84, 245, 254, 255, 255, 191, 0, 0, 84, 245, 0, 0, 255, 191, 0, 0, 84, 245, 254, 239, 255, 191, 0, 0, 84, 245, 255, 15, 255, 191, 255, 127, 0, 0, 255, 127, 0, 0, 255, 127, 0, 0, 255, 127, 0, 0, 255, 127, 0, 0, 255, 127, 0, 0, 255, 127, 0, 0, 255, 127, 0, 0, 255, 127, 0, 0, 255, 127, 0, 0, 255, 127, 0, 0, 255, 127, 0, 0)
+"vertex_data": PackedByteArray("AAD+//7//78AAAAA/v//vwAA/v8AAP+/AAAAAAAA/78AAP7//w//vwAA/v8D8P+/AAAAAP7v/78AAAAA/w//vwAAVPX+//+/AABU9QAA/78AAFT1/u//vwAAVPX/D/+//38AAP9/AAD/fwAA/38AAP9/AAD/fwAA/38AAP9/AAD/fwAA/38AAP9/AAD/fwAA")
 }]
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_y5a42")
@@ -41,17 +41,17 @@ shadow_mesh = SubResource("ArrayMesh_y5a42")
 resource_name = "doortile_Plane_001"
 _surfaces = [{
 "aabb": AABB(0, -2, -0.875001, 1e-05, 2.87502, 1.75001),
-"attribute_data": PackedByteArray(104, 183, 127, 61, 0, 0, 128, 63, 115, 0, 112, 63, 0, 0, 128, 63, 104, 183, 127, 61, 208, 162, 42, 61, 114, 0, 112, 63, 224, 162, 42, 61),
+"attribute_data": PackedByteArray("aLd/PQAAgD9zAHA/AACAP2i3fz3Qoio9cgBwP+CiKj0="),
 "bone_aabbs": [AABB(0, -2, -0.875001, 1e-05, 2.87502, 1.75001)],
 "format": 34359745559,
 "index_count": 6,
-"index_data": PackedByteArray(2, 0, 1, 0, 0, 0, 2, 0, 3, 0, 1, 0),
+"index_data": PackedByteArray("AgABAAAAAgADAAEA"),
 "material": SubResource("StandardMaterial3D_prooe"),
 "primitive": 3,
-"skin_data": PackedByteArray(0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 0, 0, 0, 0, 0, 0),
+"skin_data": PackedByteArray("AAAAAAAAAAD//wAAAAAAAAAAAAAAAAAA//8AAAAAAAAAAAAAAAAAAP//AAAAAAAAAAAAAAAAAAD//wAAAAAAAA=="),
 "uv_scale": Vector4(0, 0, 0, 0),
 "vertex_count": 4,
-"vertex_data": PackedByteArray(0, 0, 0, 0, 0, 0, 0, 192, 14, 0, 96, 63, 0, 0, 0, 0, 0, 0, 0, 192, 14, 0, 96, 191, 0, 0, 0, 0, 122, 1, 96, 63, 14, 0, 96, 63, 0, 0, 0, 0, 122, 1, 96, 63, 14, 0, 96, 191, 255, 255, 255, 127, 255, 255, 255, 255, 255, 255, 255, 127, 255, 255, 255, 255, 255, 255, 255, 127, 255, 255, 255, 255, 255, 255, 255, 127, 254, 255, 255, 255)
+"vertex_data": PackedByteArray("AAAAAAAAAMAOAGA/AAAAAAAAAMAOAGC/AAAAAHoBYD8OAGA/AAAAAHoBYD8OAGC/////f/////////9//////////3//////////f/7///8=")
 }]
 blend_shape_mode = 0
 
@@ -72,11 +72,11 @@ _surfaces = [{
 "aabb": AABB(-2.5, -1.13247e-07, -2, 4, 1.0151e-05, 4.00001),
 "format": 34896613377,
 "index_count": 18,
-"index_data": PackedByteArray(1, 0, 4, 0, 5, 0, 1, 0, 0, 0, 4, 0, 6, 0, 3, 0, 7, 0, 6, 0, 2, 0, 3, 0, 2, 0, 4, 0, 0, 0, 2, 0, 6, 0, 4, 0),
+"index_data": PackedByteArray("AQAEAAUAAQAAAAQABgADAAcABgACAAMAAgAEAAAAAgAGAAQA"),
 "primitive": 3,
 "uv_scale": Vector4(0, 0, 0, 0),
 "vertex_count": 8,
-"vertex_data": PackedByteArray(0, 0, 206, 3, 254, 255, 0, 0, 255, 255, 206, 3, 254, 255, 0, 0, 0, 0, 206, 3, 0, 0, 0, 0, 255, 255, 206, 3, 0, 0, 0, 0, 255, 63, 182, 5, 255, 191, 0, 0, 255, 255, 0, 0, 255, 191, 0, 0, 255, 63, 182, 5, 255, 63, 0, 0, 255, 255, 0, 0, 255, 63, 0, 0)
+"vertex_data": PackedByteArray("AADOA/7/AAD//84D/v8AAAAAzgMAAAAA///OAwAAAAD/P7YF/78AAP//AAD/vwAA/z+2Bf8/AAD//wAA/z8AAA==")
 }]
 blend_shape_mode = 0
 
@@ -84,15 +84,15 @@ blend_shape_mode = 0
 resource_name = "doortile_Plane_002"
 _surfaces = [{
 "aabb": AABB(-2.5, -1.13247e-07, -2, 4, 1.0151e-05, 4.00001),
-"attribute_data": PackedByteArray(0, 0, 0, 0, 0, 0, 255, 255, 254, 255, 0, 0, 254, 255, 255, 255, 255, 63, 255, 63, 255, 63, 255, 255, 255, 191, 255, 63, 255, 191, 255, 255),
+"attribute_data": PackedByteArray("AAAAAAAA///+/wAA/v////8//z//P////7//P/+///8="),
 "format": 34896613399,
 "index_count": 18,
-"index_data": PackedByteArray(1, 0, 4, 0, 5, 0, 1, 0, 0, 0, 4, 0, 6, 0, 3, 0, 7, 0, 6, 0, 2, 0, 3, 0, 2, 0, 4, 0, 0, 0, 2, 0, 6, 0, 4, 0),
+"index_data": PackedByteArray("AQAEAAUAAQAAAAQABgADAAcABgACAAMAAgAEAAAAAgAGAAQA"),
 "material": SubResource("StandardMaterial3D_j2xwd"),
 "primitive": 3,
 "uv_scale": Vector4(0, 0, 0, 0),
 "vertex_count": 8,
-"vertex_data": PackedByteArray(0, 0, 206, 3, 254, 255, 84, 213, 255, 255, 206, 3, 254, 255, 84, 213, 0, 0, 206, 3, 0, 0, 84, 213, 255, 255, 206, 3, 0, 0, 84, 213, 255, 63, 182, 5, 255, 191, 84, 213, 255, 255, 0, 0, 255, 191, 84, 213, 255, 63, 182, 5, 255, 63, 84, 213, 255, 255, 0, 0, 255, 63, 84, 213, 84, 213, 170, 42, 84, 213, 170, 42, 84, 213, 170, 42, 84, 213, 170, 42, 84, 213, 170, 42, 84, 213, 170, 42, 84, 213, 170, 42, 84, 213, 170, 42)
+"vertex_data": PackedByteArray("AADOA/7/VNX//84D/v9U1QAAzgMAAFTV///OAwAAVNX/P7YF/79U1f//AAD/v1TV/z+2Bf8/VNX//wAA/z9U1VTVqipU1aoqVNWqKlTVqipU1aoqVNWqKlTVqipU1aoq")
 }]
 blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_36i2f")
