@@ -12,6 +12,8 @@ static var rubble   : PackedScene = preload("res://scenes/scn/rubble.scn")
 static func _static_init()->void:
 	tilecol.size = Vector3(1,0.001,1)
 
+signal room_constructed
+
 var roomdata : Room
 
 var doors : Array[Door3D]
@@ -25,6 +27,7 @@ var is_room_one_wide : bool = false #along x axis
 
 func _init(room:Room)->void:
 	roomdata = room
+	roomdata.is_loaded = true
 	roomdata.roominterior = self
 	is_room_one_wide = roomdata.scale.z == 1
 	Global.player.center_camera_in_room = is_room_one_wide
@@ -51,17 +54,13 @@ func _ready()->void:
 	for box : Box in roomdata.boxes:
 		create_box(box)
 	
-	if Global.player:
-		Global.player.camera_left_limit = leftmost
-		Global.player.camera_right_limit = rightmost
-		Global.player.camera_near_limit = closest
+	room_constructed.emit()
 	
 	for item : RoomItem in roomdata.items:
 		var obj : RoomItemInstance = item.create_instance()
 		objects.append(obj); add_child(obj)
-		
-	embedded_tutorial_setup()
 	
+	embedded_tutorial_setup()
 	bake_navigation_mesh()
 
 func create_box(box:Box)->void:
@@ -202,3 +201,13 @@ func get_door_leads_to_room(room:int,city_ref:City)->Door3D:
 		if leads_to != -1 and leads_to == room:
 			return door
 	return null
+
+func give_player_camera_info(player:Player3D)->void:
+	player.camera_left_limit = leftmost
+	player.camera_right_limit = rightmost
+	player.camera_near_limit = closest
+	player.center_camera_in_room = is_room_one_wide
+
+func _notification(what:int)->void:
+	if what == NOTIFICATION_PREDELETE:
+		roomdata.is_loaded = false

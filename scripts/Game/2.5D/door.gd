@@ -69,13 +69,10 @@ func _ready()->void:
 			anim.seek(INF,true)
 	
 	set_opacity(true)
-	
-	var timer : Timer = Timer.new()
-	add_child(timer)
-	timer.start(0.1)
-	
-	await timer.timeout
-	timer.queue_free()
+
+func _enter_tree()->void:
+	coyote_collision = true
+	await get_tree().create_timer(0.1).timeout
 	coyote_collision = false
 
 func toggle_door()->void:

@@ -16,7 +16,6 @@ func _ready()->void:
 	pass
 
 func _physics_process(delta:float)->void:
-	print(navagent.get_current_navigation_path())
 	if has_nav_target:
 		if navagent.distance_to_target() <= 0.5: has_nav_target = false; DEV_OUTPUT.push_message("reached target")
 		velocity = (navagent.get_next_path_position() - global_position).normalized() * speed

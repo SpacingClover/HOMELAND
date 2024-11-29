@@ -9,6 +9,10 @@ script = ExtResource("1_jja4e")
 [node name="root" type="Node3D" parent="."]
 transform = Transform3D(-8.74228e-08, 0, -2, 0, 2, 0, 2, 0, -8.74228e-08, 0, 0, 0)
 
+[node name="room_buffer_root" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 500, 0)
+visible = false
+
 [node name="entities" type="Node3D" parent="."]
 
 [node name="player" parent="entities" instance=ExtResource("3_fu6dm")]
