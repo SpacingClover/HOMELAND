@@ -290,6 +290,8 @@ func get_coords_for_3D_view()->Vector3:
 	var vec : Vector3 = Vector3(position.z,position.y+1,-position.x)/2
 	return vec
 
+func entered_room()->void:
+	pass
 
 func DEBUG_add_item_to_inventory(item:GrabbableItemInstance)->void:
 	var icon : Sprite2D = item.get_as_sprite()

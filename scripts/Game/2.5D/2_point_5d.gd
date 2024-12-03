@@ -16,46 +16,57 @@ func _ready()->void:
 	root.position = Vector3.ZERO
 	entities_root.position = Vector3.ZERO
 
-func load_room_interior(room:Room,player_to_box:Box=null,player_from_box:Box=null)->void:
-	
-	var is_constructing_room : bool = true
-	
-	if room3d and is_instance_valid(room3d):
-		var room_has_entities : bool = false
-		for child : Node3D in room3d.get_children():
-			if child is NPC:
-				room_has_entities = true
+func load_room_interior(room:Room,make_current:bool=false)->void:	
+	if make_current:
+		if room3d and is_instance_valid(room3d):
+			var room_has_entities : bool = false
+			for child : Node3D in room3d.get_children():
+				if child is NPC:
+					room_has_entities = true
+			
+			if room_has_entities:
+				#room3d_rooms_buffer.append(room3d)
+				root.remove_child(room3d)
+				room_buffer_root.add_child(room3d)
+			else:
+				room3d.save_room_objects()
+				room3d.queue_free()
 		
-		if room_has_entities:
-			#room3d_rooms_buffer.append(room3d)
-			root.remove_child(room3d)
-			room_buffer_root.add_child(room3d)
+		root.position = Vector3.ZERO
+		entities_root.position = Vector3.ZERO
+		
+		if room.is_loaded:
+			room3d = room.roominterior
+			room_buffer_root.remove_child(room3d)
 		else:
-			room3d.save_room_objects()
-			room3d.queue_free()
-	
-	root.position = Vector3.ZERO
-	entities_root.position = Vector3.ZERO
-	
-	if room.is_loaded:
-		room3d = room.roominterior
-		room_buffer_root.remove_child(room3d)
-		is_constructing_room = false
+			room3d = RoomInterior3D.new(room)
+		
+		root.add_child(room3d)
 	else:
-		room3d = RoomInterior3D.new(room)
+		var buffroom : RoomInterior3D = RoomInterior3D.new(room)
+		room_buffer_root.add_child(buffroom)
+
+func send_entity_to_room(entity:Node3D,room:Room,tobox:Box=null,frombox:Box=null)->void:
+	var is_constructing_room : bool = false
+	if not room.is_loaded:
+		is_constructing_room = true
+	load_room_interior(room,entity is Player3D)
 	
-	root.add_child(room3d)
+	var topos : Vector3 = tobox.global_coords
+	if frombox: topos = lerp(topos,frombox.global_coords,0.49)
 	
-	var topos : Vector3 = player_to_box.global_coords
-	if player_from_box:
-		topos = lerp(topos,player_from_box.global_coords,0.49)
+	if not entity is Player3D:
+		entity.get_parent().remove_child(entity)
+		room.roominterior.add_child(entity)
+	entity.global_position = topos + room.roominterior.get_parent().global_position 
+	entity.global_position.y -= 1
 	
-	player.position = topos
-	player.position.y -= 1
+	entity.entered_room()
 	
-	if is_constructing_room and not room3d.is_node_ready():
-		await room3d.room_constructed
-	room3d.give_player_camera_info(player)
+	if entity is Player3D:
+		if is_constructing_room and not room3d.is_node_ready():
+			await room3d.room_constructed
+		room3d.give_player_camera_info(player)
 
 func reset()->void:
 	room3d.queue_free()

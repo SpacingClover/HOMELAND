@@ -6,7 +6,7 @@
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_muk8t"]
 height = 1.0
-radius = 0.991456
+radius = 0.473445
 
 [node name="npc" type="CharacterBody3D"]
 collision_layer = 0
@@ -42,11 +42,6 @@ region_rect = Rect2(0, 0, 16, 16)
 [node name="col" type="CollisionShape3D" parent="."]
 transform = Transform3D(1.28839, 0, 0, 0, 2.36057, 0, 0, 0, 0.937815, 0, 0, 0)
 shape = ExtResource("3_rnj2j")
-
-[node name="cam" type="Camera3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 0.956305, 0.292372, 0, -0.292372, 0.956305, 0, 2.36, 5.795)
-cull_mask = 2
-fov = 30.9
 
 [node name="area" type="Area3D" parent="."]
 collision_layer = 0

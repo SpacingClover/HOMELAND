@@ -91,12 +91,7 @@ func _input(event:InputEvent)->void:
 								if args.size() >= 1:
 									for child : Node3D in Global.shooterscene.room3d.get_children():
 										if child is NPC:
-											var door : Door3D = Global.current_room.roominterior.get_door_leads_to_room(args[0],Global.current_region)
-											var targetpos : Vector3 = door.global_position
-											targetpos.y -= 2
-											targetpos -= -Vector3(door.direction.z,door.direction.y,-door.direction.x)/4
-											if door: child.update_target_location(targetpos); push_message("target "+str(targetpos))
-											else: push_message("cant find door to room "+str(args[0]))
+											child.go_to_room(args[0])
 					_:
 						push_message("invalid target at pos 1")
 			"save":

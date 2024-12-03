@@ -147,7 +147,8 @@ func enter_room(room:Room,startbox:Box=null,frombox:Box=null,loading_game:bool=f
 	if not startbox:
 		startbox = current_room.boxes[0]
 	if shooterscene:
-		shooterscene.load_room_interior(room,startbox,frombox)
+		#shooterscene.load_room_interior(room,startbox,frombox)
+		shooterscene.send_entity_to_room(player,room,startbox,frombox)
 	if world3D: if not world3D.is_inside_tree():
 		await world3D.tree_entered
 	if loading_game and current_game.position != Vector3.ZERO and Global.player:

@@ -154,33 +154,39 @@ func parse_overlapping_bodies(_x:StringName)->void:
 	for body : PhysicsBody3D in area.get_overlapping_bodies():
 		body_entered(body)
 
+func send_entity_through_door(entity:Node3D)->void:
+	if not is_victory_door:
+		var nextroom : Room = Global.current_region.get_room_at(box.coords+direction)
+		var nextbox : Box = Global.current_region.get_box_at(box.coords+direction)
+		if nextroom and nextbox:
+			if entity is Player3D:
+				Global.enter_room(nextroom,nextbox,box)
+			else:
+				Global.shooterscene.send_entity_to_room(entity,nextroom,nextbox,box)
+			#Global.shooterscene.load_room_interior(nextroom)
+			#Global.enter_room(nextroom,nextbox,box)
+	else:
+		var exit : CityExit = Global.current_region.get_room_at(box.coords)
+		if exit.nextcity >= 0 and exit.corresponding_exit >= 0:
+			var nextcity : City = Global.current_game.cities[exit.nextcity]
+			var nextexit : CityExit = nextcity.exits[exit.corresponding_exit]
+			var nextexitroomsidx : int = nextcity.rooms.find(nextexit)
+			Global.set_new_city(exit.nextcity,nextexitroomsidx)
+		
+		elif exit.nextcity == -1:
+			TransitionHandler.begin_transition(TransitionHandler.MOVEMENTDEMO_COMPLETED)
+			await get_tree().create_timer(10).timeout
+			TransitionHandler.end_transition()
+			Global.unload_game_and_exit_to_menu()
+		
+		elif exit.nextcity == -2:
+			return
+
 func body_entered(body:PhysicsBody3D)->void:
 	if body is Player3D and not coyote_collision:
 		player_near_door.emit()
-		
 		if is_open:
-			
-			if not is_victory_door:
-				var nextroom : Room = Global.current_region.get_room_at(box.coords+direction)
-				var nextbox : Box = Global.current_region.get_box_at(box.coords+direction)
-				if nextroom and nextbox:
-					Global.enter_room(nextroom,nextbox,box)
-			else:
-				var exit : CityExit = Global.current_region.get_room_at(box.coords)
-				if exit.nextcity >= 0 and exit.corresponding_exit >= 0:
-					var nextcity : City = Global.current_game.cities[exit.nextcity]
-					var nextexit : CityExit = nextcity.exits[exit.corresponding_exit]
-					var nextexitroomsidx : int = nextcity.rooms.find(nextexit)
-					Global.set_new_city(exit.nextcity,nextexitroomsidx)
-				
-				elif exit.nextcity == -1:
-					TransitionHandler.begin_transition(TransitionHandler.MOVEMENTDEMO_COMPLETED)
-					await get_tree().create_timer(10).timeout
-					TransitionHandler.end_transition()
-					Global.unload_game_and_exit_to_menu()
-				
-				elif exit.nextcity == -2:
-					return
+			send_entity_through_door(body)
 
 func body_exited(body:PhysicsBody3D)->void:
 	pass

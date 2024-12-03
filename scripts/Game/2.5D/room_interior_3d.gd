@@ -30,7 +30,6 @@ func _init(room:Room)->void:
 	roomdata.is_loaded = true
 	roomdata.roominterior = self
 	is_room_one_wide = roomdata.scale.z == 1
-	Global.player.center_camera_in_room = is_room_one_wide
 	
 	navigation_mesh = NavigationMesh.new()
 	
@@ -70,9 +69,6 @@ func create_box(box:Box)->void:
 		match faces[i]:
 			Box.NONE: pass
 			_: create_face(box,City.DIRECTIONS[i],rotations[i],faces[i])
-	
-	if is_room_one_wide:
-		Global.player.centered_room_pos = get_child(0).global_position.x
 	
 	if box.state == Box.RUBBLE:
 		var rubbleinst : Node3D = rubble.instantiate()
@@ -207,6 +203,8 @@ func give_player_camera_info(player:Player3D)->void:
 	player.camera_right_limit = rightmost
 	player.camera_near_limit = closest
 	player.center_camera_in_room = is_room_one_wide
+	if is_room_one_wide:
+		Global.player.centered_room_pos = get_child(0).global_position.x
 
 func _notification(what:int)->void:
 	if what == NOTIFICATION_PREDELETE:
