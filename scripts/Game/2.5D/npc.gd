@@ -6,12 +6,13 @@ var path_between_rooms : PackedInt64Array
 var path_between_rooms_index : int
 var is_navigating_between_rooms : bool = false
 var target_object : Node3D
+var target_room : int
 
 var speed : float = 3
 
 var has_nav_target : bool = false
 
-var inside_room : RoomInstance3D
+var inside_room : Room
 var inside_city : City
 
 func _init()->void:
@@ -19,11 +20,14 @@ func _init()->void:
 
 func _ready()->void:
 	area.area_entered.connect(area_entered_area)
+	inside_city = Global.current_region
+	inside_room = get_parent().roomdata
 
 func _physics_process(delta:float)->void:
 	if has_nav_target:
 		if navagent.distance_to_target() <= 0.5: has_nav_target = false; DEV_OUTPUT.push_message("reached target")
 		velocity = (navagent.get_next_path_position() - global_position).normalized() * speed
+	velocity.y -= 0.098
 	move_and_collide(velocity*delta)
 	velocity *= 0.85
 
@@ -37,37 +41,41 @@ func update_target_location(target_pos:Vector3)->void:
 	Global.shooterscene.room3d.bake_navigation_mesh(true)
 	await Global.shooterscene.room3d.bake_finished
 	
+	navagent.target_position = target_pos
 	if navagent.is_target_reachable():
-		navagent.target_position = target_pos
 		has_nav_target = true
+	else:
+		DEV_OUTPUT.push_message("target unreachable")
 
 func go_to_room(target_room_idx:int)->void:
-	var door : Door3D = Global.current_room.roominterior.get_door_leads_to_room(target_room_idx,Global.current_region)
+	var door : Door3D = inside_room.roominterior.get_door_leads_to_room(target_room_idx,Global.current_region)
 	if door: update_target_object(door)
 
 func pick_random_target_vec()->void:
-	update_target_location(NavigationServer3D.region_get_random_point(Global.shooterscene.room3d.get_region_rid(),0,false))
+	update_target_location(NavigationServer3D.region_get_random_point(inside_room.roominterior.get_region_rid(),0,false))
 
-func go_to_target_in_room(from:int,room:int,target:Vector3=Vector3.ZERO)->void:
-	var astar : AStar3D = Global.current_region.get_rooms_as_astar()
-	path_between_rooms = astar.get_id_path(from,room)
-	path_between_rooms_index = -1
+func pathfind_between_rooms_to_room(room:int,target:Vector3=Vector3.ZERO)->void:
+	var astar : AStar3D = inside_city.get_rooms_as_astar()
+	path_between_rooms = astar.get_id_path(inside_room.index,room)
+	DEV_OUTPUT.push_message(str(path_between_rooms))
+	path_between_rooms_index = 0
+	target_room = room
 	is_navigating_between_rooms = true
 	entered_room()
 
 func entered_room()->void:  ##############call every time the npc enters a room##############
-	pass
-	#if is_navigating_between_rooms:
-		#path_between_rooms_index += 1
-		#var door_coords : Vector3 = inside_room.get_door_leads_to_room(path_between_rooms[path_between_rooms_index],inside_city)
-		#update_target_location(door_coords)
-		####YOU HAVE TO MAKE IT SO THAT OTHER ROOMS CAN BE LOADED THAT PLAYER IS NOT INSIDE OF
-		####THEN YOU HAVE TO MAKE IT SO THE NPCS CAN DETECT DOORS
-		####WHEN NPC DETECTS DOOR, IF IT IS ON PATH THROUGH IT, IT OPENS IT AND GOES THROUGH
-		####WHEN NPC ENTERS ROOM, IT CALLS ENTERED ROOM
+	await get_tree().create_timer(0.1).timeout
+	inside_room = get_parent().roomdata
+	if is_navigating_between_rooms:
+		path_between_rooms_index += 1
+		if inside_room.index == target_room:
+			is_navigating_between_rooms = false
+			pick_random_target_vec()
+			return
+		go_to_room(path_between_rooms[path_between_rooms_index])
+		
 
 func area_entered_area(col_area:Area3D)->void:
-	#breakpoint
 	if target_object and target_object is Door3D and col_area.get_parent() == target_object:
 		if not target_object.is_open:
 			target_object.open()

@@ -231,6 +231,7 @@ func shoot(at_pos:Vector3)->void:
 	Flash3D.new(at_pos)
 
 func place_camera()->void:
+	return
 	camera.position = CAMERACENTER
 	if not center_camera_in_room:
 		camera.global_position.x = clampf(camera.global_position.x,camera_right_limit,camera_left_limit)

@@ -91,7 +91,24 @@ func _input(event:InputEvent)->void:
 								if args.size() >= 1:
 									for child : Node3D in Global.shooterscene.room3d.get_children():
 										if child is NPC:
-											child.go_to_room(args[0])
+											#child.go_to_room(args[0])
+											child.pathfind_between_rooms_to_room(args[0])
+							"rand":
+								for child : Node3D in Global.shooterscene.room3d.get_children():
+									if child is NPC:
+										child.pick_random_target_vec()
+					"cam":
+						var args : PackedInt64Array = get_args_int(msg_parts,2)
+						if args.size() >= 2:
+							match args[0]:
+								0:
+									Global.shooterscene.camera.cull_mask = args[1]
+								1:
+									Global.world3D.camera.cull_mask = args[1]
+								2:
+									push_message("no behaviour defined")
+								3:
+									Global.mapview.camera.cull_mask = args[1]
 					_:
 						push_message("invalid target at pos 1")
 			"save":
