@@ -46,7 +46,7 @@ func load_room_interior(room:Room,make_current:bool=false)->void:
 		var buffroom : RoomInterior3D = RoomInterior3D.new(room)
 		room_buffer_root.add_child(buffroom)
 
-func send_entity_to_room(entity:Node3D,room:Room,tobox:Box=null,frombox:Box=null)->void:
+func send_entity_to_room(entity:Node3D,room:Room,tobox:Box=null,frombox:Box=null,fromroom:Room=null)->void:
 	var is_constructing_room : bool = false
 	if not room.is_loaded:
 		is_constructing_room = true
@@ -67,9 +67,24 @@ func send_entity_to_room(entity:Node3D,room:Room,tobox:Box=null,frombox:Box=null
 		if is_constructing_room and not room3d.is_node_ready():
 			await room3d.room_constructed
 		room3d.give_player_camera_info(player)
+	else:
+		await get_tree().create_timer(0.1).timeout
+		##if previous room is in buffer, handle unloading
+		if fromroom and fromroom.roominterior.get_parent() == room_buffer_root:
+			DEV_OUTPUT.push_message("room is in buffer")
+			var buffer_room_has_npcs : bool = false
+			for child : Node3D in fromroom.roominterior.get_children():
+				if child is NPC or child is Player3D:
+					DEV_OUTPUT.push_message("room has npcs")
+					buffer_room_has_npcs = true
+					break
+			if not buffer_room_has_npcs:
+				DEV_OUTPUT.push_message("unloading room")
+				fromroom.roominterior.queue_free()
 
 func reset()->void:
-	room3d.queue_free()
+	if room3d and is_instance_valid(room3d):
+		room3d.queue_free()
 	for child : Node3D in root.get_children():
 		child.queue_free()
 	room3d = null

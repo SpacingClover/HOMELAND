@@ -7,6 +7,8 @@ var path_between_rooms_index : int
 var is_navigating_between_rooms : bool = false
 var target_object : Node3D
 var target_room : int
+var navigation_current_global_offset : Vector3
+var local_nav_started_in_buffer : bool = false
 
 var speed : float = 3
 
@@ -25,9 +27,12 @@ func _ready()->void:
 
 func _physics_process(delta:float)->void:
 	if has_nav_target:
-		if navagent.distance_to_target() <= 0.5: has_nav_target = false; DEV_OUTPUT.push_message("reached target")
-		velocity = (navagent.get_next_path_position() - global_position).normalized() * speed
-	velocity.y -= 0.098
+		if navagent.distance_to_target() <= 0.5: has_nav_target = false
+		velocity = navagent.get_next_path_position()
+		velocity -= global_position
+		print(velocity)
+		velocity.y = 0
+		velocity = velocity.normalized() * speed
 	move_and_collide(velocity*delta)
 	velocity *= 0.85
 
@@ -36,6 +41,7 @@ func update_target_object(object:Node3D)->void:
 	targetpos -= -Vector3(object.direction.z,object.direction.y,-object.direction.x)/4
 	update_target_location(targetpos)
 	target_object = object
+	check_if_target_object_inside_area()
 
 func update_target_location(target_pos:Vector3)->void:
 	Global.shooterscene.room3d.bake_navigation_mesh(true)
@@ -43,6 +49,8 @@ func update_target_location(target_pos:Vector3)->void:
 	
 	navagent.target_position = target_pos
 	if navagent.is_target_reachable():
+		navigation_current_global_offset = inside_room.roominterior.global_position
+		local_nav_started_in_buffer = not inside_room == Global.current_room
 		has_nav_target = true
 	else:
 		DEV_OUTPUT.push_message("target unreachable")
@@ -82,3 +90,10 @@ func area_entered_area(col_area:Area3D)->void:
 		target_object.send_entity_through_door(self)
 		has_nav_target = false
 		target_object = null
+
+func check_if_target_object_inside_area()->void:
+	for body : Node3D in area.get_overlapping_bodies():
+		if body == target_object:
+			for child : Node3D in body.get_children():
+				if child is Area3D:
+					area_entered_area(child)
