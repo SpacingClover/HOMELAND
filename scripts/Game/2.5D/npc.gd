@@ -30,7 +30,6 @@ func _physics_process(delta:float)->void:
 		if navagent.distance_to_target() <= 0.5: has_nav_target = false
 		velocity = navagent.get_next_path_position()
 		velocity -= global_position
-		print(velocity)
 		velocity.y = 0
 		velocity = velocity.normalized() * speed
 	move_and_collide(velocity*delta)
@@ -65,7 +64,6 @@ func pick_random_target_vec()->void:
 func pathfind_between_rooms_to_room(room:int,target:Vector3=Vector3.ZERO)->void:
 	var astar : AStar3D = inside_city.get_rooms_as_astar()
 	path_between_rooms = astar.get_id_path(inside_room.index,room)
-	DEV_OUTPUT.push_message(str(path_between_rooms))
 	path_between_rooms_index = 0
 	target_room = room
 	is_navigating_between_rooms = true
@@ -78,7 +76,7 @@ func entered_room()->void:  ##############call every time the npc enters a room#
 		path_between_rooms_index += 1
 		if inside_room.index == target_room:
 			is_navigating_between_rooms = false
-			pick_random_target_vec()
+			#pick_random_target_vec()
 			return
 		go_to_room(path_between_rooms[path_between_rooms_index])
 		
@@ -92,8 +90,6 @@ func area_entered_area(col_area:Area3D)->void:
 		target_object = null
 
 func check_if_target_object_inside_area()->void:
-	for body : Node3D in area.get_overlapping_bodies():
-		if body == target_object:
-			for child : Node3D in body.get_children():
-				if child is Area3D:
-					area_entered_area(child)
+	for body : Area3D in area.get_overlapping_areas():
+		if body.get_parent() == target_object:
+			area_entered_area(body)

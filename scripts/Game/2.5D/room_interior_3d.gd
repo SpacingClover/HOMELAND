@@ -33,15 +33,20 @@ func _init(room:Room)->void:
 	
 	navigation_mesh = NavigationMesh.new()
 	
+	navigation_mesh.sample_partition_type = NavigationMesh.SAMPLE_PARTITION_LAYERS
 	navigation_mesh.geometry_collision_mask = 66
 	navigation_mesh.geometry_parsed_geometry_type = NavigationMesh.PARSED_GEOMETRY_STATIC_COLLIDERS
 	
-	navigation_mesh.cell_size = 0.01
+	navigation_mesh.cell_size = 0.03
 	navigation_mesh.cell_height = 0.01
 	
 	navigation_mesh.agent_height = 1.9
-	navigation_mesh.agent_radius = 0.01
+	navigation_mesh.agent_radius = 0.1
 	navigation_mesh.agent_max_climb = 0.05
+	
+	navigation_mesh.edge_max_length = 1
+	navigation_mesh.edge_max_error = 3
+	navigation_mesh.vertices_per_polygon = 3
 
 func _ready()->void:
 	leftmost = -INF
@@ -206,6 +211,7 @@ func give_player_camera_info(player:Player3D)->void:
 	if is_room_one_wide:
 		Global.player.centered_room_pos = get_child(0).global_position.x
 
-func _notification(what:int)->void:
-	if what == NOTIFICATION_PREDELETE:
-		roomdata.is_loaded = false
+func unload_room()->void:
+	roomdata.is_loaded = false
+	save_room_objects()
+	queue_free()

@@ -163,6 +163,7 @@ func send_entity_through_door(entity:Node3D)->void:
 				Global.enter_room(nextroom,nextbox,box)
 			elif entity is NPC:
 				Global.shooterscene.send_entity_to_room(entity,nextroom,nextbox,box,entity.inside_room)
+				entity.velocity -= Vector3(direction.z,direction.y,-direction.x) * 3
 			#Global.shooterscene.load_room_interior(nextroom)
 			#Global.enter_room(nextroom,nextbox,box)
 	else:

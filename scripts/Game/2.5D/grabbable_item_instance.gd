@@ -1,6 +1,6 @@
 class_name GrabbableItemInstance extends RoomItemInstance
 
-@onready var sprite : Sprite3D = get_node_or_null("sprite")
+@onready var sprite : Sprite3D = get_node_or_null(^"sprite")
 
 func get_as_2d_body()->StaticBody2D:
 	return StaticBody2D.new()

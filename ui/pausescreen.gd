@@ -6,10 +6,10 @@ const bottom_left : int = 2
 const bottom_right : int = 3
 @export_enum("top_left","top_right","bottom_left","bottom_right") var screen_pos : int
 
-@onready var sprite1 : Sprite2D = get_node_or_null("Panel/sprite1")
-@onready var sprite2 : Sprite2D = get_node_or_null("Panel/sprite2")
-@onready var sprite3 : Sprite2D = get_node_or_null("Panel/sprite3")
-@onready var sprite4 : Sprite2D = get_node_or_null("Panel/sprite4")
+@onready var sprite1 : Sprite2D = get_node_or_null(^"Panel/sprite1")
+@onready var sprite2 : Sprite2D = get_node_or_null(^"Panel/sprite2")
+@onready var sprite3 : Sprite2D = get_node_or_null(^"Panel/sprite3")
+@onready var sprite4 : Sprite2D = get_node_or_null(^"Panel/sprite4")
 
 var sprites : Array[Sprite2D]:
 	get: return [sprite1,sprite2,sprite3,sprite4]

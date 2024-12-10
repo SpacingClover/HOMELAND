@@ -199,7 +199,7 @@ func unload_game_and_exit_to_menu()->void:
 
 func debug_reset()->void:
 	
-	var inv : Node2D = titlescreen.get_node_or_null("25d_topbar_root")
+	var inv : Node2D = titlescreen.get_node_or_null(^"25d_topbar_root")
 	if inv:
 		for child : Node in inv.get_children():
 			child.queue_free()
