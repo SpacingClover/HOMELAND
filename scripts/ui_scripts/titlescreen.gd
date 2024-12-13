@@ -2,16 +2,16 @@ class_name TitleScreen extends Control
 
 const marker_texture : Texture2D = preload("res://visuals/spritesheets/ui/menu_focus_2.png")
 
+@onready var backdrop : Panel = $Panel
+@onready var credits : Control = $credits
+@onready var editorgui : Panel = $editorgui
+
 var title : TitleView ## not onready due to potential reordering
 var buttons : ButtonsView
 var lists : ListsView
 var extra : ExtraView
 var titlescreen_gui : Array[Control]:
 	get: return [title,buttons,lists,extra]
-@onready var backdrop : Panel = $Panel
-@onready var credits : Control = $credits
-
-
 var focus_marker : Sprite2D
 var markertween : Tween
 var zoomtween : Tween

@@ -27,6 +27,7 @@ var locked : bool = false
 var menu_hidden : bool = false
 var in_game : bool = false
 var DEV_MODE : bool = false
+var is_level_editor_mode_enabled : bool = false
 
 signal loading_finished
 signal hide_menu ## menu is titlescreen
@@ -147,7 +148,6 @@ func enter_room(room:Room,startbox:Box=null,frombox:Box=null,loading_game:bool=f
 	if not startbox:
 		startbox = current_room.boxes[0]
 	if shooterscene:
-		#shooterscene.load_room_interior(room,startbox,frombox)
 		shooterscene.send_entity_to_room(player,room,startbox,frombox)
 	if world3D: if not world3D.is_inside_tree():
 		await world3D.tree_entered
@@ -198,10 +198,26 @@ func unload_game_and_exit_to_menu()->void:
 	MusicManager.play_song("action")
 
 func debug_reset()->void:
-	
 	var inv : Node2D = titlescreen.get_node_or_null(^"25d_topbar_root")
 	if inv:
 		for child : Node in inv.get_children():
 			child.queue_free()
 	if Global.player:
 		Global.player.DEBUG_inventory.clear()
+
+func launch_level_editor()->void:
+	screenroots[0].hide()
+	screenroots[1].hide()
+	screenroots[3].hide()
+	titlescreen.get_node(^"HBoxContainer/VBoxContainer").hide()
+	is_level_editor_mode_enabled = true
+	current_game = GameData.new()
+	current_game.cities.append(await City.new())
+	current_region = current_game.cities[0]
+	world3D.reset_3d_view()
+	world3D.display_rooms()
+	world3D.show()
+	hide_menu.emit()
+	player.queue_free()
+	world3D.playermarker.hide()
+	titlescreen.editorgui.show()

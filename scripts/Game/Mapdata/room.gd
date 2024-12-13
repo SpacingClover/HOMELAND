@@ -28,7 +28,6 @@ var index : int
 var is_loaded : bool = false
 
 func _init(size:Vector3i=Vector3i.ZERO,pos:Vector3i=Vector3i.ZERO,being_generated:bool=false)->void:
-	
 	if being_generated:
 		boxes.clear()
 		coords = pos

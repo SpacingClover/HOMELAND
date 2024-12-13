@@ -91,16 +91,16 @@ func _init(room_resource:Room)->void:
 				road_icon.scale *= 1.3
 				mesh.add_child(road_icon)
 	
-	tag = Label3D.new()
-	tag.billboard = BaseMaterial3D.BILLBOARD_ENABLED
-	tag.text = "idx missing"
-	if Global.current_region.rooms.has(room_resource):
-		tag.text = str(Global.current_region.rooms.find(room_resource))
-		tag.no_depth_test = true
-		tag.scale *= 20
-		tag.global_position = room_resource.coords
-		tag.hide()
-	add_child(tag)
+	#tag = Label3D.new()
+	#tag.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+	#tag.text = "idx missing"
+	#if Global.current_region.rooms.has(room_resource):
+		#tag.text = str(Global.current_region.rooms.find(room_resource))
+		#tag.no_depth_test = true
+		#tag.scale *= 20
+		#tag.global_position = room_resource.coords
+		#tag.hide()
+	#add_child(tag)
 	
 	DEV_OUTPUT.current.show_roomvisual_indices.connect(show_tag)
 	
@@ -205,3 +205,6 @@ func embedded_tutorial_setup()->void:
 func show_tag()->void:
 	print("show")
 	tag.show()
+
+func toggle_collision()->void:
+	collision_layer = 0 if collision_layer == 1 else 1

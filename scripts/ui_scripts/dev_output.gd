@@ -210,6 +210,18 @@ func _input(event:InputEvent)->void:
 				match msg_parts[1]:
 					"dev_levels":
 						Global.titlescreen.lists.display_list(Global.titlescreen.lists.modes.dev_levels)
+			"launch":
+				match msg_parts[1]:
+					"editor":
+						Global.launch_level_editor()
+			"new":
+				match msg_parts[1]:
+					"room":
+						var args : PackedInt64Array = get_args_int(msg_parts,2)
+						if args.size() < 3:
+							push_message("args x y z")
+						else:
+							Global.world3D.create_room()
 
 static func push_message(text:String)->void:
 	var label : Label = Label.new()

@@ -24,7 +24,7 @@
 [ext_resource type="PackedScene" uid="uid://dlvp4vkjg4we" path="res://ui/transition.tscn" id="21_v0n60"]
 [ext_resource type="Script" path="res://scripts/ui_scripts/dev_output.gd" id="22_ok02m"]
 [ext_resource type="Script" path="res://scripts/Game/Main/MusicManager.gd" id="23_ldrbm"]
-[ext_resource type="PackedScene" uid="uid://d1v1m2j033syj" path="res://ui/editorgui.tscn" id="24_0wili"]
+[ext_resource type="Script" path="res://ui/editorgui.gd" id="24_pgc5v"]
 
 [sub_resource type="SphereMesh" id="SphereMesh_wvrte"]
 
@@ -796,13 +796,48 @@ horizontal_alignment = 2
 vertical_alignment = 1
 autowrap_mode = 2
 
-[node name="editorgui" parent="." instance=ExtResource("24_0wili")]
-visible = false
+[node name="editorgui" type="Panel" parent="."]
 layout_mode = 0
-offset_left = 37.0
-offset_top = 116.0
-offset_right = 255.0
-offset_bottom = 514.0
+offset_left = 40.0
+offset_top = 216.0
+offset_right = 258.0
+offset_bottom = 614.0
+scale = Vector2(1.57028, 1.53368)
+theme_override_styles/panel = SubResource("StyleBoxFlat_tq0sg")
+script = ExtResource("24_pgc5v")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="editorgui"]
+clip_contents = true
+layout_mode = 2
+offset_left = 6.0
+offset_top = 5.0
+offset_right = 132.0
+offset_bottom = 389.0
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="Button" type="Button" parent="editorgui/VBoxContainer"]
+layout_mode = 2
+text = "new room"
+
+[node name="Button3" type="Button" parent="editorgui/VBoxContainer"]
+layout_mode = 2
+text = "delete room"
+
+[node name="HBoxContainer" type="HBoxContainer" parent="editorgui/VBoxContainer"]
+layout_mode = 2
+
+[node name="LineEdit" type="LineEdit" parent="editorgui/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="LineEdit2" type="LineEdit" parent="editorgui/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="LineEdit3" type="LineEdit" parent="editorgui/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
 
 [node name="25d_topbar_root" type="Node2D" parent="."]
 position = Vector2(441, 155)

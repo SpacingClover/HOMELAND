@@ -27,6 +27,7 @@ var viewport : GameView
 var tween : Tween
 var selected_room : RoomInstance3D
 var hightlighted_room : RoomInstance3D
+var room_last_selected : RoomInstance3D
 var visual : Node3D
 var room_movement_border : StaticBody3D
 
@@ -43,6 +44,7 @@ var room_movement_axis : int = 0:
 var dragging_room : bool = false
 var motion_in_progress : bool = false
 var change_axis_locked : bool = false
+var selecting_faces_directly : bool = false
 
 func _init()->void:
 	Global.world3D = self
@@ -50,6 +52,7 @@ func _init()->void:
 
 func _ready()->void:
 	orbit(Vector2.ZERO)
+	axismarker._ready()
 
 func _input(event:InputEvent)->void:
 	if event is InputEventMouseMotion:
@@ -148,7 +151,9 @@ func select_room(room:RoomInstance3D)->void:
 	selected_room_original_pos = selected_room.position
 	selected_room_previous_pos = selected_room.position
 	raycast.collision_mask = 4
+	room_last_selected = selected_room
 	create_room_movement_border()
+	Global.titlescreen.editorgui.new_room_selected()
 
 func switch_axis()->void:
 	breakpoint
@@ -221,7 +226,7 @@ func place_room()->void:
 		loaded_room_marker_PREVIOUS_offset = loaded_room_marker_offset
 	selection_over()
 	Global.current_region.check_for_adjacient_doors()
-	recenter_camera()
+	if not Global.is_level_editor_mode_enabled: recenter_camera()
 
 func get_room_bounds_on_axis(room:RoomInstance3D,axis:int)->RoomVisualBoundsInformation:
 	var data : RoomVisualBoundsInformation = RoomVisualBoundsInformation.new(axis)
@@ -428,12 +433,13 @@ func slide_room_along_axis(mouse_coords:Vector3,axis:int=room_movement_axis)->vo
 				AXIS_Z: disp = Vector3(0,0,-min)
 	
 	##check if room is within bounds
-	var difference : Vector3i = abs((selected_room.data_reference.coords+Vector3i(disp))-selected_room.data_reference.original_coords)
-	if direction_positive: difference += selected_room.data_reference.scale - Vector3i(1,1,1)
-	match axis:
-		AXIS_X when difference.x >= ROOM_MOVE_RANGE: return
-		AXIS_Y when difference.y >= ROOM_MOVE_RANGE: return
-		AXIS_Z when difference.z >= ROOM_MOVE_RANGE: return
+	if not Global.is_level_editor_mode_enabled:
+		var difference : Vector3i = abs((selected_room.data_reference.coords+Vector3i(disp))-selected_room.data_reference.original_coords)
+		if direction_positive: difference += selected_room.data_reference.scale - Vector3i(1,1,1)
+		match axis:
+			AXIS_X when difference.x >= ROOM_MOVE_RANGE: return
+			AXIS_Y when difference.y >= ROOM_MOVE_RANGE: return
+			AXIS_Z when difference.z >= ROOM_MOVE_RANGE: return
 	
 	selected_room.position = selected_room_previous_pos + disp
 	selected_room.data_reference.add_to_position(disp)
@@ -471,6 +477,11 @@ func create_room_movement_border()->void:
 	col.scale.y = 0.01
 	
 	#room_movement_border.collision_layer = 4
+	
+	if Global.is_level_editor_mode_enabled:
+		mesh.hide()
+		col.scale.x *= 100000
+		col.scale.z *= 100000
 	root.add_child(room_movement_border)
 
 func update_doors_in_moved_room(room:Room)->void:
@@ -569,3 +580,20 @@ class RoomVisualBoundsInformation extends RefCounted:
 		return (min_position+max_position)/2
 	func get_axis()->int:
 		return axis
+
+func create_room()->void:
+	var room : Room = Room.new(Vector3i(1,1,1),Vector3i.ZERO,true)
+	Global.current_region.rooms.append(room)
+	Global.current_region.validate_city()
+	display_room(room)
+	select_room(room.roomvisual)
+
+func delete_room()->void:
+	if not is_instance_valid(room_last_selected):
+		room_last_selected = null
+		return
+	if room_last_selected:
+		if selected_room:
+			drop_selected_visual()
+		Global.current_region.rooms.remove_at(room_last_selected.data_reference.index)
+		room_last_selected.queue_free()
