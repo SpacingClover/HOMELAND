@@ -30,6 +30,7 @@ var hightlighted_room : RoomInstance3D
 var room_last_selected : RoomInstance3D
 var visual : Node3D
 var room_movement_border : StaticBody3D
+var highlighted_face : RoomInstance3D.RoomInstanceFace
 
 var rooms_3D : Array[RoomInstance3D]
 
@@ -83,7 +84,15 @@ func orbit(vel:Vector2,lockvert:bool=false)->void:
 
 func mouse_motion()->void:
 	var room : PhysicsBody3D = get_clicked()
-	if room is RoomInstance3D:
+	if Global.is_level_editor_mode_enabled and room is RoomInstance3D.RoomInstanceFace:
+		if highlighted_face:
+			if not is_instance_valid(highlighted_face):
+				highlighted_face = null
+			elif room != highlighted_face:
+				highlighted_face.disable_highlight()
+		highlighted_face = room
+		highlighted_face.highlight()
+	elif room is RoomInstance3D:
 		if hightlighted_room and room != hightlighted_room and not hightlighted_room.is_selected:
 			hightlighted_room.disable_highlight()
 		if room.data_reference is Feature:
@@ -98,16 +107,23 @@ func mouse_motion()->void:
 		slide_room_along_axis(get_click_pos(),AXIS_Z)
 		
 	elif room == null and not selected_room and hightlighted_room: #unhighlight
-		hightlighted_room.disable_highlight()
+		if not is_instance_valid(hightlighted_room):
+			hightlighted_room = null
+		else:
+			hightlighted_room.disable_highlight()
 
 func Lclick()->void:
-	var room : PhysicsBody3D = get_clicked()
+	var body : PhysicsBody3D = get_clicked()
 	
-	if selected_room:
+	if Global.is_level_editor_mode_enabled: if selecting_faces_directly:
+		if body is RoomInstance3D.RoomInstanceFace:
+			body.hide()
+	
+	elif selected_room:
 		place_room()
 		
-	elif room: if room is RoomInstance3D and not room.data_reference is Feature:
-		select_room(room)
+	elif body: if body is RoomInstance3D and not body.data_reference is Feature:
+		select_room(body)
 
 func Rclick()->void:
 	if selected_room:
@@ -597,3 +613,7 @@ func delete_room()->void:
 			drop_selected_visual()
 		Global.current_region.rooms.remove_at(room_last_selected.data_reference.index)
 		room_last_selected.queue_free()
+	if hightlighted_room:
+		if is_instance_valid(hightlighted_room):
+			hightlighted_room.disable_highlight()
+		hightlighted_room = null

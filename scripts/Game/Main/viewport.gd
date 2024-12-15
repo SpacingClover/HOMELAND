@@ -157,8 +157,11 @@ func pass_mouseout()->void:
 	if mapview and is_instance_valid(mapview):
 		Global.mapview.markerinfo.hide()
 	if orbitable and Global.world3D:
-		if Global.world3D.hightlighted_room and not Global.world3D.selected_room and is_instance_valid(Global.world3D.hightlighted_room):
-			Global.world3D.hightlighted_room.disable_highlight()
+		if Global.world3D.hightlighted_room and not Global.world3D.selected_room:
+			if not is_instance_valid(Global.world3D.hightlighted_room):
+				Global.world3D.hightlighted_room = null
+			else:
+				Global.world3D.hightlighted_room.disable_highlight()
 
 func has_control()->bool:
 	return Global.player_controlling == self

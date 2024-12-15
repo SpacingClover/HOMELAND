@@ -83,6 +83,8 @@ func count_exits()->void:
 
 func set_doors()->void: #this might need to be threaded
 	for room : Room in rooms:
+		#if room.validated:
+			#continue
 		for box : Box in room.boxes:
 			for dir : Vector3i in DIRECTIONS:
 				var set_to : int = configure_door(room,box,dir)

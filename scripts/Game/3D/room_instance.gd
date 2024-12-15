@@ -20,6 +20,7 @@ var data_reference : Room
 var tag : Label3D
 
 var is_selected : bool = false
+var are_rooms_selectable : bool = false
 
 signal room_instance_selected
 signal room_instance_placed
@@ -35,16 +36,17 @@ func _init(room_resource:Room)->void:
 		var mesh : MeshInstance3D = MeshInstance3D.new()
 		mesh.mesh = BoxMesh.new()
 		mesh.set_meta(&"boxdata",boxdata)
-		if boxdata.state != Box.RUBBLE:
-			mesh.material_override = boxmaterial.duplicate()
-		else:
-			mesh.material_override = rubbleboxmaterial.duplicate()
+		#if boxdata.state != Box.RUBBLE:
+			#mesh.material_override = boxmaterial.duplicate()
+		#else:
+			#mesh.material_override = rubbleboxmaterial.duplicate()
 		mesh.position = boxdata.coords
 		boxdata.set_boxvisual_reference(mesh)
-		if room_resource is Feature:
-			if room_resource is CityExit: mesh.material_override = cityexitdoorroommaterial
-			else: mesh.material_override = featureroommaterial
+		#if room_resource is Feature:
+			#if room_resource is CityExit: mesh.material_override = cityexitdoorroommaterial
+			#else: mesh.material_override = featureroommaterial
 		add_child(mesh)
+		mesh.hide()
 		
 		var col : CollisionShape3D = CollisionShape3D.new()
 		col.shape = BoxShape3D.new()
@@ -52,6 +54,10 @@ func _init(room_resource:Room)->void:
 		add_child(col)
 		
 		for dir : Vector3i in City.DIRECTIONS:
+			
+			if boxdata.get_door(dir) != Box.NONE:
+				add_child(RoomInstanceFace.new(data_reference,boxdata,dir,Global.is_level_editor_mode_enabled,Global.world3D.selecting_faces_directly))
+			
 			if boxdata.has_doorway(dir):
 				var doormesh : MeshInstance3D = MeshInstance3D.new()
 				doormesh.mesh = BoxMesh.new()
@@ -66,8 +72,7 @@ func _init(room_resource:Room)->void:
 				
 				mesh.add_child(doormesh)
 				boxdata.add_door_reference(doormesh,dir)
-				
-				DEV_OUTPUT.current.doormeshlist.append(doormesh)
+				#DEV_OUTPUT.current.doormeshlist.append(doormesh)
 				
 				if boxdata.has_locked_door(dir):
 					var lock_sprite : Sprite3D = Sprite3D.new()
@@ -90,6 +95,10 @@ func _init(room_resource:Room)->void:
 					City.RIGHT: road_icon.rotation_degrees.y = 270
 				road_icon.scale *= 1.3
 				mesh.add_child(road_icon)
+			
+			
+	
+	
 	
 	#tag = Label3D.new()
 	#tag.billboard = BaseMaterial3D.BILLBOARD_ENABLED
@@ -110,25 +119,20 @@ func highlight()->void:
 	if is_selected:
 		return
 	for child : Node3D in get_children():
-		if child is MeshInstance3D and child.has_meta(&"boxdata"):
-			
-			child.material_override.emission_enabled = true
-			child.material_override.emission = yellowglow
-			child.material_override.emission_energy_multiplier = 0.75
+		if child is RoomInstanceFace:
+			child.highlight()
 
 func super_highlight()->void:
 	is_selected = true
 	for child : Node3D in get_children():
-		if child is MeshInstance3D and child.has_meta(&"boxdata"):
-			child.material_override.emission_enabled = true
-			child.material_override.emission = pinkglow
-			child.material_override.emission_energy_multiplier = 1
+		if child is RoomInstanceFace:
+			child.super_hightlight()
 
 func disable_highlight()->void:
 	is_selected = false
 	for child : Node3D in get_children():
-		if child is MeshInstance3D and child.has_meta(&"boxdata"):
-			child.material_override.emission_enabled = false
+		if child is RoomInstanceFace:
+			child.disable_highlight()
 
 func get_min_x()->int:
 	var min : int = get_child(0).position.x
@@ -208,3 +212,68 @@ func show_tag()->void:
 
 func toggle_collision()->void:
 	collision_layer = 0 if collision_layer == 1 else 1
+
+func set_faces_selectable(to:bool)->void:
+	for child : Node3D in get_children():
+		if child is RoomInstanceFace:
+			child.set_colliding(to)
+		elif child is CollisionShape3D:
+			child.disabled = to
+	are_rooms_selectable = to
+
+class RoomInstanceFace extends StaticBody3D:
+	static var boxshape : BoxShape3D = BoxShape3D.new()
+	static var planemesh : PlaneMesh = PlaneMesh.new()
+	static func _static_init()->void:
+		planemesh.size /= 2
+		boxshape.size.y = 0.1
+		pass #shape the boxmesh and planemesh
+	var room : Room
+	var box : Box
+	var dir : Vector3i
+	var mesh : MeshInstance3D
+	var col : CollisionShape3D
+	func _init(room_:Room,box_:Box,dir_:Vector3i,has_collision:bool=false,enabled:bool=false)->void:
+		box = box_
+		dir = dir_
+		position = box.coords
+		if has_collision:
+			col = CollisionShape3D.new(); col.shape = boxshape
+			col.disabled = not enabled
+			col.position.y = 0.5
+			add_child(col)
+		match dir:
+			City.LEFT:
+				rotation_degrees = Vector3(-90,0,0)
+			City.RIGHT:
+				rotation_degrees = Vector3(90,0,0)
+			City.TOP:
+				rotation_degrees = Vector3(-90,90,0)
+			City.BOTTOM:
+				rotation_degrees = Vector3(-90,-90,0)
+			City.DOWN:
+				rotation_degrees = Vector3(0,0,180)
+		mesh = MeshInstance3D.new(); mesh.mesh = planemesh
+		mesh.position.y = 0.5
+		if box.state != Box.RUBBLE:
+			mesh.material_override = RoomInstance3D.boxmaterial.duplicate()
+		else:
+			mesh.material_override = RoomInstance3D.rubbleboxmaterial.duplicate()
+		if room is Feature:
+			if room is CityExit: mesh.material_override = RoomInstance3D.cityexitdoorroommaterial
+			else: mesh.material_override = RoomInstance3D.featureroommaterial
+		add_child(mesh)
+	func highlight()->void:
+		mesh.material_override.emission_enabled = true
+		mesh.material_override.emission = RoomInstance3D.yellowglow
+		mesh.material_override.emission_energy_multiplier = 0.75
+	func super_hightlight()->void:
+		mesh.material_override.emission_enabled = true
+		mesh.material_override.emission = RoomInstance3D.pinkglow
+		mesh.material_override.emission_energy_multiplier = 1
+	func disable_highlight()->void:
+		mesh.material_override.emission_enabled = false
+	func set_mesh_material(material:StandardMaterial3D)->void:
+		mesh.material_override = material
+	func set_colliding(to:bool)->void:
+		col.disabled = not to
