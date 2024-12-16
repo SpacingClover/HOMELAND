@@ -115,14 +115,14 @@ func mouse_motion()->void:
 func Lclick()->void:
 	var body : PhysicsBody3D = get_clicked()
 	
-	if Global.is_level_editor_mode_enabled: if selecting_faces_directly:
+	if Global.is_level_editor_mode_enabled and selecting_faces_directly:
 		if body is RoomInstance3D.RoomInstanceFace:
-			body.hide()
+			body.set_face_type(Global.titlescreen.editorgui.setfacetype.selected)
 	
 	elif selected_room:
 		place_room()
 		
-	elif body: if body is RoomInstance3D and not body.data_reference is Feature:
+	elif body and body is RoomInstance3D and not body.data_reference is Feature:
 		select_room(body)
 
 func Rclick()->void:
@@ -166,10 +166,10 @@ func select_room(room:RoomInstance3D)->void:
 	create_visual(selected_room)
 	selected_room_original_pos = selected_room.position
 	selected_room_previous_pos = selected_room.position
-	raycast.collision_mask = 4
 	room_last_selected = selected_room
+	raycast.collision_mask = 4
 	create_room_movement_border()
-	Global.titlescreen.editorgui.new_room_selected()
+	if Global.is_level_editor_mode_enabled: Global.titlescreen.editorgui.new_room_selected()
 
 func switch_axis()->void:
 	breakpoint

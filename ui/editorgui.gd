@@ -1,4 +1,4 @@
-extends Panel
+extends PanelContainer
 
 @onready var newroom : Button = $VBoxContainer/Button
 @onready var deleteroom : Button = $VBoxContainer/Button3
@@ -9,6 +9,13 @@ extends Panel
 @onready var editfaces : Button = $VBoxContainer/Button4
 @onready var isolateroom : Button = $VBoxContainer/Button5
 @onready var setfacetype : OptionButton = $VBoxContainer/OptionButton
+@onready var creategame : Button = $VBoxContainer/Button2
+@onready var savegame : Button = $VBoxContainer/Button6
+@onready var opengame : Button = $VBoxContainer/Button7
+@onready var selectfilescontainer : PanelContainer = $Node/PanelContainer
+@onready var fileslist : OptionButton = $Node/PanelContainer/VBoxContainer/OptionButton
+@onready var selectfilebutton : Button = $Node/PanelContainer/VBoxContainer/Button
+@onready var cancelfileslist : Button = $Node/PanelContainer/VBoxContainer/Button2
 
 var room_isolation_mode : bool = false
 
@@ -21,6 +28,9 @@ func _ready()->void:
 	scalex.value_changed.connect(check_scale_value)
 	scaley.value_changed.connect(check_scale_value)
 	scalez.value_changed.connect(check_scale_value)
+	opengame.pressed.connect(open_files_menu)
+	selectfilebutton.pressed.connect(func()->void:open_game(fileslist.get_item_text(fileslist.selected)))
+	cancelfileslist.pressed.connect(selectfilescontainer.hide)
 
 func rescale_room()->void:
 	var roomvisual : RoomInstance3D = Global.world3D.room_last_selected
@@ -77,3 +87,21 @@ func isolate_room()->void:
 	newroom.disabled = room_isolation_mode
 	deleteroom.disabled = room_isolation_mode
 	isolateroom.text = ("disable" if room_isolation_mode else "enable") + " isolate room"
+
+func open_files_menu()->void:
+	selectfilescontainer.show()
+	fileslist.clear()
+	var files : Array[String]
+	for file : String in DirAccess.get_files_at("res://demos/"):
+		files.append("res://demos/"+file)
+	for file : String in DirAccess.get_files_at("res://dev_levels/"):
+		files.append("res://dev_levels/"+file)
+	for dir : String in files:
+		fileslist.add_item(dir)
+
+func open_game(dir:String)->void:
+	selectfilescontainer.hide()
+	Global.current_game = ResourceLoader.load(dir,&"",ResourceLoader.CACHE_MODE_IGNORE)
+	Global.current_region = Global.current_game.cities[0]
+	Global.world3D.reset_3d_view()
+	Global.world3D.display_rooms()

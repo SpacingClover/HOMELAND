@@ -234,9 +234,13 @@ class RoomInstanceFace extends StaticBody3D:
 	var mesh : MeshInstance3D
 	var col : CollisionShape3D
 	func _init(room_:Room,box_:Box,dir_:Vector3i,has_collision:bool=false,enabled:bool=false)->void:
+		room = room_
 		box = box_
 		dir = dir_
 		position = box.coords
+		if box.get_door(dir) == Box.NONE:
+			queue_free()
+			return
 		if has_collision:
 			col = CollisionShape3D.new(); col.shape = boxshape
 			col.disabled = not enabled
@@ -255,13 +259,18 @@ class RoomInstanceFace extends StaticBody3D:
 				rotation_degrees = Vector3(0,0,180)
 		mesh = MeshInstance3D.new(); mesh.mesh = planemesh
 		mesh.position.y = 0.5
-		if box.state != Box.RUBBLE:
-			mesh.material_override = RoomInstance3D.boxmaterial.duplicate()
-		else:
-			mesh.material_override = RoomInstance3D.rubbleboxmaterial.duplicate()
-		if room is Feature:
-			if room is CityExit: mesh.material_override = RoomInstance3D.cityexitdoorroommaterial
-			else: mesh.material_override = RoomInstance3D.featureroommaterial
+		
+		if box.state == Box.RUBBLE:
+			set_face_type(8,false)
+		elif room is CityExit:
+			set_face_type(9,false)
+		elif room is Feature:
+			set_face_type(10,false)
+		
+		
+		else: ##normal face
+			set_face_type(2,false)
+		
 		add_child(mesh)
 	func highlight()->void:
 		mesh.material_override.emission_enabled = true
@@ -276,4 +285,27 @@ class RoomInstanceFace extends StaticBody3D:
 	func set_mesh_material(material:StandardMaterial3D)->void:
 		mesh.material_override = material
 	func set_colliding(to:bool)->void:
-		col.disabled = not to
+		if to: col.disabled = not get_parent().visible
+		else: col.disabled = true
+	func set_face_type(to:int,set_to_data:bool=true)->void:
+		match to:
+			1:
+				pass
+			2:## normal wall
+				set_mesh_material(RoomInstance3D.boxmaterial.duplicate(true))
+			3:
+				pass
+			4:
+				pass
+			5:
+				pass
+			6:
+				pass
+			7:
+				pass
+			8:## box rubble
+				set_mesh_material(RoomInstance3D.rubbleboxmaterial.duplicate(true))
+			9:## room cityexit
+				set_mesh_material(RoomInstance3D.cityexitdoorroommaterial.duplicate(true))
+			10:## room feature
+				set_mesh_material(RoomInstance3D.featureroommaterial.duplicate(true))

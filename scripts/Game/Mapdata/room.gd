@@ -131,7 +131,8 @@ func delete_room_visual()->void:
 			Global.world3D.rooms_3D.remove_at(pos)
 			break
 		pos += 1
-	roomvisual.queue_free()
+	if roomvisual:
+		roomvisual.queue_free()
 	roomvisual = null
 
 func check_for_adjacient_doors(city_ref:City)->void:
