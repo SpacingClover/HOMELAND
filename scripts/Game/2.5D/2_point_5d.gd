@@ -26,7 +26,6 @@ func load_room_interior(room:Room,make_current:bool=false)->void:
 			root.add_child(room3d)
 		
 		##handle adjacient rooms
-		DEV_OUTPUT.push_message(str(room.get_room_connections(Global.current_region)))
 		for roomindex : int in room.get_room_connections(Global.current_region):
 			load_room_interior(Global.current_region.rooms[roomindex])
 		clean_room_buffer()

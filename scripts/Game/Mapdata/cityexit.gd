@@ -27,8 +27,8 @@ func _init(size:Vector3i=Vector3i.ZERO,pos:Vector3i=Vector3i.ZERO,being_generate
 			exitbox = box
 	exitbox.set_door(exit_direction,Box.CITY_EXIT_DOOR)
 
-func validate()->void:
-	#super()
-	validated = false
-	_init(scale,coords,true,exit_direction)
-	validated = true
+func validate(city_ref:City)->void:
+	super(city_ref)
+	#validated = false
+	#_init(scale,coords,true,exit_direction)
+	#validated = true

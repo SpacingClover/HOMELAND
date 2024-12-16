@@ -117,12 +117,12 @@ func Lclick()->void:
 	
 	if Global.is_level_editor_mode_enabled and selecting_faces_directly:
 		if body is RoomInstance3D.RoomInstanceFace:
-			body.set_face_type(Global.titlescreen.editorgui.setfacetype.selected)
+			body.set_face_type(Global.titlescreen.editorgui.setfacetype.selected,true)
 	
 	elif selected_room:
 		place_room()
 		
-	elif body and body is RoomInstance3D and not body.data_reference is Feature:
+	elif (body and body is RoomInstance3D) and not (body.data_reference is Feature and not Global.is_level_editor_mode_enabled):
 		select_room(body)
 
 func Rclick()->void:
@@ -261,7 +261,7 @@ func get_room_bounds_on_axis(room:RoomInstance3D,axis:int)->RoomVisualBoundsInfo
 	bounds_raycast.target_position = dir
 	for i : int in range(2):
 		for child : Node3D in room.get_children():
-			if not (child is MeshInstance3D and child.has_meta(&"boxdata")):#all works
+			if not (child is CollisionShape3D):#all works
 				continue
 			
 			bounds_raycast.global_position = child.global_position #works
@@ -613,6 +613,7 @@ func delete_room()->void:
 			drop_selected_visual()
 		Global.current_region.rooms.remove_at(room_last_selected.data_reference.index)
 		room_last_selected.queue_free()
+		Global.titlescreen.editorgui.deleteroom.disabled = true
 	if hightlighted_room:
 		if is_instance_valid(hightlighted_room):
 			hightlighted_room.disable_highlight()

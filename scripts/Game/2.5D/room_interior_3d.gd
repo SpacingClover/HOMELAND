@@ -68,6 +68,9 @@ func _ready()->void:
 	bake_navigation_mesh()
 
 func create_box(box:Box)->void:
+	
+	box.doorinstances.clear()
+	
 	var faces : Array[int] = box.doors
 	for i : int in range(6):
 		if City.DIRECTIONS[i] == City.UP: continue

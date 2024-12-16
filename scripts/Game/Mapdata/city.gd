@@ -58,15 +58,11 @@ func exit_city()->void:
 func validate_city()->void:
 	for room : Room in rooms:
 		if not room.validated:
-			room.validate()
-	set_doors() #this has gotta be changed #make it so only unvalidated rooms are affected
-	remove_doubles() #not good at all
+			room.validate(self)
+	#set_doors()
+	#remove_doubles() #not good at all
 	count_exits()
 	validated = true
-
-func generate()->void:
-	
-	validate_city()
 
 func create_room(size:Vector3i,pos:Vector3i)->void:
 	rooms.append(Room.new(size,pos,true))
@@ -81,28 +77,26 @@ func count_exits()->void:
 		if room is CityExit:
 			exits.append(room)
 
-func set_doors()->void: #this might need to be threaded
-	for room : Room in rooms:
+#func set_doors()->void: #this might need to be threaded
+	#for room : Room in rooms:
 		#if room.validated:
 			#continue
-		for box : Box in room.boxes:
-			for dir : Vector3i in DIRECTIONS:
-				var set_to : int = configure_door(room,box,dir)
-				if box.state == Box.RUBBLE and set_to >= Box.WALL:
-					set_to = Box.HOLE
-				if box.get_door(dir) < Box.CITY_EXIT_DOOR:
-					box.set_door(dir,set_to)
-
-func configure_door(from_room:Room,from_box:Box,dir:Vector3i)->int:
-	var checkpos : Vector3i = from_box.coords + dir
-	for to_room : Room in rooms:
-		for to_box : Box in to_room.boxes:
-			if to_box.coords == checkpos:
-				if to_room == from_room:
-					return Box.NONE
-				else:
-					return Box.DOOR
-	return Box.WALL
+		#for box : Box in room.boxes:
+			#for dir : Vector3i in DIRECTIONS:
+				#var set_to : int = configure_door(room,box,dir)
+				#if box.state == Box.RUBBLE and set_to >= Box.WALL:
+					#set_to = Box.HOLE
+				#if box.get_door(dir) < Box.CITY_EXIT_DOOR:
+					#box.set_door(dir,set_to)
+#
+#func configure_door(from_room:Room,from_box:Box,dir:Vector3i)->int:
+	#var checkpos : Vector3i = from_box.coords + dir
+	#for to_room : Room in rooms:
+		#for to_box : Box in to_room.boxes:
+			#if to_box.coords == checkpos:
+				#if to_room == from_room:
+					#return Box.NONE
+	#return Box.WALL
 	
 func remove_doubles()->void:
 	var adjacient_rooms : Array[Room]

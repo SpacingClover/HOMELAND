@@ -163,18 +163,20 @@ func check_for_adjacient_doors(city_ref:City)->Array[int]:
 	var adjacient_rooms : Array[int]
 	for dir : Vector3i in City.DIRECTIONS:
 		door = get_door(dir)
-		if door >= CITY_EXIT_DOOR:
+		if door >= CITY_EXIT_DOOR: ## wall has recognized id
 			continue
-		if door > WALL:
+		if door > WALL: ## wall is of a door type
 			adjbox = city_ref.get_box_at(coords+dir)
 			if adjbox and adjbox.has_doorway(-dir):
 				if adjbox.state != Box.RUBBLE and state != Box.RUBBLE:
 					set_door_color(dir,red)
 					adjbox.set_door_color(-dir,red)
+					DEV_OUTPUT.push_message(r"set door red")
 					adjacient_rooms.append(city_ref.get_room_at(adjbox.coords).index)##
 					return adjacient_rooms
 				else:
 					adjbox.set_door_color(-dir,brown)
+					DEV_OUTPUT.push_message(r"set door brown")
 					if adjbox.get_door(-dir) == OPEN or adjbox.get_door(-dir) == OPEN_OUT:
 						adjbox.set_door(-dir,DOOR)
 						if city_ref.get_room_at(adjbox.coords) == Global.current_room:
@@ -182,6 +184,7 @@ func check_for_adjacient_doors(city_ref:City)->Array[int]:
 							adjbox.get_door_instance(-dir).door3dinstance.handle_lock_icon()
 							
 			set_door_color(dir,brown)
+			DEV_OUTPUT.push_message(r"set door brown")
 			if get_door(dir) == OPEN or get_door(dir) == OPEN_OUT:
 				set_door(dir,DOOR)
 				if city_ref.get_room_at(coords) == Global.current_room:

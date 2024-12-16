@@ -15,7 +15,6 @@ func _input(event:InputEvent)->void:
 	if event.is_action_pressed(&"scroll_down"):
 		camera.zoom *= 0.9
 		if camera.zoom.x < 0.78: camera.zoom = Vector2(0.78,0.78)
-		DEV_OUTPUT.push_message(str(camera.zoom))
 
 func load_board()->void:
 	board = CircuitBoard.new()

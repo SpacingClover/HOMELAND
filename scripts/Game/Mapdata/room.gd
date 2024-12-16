@@ -39,9 +39,8 @@ func _init(size:Vector3i=Vector3i.ZERO,pos:Vector3i=Vector3i.ZERO,being_generate
 		boxes.reverse()
 		original_coords = coords
 		original_coords_set = true
-		validated = true
 
-func validate()->void:
+func validate(city_ref:City)->void:
 	if not validated:
 		scale = abs(scale)
 		if scale.x == 0:scale.x = 1
@@ -51,6 +50,12 @@ func validate()->void:
 		if prod != boxes.size():
 			_init(scale,coords,true)
 		validated = true
+		for box : Box in boxes:
+			for dir : Vector3i in City.DIRECTIONS:
+				if city_ref.get_room_at(box.coords+dir) == self:
+					box.set_door(dir,Box.NONE)
+				else:
+					box.set_door(dir,Box.WALL)
 	
 
 func add_to_position(add:Vector3i)->void:

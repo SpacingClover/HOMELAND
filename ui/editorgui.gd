@@ -41,8 +41,7 @@ func rescale_room()->void:
 	roomvisual.queue_free()
 	roomvisual.data_reference.scale = Vector3i(scalex.value,scaley.value,scalez.value)
 	roomvisual.data_reference.validated = false
-	roomvisual.data_reference.validate()
-	Global.current_region.validate_city()
+	roomvisual.data_reference.validate(Global.current_region)
 	Global.world3D.display_room(room)
 	Global.world3D.room_last_selected = room.roomvisual
 	check_scale_value()
@@ -55,6 +54,7 @@ func new_room_selected()->void:
 	scaley.value = roomvisual.data_reference.scale.y
 	scalez.value = roomvisual.data_reference.scale.z
 	check_scale_value()
+	deleteroom.disabled = false
 
 func check_scale_value(value:float=0.0)->void:
 	var roominstance : RoomInstance3D = Global.world3D.room_last_selected
@@ -105,3 +105,4 @@ func open_game(dir:String)->void:
 	Global.current_region = Global.current_game.cities[0]
 	Global.world3D.reset_3d_view()
 	Global.world3D.display_rooms()
+	deleteroom.disabled = true
