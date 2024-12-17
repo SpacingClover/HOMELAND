@@ -113,6 +113,7 @@ func mouse_motion()->void:
 			hightlighted_room.disable_highlight()
 
 func Lclick()->void:
+	Global.titlescreen.editorgui.rightclickpopup.hide()
 	var body : PhysicsBody3D = get_clicked()
 	
 	if Global.is_level_editor_mode_enabled and selecting_faces_directly:
@@ -128,6 +129,8 @@ func Lclick()->void:
 func Rclick()->void:
 	if selected_room:
 		drop_selected_visual()
+	elif Global.is_level_editor_mode_enabled:
+		Global.titlescreen.editorgui.open_rightclick_popup(get_clicked())
 
 func display_rooms()->void:
 	rooms_3D.clear()
@@ -597,8 +600,12 @@ class RoomVisualBoundsInformation extends RefCounted:
 	func get_axis()->int:
 		return axis
 
-func create_room()->void:
-	var room : Room = Room.new(Vector3i(1,1,1),Vector3i.ZERO,true)
+func create_room(of_type:int)->void:
+	var room : Room
+	match of_type:
+		0: room = Room.new(Vector3i(1,1,1),Vector3i.ZERO,true)
+		1: room = CityExit.new(Vector3i(1,1,1),Vector3i.ZERO,true)
+		2: room = Feature.new(Vector3i(1,1,1),Vector3i.ZERO,true)
 	Global.current_region.rooms.append(room)
 	Global.current_region.validate_city()
 	display_room(room)

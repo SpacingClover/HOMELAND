@@ -220,7 +220,7 @@ class RoomInstanceFace extends StaticBody3D:
 		match to:
 			0:## normal wall
 				clear_children()
-				if setdata: box.set_door(dir,Box.WALL)
+				if setdata: box.set_door(dir,Box.WALL); box.set_lock(dir,Box.NO_LOCK)
 			1:## hole in the wall
 				clear_children()
 				var doormesh : MeshInstance3D = MeshInstance3D.new()
@@ -230,11 +230,11 @@ class RoomInstanceFace extends StaticBody3D:
 				doormesh.material_override = RoomInstance3D.doormaterial.duplicate(true)
 				add_child(doormesh)
 				box.add_door_reference(doormesh,dir)
-				if setdata: box.set_door(dir,Box.HOLE)
+				if setdata: box.set_door(dir,Box.HOLE); box.set_lock(dir,Box.NO_LOCK)
 			2:## door
 				clear_children()
 				add_door()
-				if setdata: box.set_door(dir,Box.DOOR)
+				if setdata: box.set_door(dir,Box.DOOR); box.set_lock(dir,Box.NO_LOCK)
 			3 when room is CityExit:## city exit door
 				clear_children()
 				var road_icon : MeshInstance3D = RoomInstance3D.road_visual.duplicate()
@@ -248,7 +248,7 @@ class RoomInstanceFace extends StaticBody3D:
 					City.DOWN: road_icon.rotation_degrees = Vector3(0,180,90)
 				add_child(road_icon)
 				add_door()
-				if setdata: box.set_door(dir,Box.CITY_EXIT_DOOR)
+				if setdata: box.set_door(dir,Box.CITY_EXIT_DOOR); box.set_lock(dir,Box.NO_LOCK)
 			4:## box rubble
 				clear_children()
 				for sibling : Node3D in get_parent().get_children():
@@ -259,7 +259,7 @@ class RoomInstanceFace extends StaticBody3D:
 							box.state = Box.HOLE
 							box.set_door(sibling.dir,Box.HOLE)
 				set_mesh_material(RoomInstance3D.rubbleboxmaterial.duplicate(true))
-				if setdata: box.set_door(dir,Box.HOLE)
+				if setdata: box.set_door(dir,Box.HOLE); box.set_lock(dir,Box.NO_LOCK)
 		Global.current_region.check_for_adjacient_doors()
 	func clear_children()->void:
 		for child : Node3D in get_children():
@@ -282,8 +282,9 @@ class RoomInstanceFace extends StaticBody3D:
 			lock_sprite.texture = RoomInstance3D.lock_icon
 			lock_sprite.no_depth_test = true
 			lock_sprite.billboard = BaseMaterial3D.BILLBOARD_ENABLED
-			lock_sprite.position.y = 1
+			lock_sprite.position = Vector3(0,0,1)
 			lock_sprite.scale *= 3
+			lock_sprite.scale.y *= 8
 			lock_sprite.texture_filter = BaseMaterial3D.TEXTURE_FILTER_NEAREST
 			lock_sprite.modulate = KeyInstance.get_key_color(box.get_lock(dir))
 			

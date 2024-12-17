@@ -5,7 +5,8 @@ enum modes{
 	demos,
 	settings,
 	tips,
-	dev_levels
+	dev_levels,
+	editor_levels
 }
 
 const demos_dir : String = "res://demos/"
@@ -72,6 +73,16 @@ func display_list(type:modes)->void:
 				directories.append("res://dev_levels/"+filename)
 				add_button(filename)
 			mode = modes.demos
+		
+		modes.editor_levels:
+			title.text = "Dev Levels"
+			
+			var exported_dir : String = OS.get_executable_path().get_base_dir()
+			filenames = DirAccess.get_files_at("res://editorgames/")
+			for filename : String in filenames:
+				directories.append("res://editorgames/"+filename)
+				add_button(filename)
+			mode = modes.demos
 	
 	title.show()
 	list.show()
@@ -79,7 +90,8 @@ func display_list(type:modes)->void:
 	move_selection()
 
 func move_selection()->void:
-	list.get_child(0).grab_focus()
+	var first : Control = list.get_child(0)
+	if first: first.grab_focus()
 
 func add_button(name:String)->void:
 	var button : Button = buttontemplate.duplicate()

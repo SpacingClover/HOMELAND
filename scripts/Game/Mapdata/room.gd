@@ -56,6 +56,7 @@ func validate(city_ref:City)->void:
 					box.set_door(dir,Box.NONE)
 				else:
 					box.set_door(dir,Box.WALL)
+		index = city_ref.rooms.find(self)
 	
 
 func add_to_position(add:Vector3i)->void:

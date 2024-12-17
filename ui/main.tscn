@@ -57,6 +57,7 @@ script = ExtResource("1_g6dcv")
 process_mode = 3
 self_modulate = Color(1, 0.52549, 0, 1)
 top_level = true
+z_index = 1
 position = Vector2(155.75, 53.7602)
 scale = Vector2(18.5204, 18.5204)
 mesh = SubResource("SphereMesh_wvrte")

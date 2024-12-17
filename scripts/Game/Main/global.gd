@@ -44,7 +44,8 @@ func _init()->void:
 	resume_game.connect(resume)
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	Input.mouse_mode = Input.MOUSE_MODE_HIDDEN
-	print() ##before release, replace all tscn with scn and tres with res
+	#open_menu.connect(func()->void:menu_hidden=false)
+	#hide_menu.connect(func()->void:menu_hidden=true)
 
 func _ready()->void:
 	screenroots = titlescreen.get_screen_roots()
@@ -211,13 +212,36 @@ func launch_level_editor()->void:
 	screenroots[3].hide()
 	titlescreen.get_node(^"HBoxContainer/VBoxContainer").hide()
 	is_level_editor_mode_enabled = true
-	current_game = GameData.new()
-	current_game.cities.append(await City.new())
-	current_region = current_game.cities[0]
+	create_empty_game()
 	world3D.reset_3d_view()
 	world3D.display_rooms()
 	world3D.show()
 	hide_menu.emit()
-	player.queue_free()
+	menu_hidden = true
+	#if player: player.queue_free(); player = null
 	world3D.playermarker.hide()
 	titlescreen.editorgui.show()
+	titlescreen.editorgui.labels.show()
+
+func close_level_editor()->void:
+	screenroots[0].show()
+	screenroots[1].show()
+	screenroots[3].show()
+	titlescreen.get_node(^"HBoxContainer/VBoxContainer").show()
+	is_level_editor_mode_enabled = false
+	world3D.selecting_faces_directly = false
+	current_game = null
+	current_region = null
+	current_room = null
+	world3D.reset_3d_view()
+	open_menu.emit()
+	menu_hidden = false
+	world3D.playermarker.show()
+	titlescreen.editorgui.hide()
+	titlescreen.editorgui.labels.hide()
+	in_game = false
+
+func create_empty_game()->void:
+	current_game = GameData.new()
+	current_game.cities.append(await City.new())
+	current_region = current_game.cities[0]

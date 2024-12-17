@@ -46,9 +46,24 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 
-[node name="Button" type="Button" parent="VBoxContainer"]
+[node name="HBoxContainer" type="HBoxContainer" parent="VBoxContainer"]
 layout_mode = 2
-text = "new room"
+
+[node name="Button" type="Button" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "create new"
+
+[node name="OptionButton" type="OptionButton" parent="VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+selected = 0
+item_count = 3
+popup/item_0/text = "Room"
+popup/item_1/text = "CityExit"
+popup/item_1/id = 1
+popup/item_2/text = "Feature"
+popup/item_2/id = 2
 
 [node name="Button3" type="Button" parent="VBoxContainer"]
 layout_mode = 2
@@ -132,17 +147,31 @@ theme_override_styles/separator = SubResource("StyleBoxEmpty_2a3ye")
 
 [node name="Button2" type="Button" parent="VBoxContainer"]
 layout_mode = 2
-disabled = true
 text = "create new game"
 
 [node name="Button6" type="Button" parent="VBoxContainer"]
 layout_mode = 2
-disabled = true
 text = "save game"
 
 [node name="Button7" type="Button" parent="VBoxContainer"]
 layout_mode = 2
 text = "open game"
+
+[node name="HSeparator7" type="HSeparator" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxEmpty_2a3ye")
+
+[node name="HSeparator8" type="HSeparator" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxEmpty_2a3ye")
+
+[node name="HSeparator9" type="HSeparator" parent="VBoxContainer"]
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxEmpty_2a3ye")
+
+[node name="Button8" type="Button" parent="VBoxContainer"]
+layout_mode = 2
+text = "close editor"
 
 [node name="Node" type="Node" parent="."]
 
@@ -174,3 +203,95 @@ text = "open game"
 layout_mode = 2
 size_flags_vertical = 3
 text = "cancel"
+
+[node name="rightclickpopup" type="PanelContainer" parent="Node"]
+visible = false
+offset_left = 871.0
+offset_top = 377.0
+offset_right = 1106.0
+offset_bottom = 424.0
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Node/rightclickpopup"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="Node/rightclickpopup/VBoxContainer"]
+layout_mode = 2
+text = "type - index"
+horizontal_alignment = 1
+
+[node name="HBoxContainer" type="HBoxContainer" parent="Node/rightclickpopup/VBoxContainer"]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="Node/rightclickpopup/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "set lock"
+
+[node name="SpinBox" type="SpinBox" parent="Node/rightclickpopup/VBoxContainer/HBoxContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = -1.0
+
+[node name="to city" type="HBoxContainer" parent="Node/rightclickpopup/VBoxContainer"]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="Node/rightclickpopup/VBoxContainer/to city"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "to city"
+
+[node name="SpinBox" type="SpinBox" parent="Node/rightclickpopup/VBoxContainer/to city"]
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = -1.0
+
+[node name="to exit" type="HBoxContainer" parent="Node/rightclickpopup/VBoxContainer"]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="Node/rightclickpopup/VBoxContainer/to exit"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "to exit"
+
+[node name="SpinBox" type="SpinBox" parent="Node/rightclickpopup/VBoxContainer/to exit"]
+layout_mode = 2
+size_flags_horizontal = 3
+min_value = -1.0
+
+[node name="Button" type="Button" parent="Node/rightclickpopup/VBoxContainer"]
+layout_mode = 2
+disabled = true
+
+[node name="labels" type="PanelContainer" parent="Node"]
+visible = false
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -362.0
+offset_top = 191.0
+offset_bottom = 908.0
+grow_horizontal = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_tq0sg")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Node/labels"]
+layout_mode = 2
+
+[node name="gamename" type="LineEdit" parent="Node/labels/VBoxContainer"]
+layout_mode = 2
+placeholder_text = "Game Name"
+
+[node name="description" type="TextEdit" parent="Node/labels/VBoxContainer"]
+custom_minimum_size = Vector2(0, 100)
+layout_mode = 2
+placeholder_text = "Game Description"
+
+[node name="cityname" type="LineEdit" parent="Node/labels/VBoxContainer"]
+layout_mode = 2
+placeholder_text = "City Name"
+
+[node name="pickcity" type="OptionButton" parent="Node/labels/VBoxContainer"]
+layout_mode = 2
+
+[node name="Button" type="Button" parent="Node/labels/VBoxContainer"]
+layout_mode = 2
+text = "create new city"

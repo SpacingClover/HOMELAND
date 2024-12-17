@@ -92,13 +92,21 @@ func set_lock(direction:Vector3i,to:int)->void:
 		City.UP:     lock_up     = to
 		City.DOWN:   lock_down   = to
 
-func has_doorway(direction:Vector3i,exclude_holes:bool=true)->bool:
+func has_doorway(direction:Vector3i,exclude_holes:bool=true,exclude_city_exit:bool=true)->bool:
 	var checkval : int = WALL if not exclude_holes else HOLE
 	var door : int = get_door(direction)
-	return door > checkval and door < CITY_EXIT_DOOR
+	#return door > checkval and door < CITY_EXIT_DOOR
+	if door > checkval:
+		if exclude_city_exit:
+			if door < CITY_EXIT_DOOR:
+				return true
+		else:
+			return true
+			
+	return false
 
 func has_locked_door(direction:Vector3i)->bool:
-	return has_doorway(direction) and (get_lock(direction) != NO_LOCK)
+	return get_lock(direction) != NO_LOCK
 
 func has_opposite_doorway(direction:Vector3i,exclude_holes:bool=false)->bool:
 	return has_doorway(-direction,exclude_holes)
@@ -171,12 +179,10 @@ func check_for_adjacient_doors(city_ref:City)->Array[int]:
 				if adjbox.state != Box.RUBBLE and state != Box.RUBBLE:
 					set_door_color(dir,red)
 					adjbox.set_door_color(-dir,red)
-					DEV_OUTPUT.push_message(r"set door red")
 					adjacient_rooms.append(city_ref.get_room_at(adjbox.coords).index)##
 					return adjacient_rooms
 				else:
 					adjbox.set_door_color(-dir,brown)
-					DEV_OUTPUT.push_message(r"set door brown")
 					if adjbox.get_door(-dir) == OPEN or adjbox.get_door(-dir) == OPEN_OUT:
 						adjbox.set_door(-dir,DOOR)
 						if city_ref.get_room_at(adjbox.coords) == Global.current_room:
@@ -184,7 +190,6 @@ func check_for_adjacient_doors(city_ref:City)->Array[int]:
 							adjbox.get_door_instance(-dir).door3dinstance.handle_lock_icon()
 							
 			set_door_color(dir,brown)
-			DEV_OUTPUT.push_message(r"set door brown")
 			if get_door(dir) == OPEN or get_door(dir) == OPEN_OUT:
 				set_door(dir,DOOR)
 				if city_ref.get_room_at(coords) == Global.current_room:
