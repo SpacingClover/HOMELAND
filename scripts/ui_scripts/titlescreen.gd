@@ -4,7 +4,7 @@ const marker_texture : Texture2D = preload("res://visuals/spritesheets/ui/menu_f
 
 @onready var backdrop : Panel = $Panel
 @onready var credits : Control = $credits
-@onready var editorgui : PanelContainer = $editorgui
+@onready var editorgui : Node = $editorgui
 
 var title : TitleView ## not onready due to potential reordering
 var buttons : ButtonsView

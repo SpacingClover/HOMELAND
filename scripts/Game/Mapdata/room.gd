@@ -137,7 +137,7 @@ func delete_room_visual()->void:
 			Global.world3D.rooms_3D.remove_at(pos)
 			break
 		pos += 1
-	if roomvisual:
+	if roomvisual and is_instance_valid(roomvisual):
 		roomvisual.queue_free()
 	roomvisual = null
 

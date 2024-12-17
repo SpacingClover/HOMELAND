@@ -251,6 +251,7 @@ class RoomInstanceFace extends StaticBody3D:
 				if setdata: box.set_door(dir,Box.CITY_EXIT_DOOR); box.set_lock(dir,Box.NO_LOCK)
 			4:## box rubble
 				clear_children()
+				if not is_inside_tree(): await tree_entered ## doesnt have parent on init
 				for sibling : Node3D in get_parent().get_children():
 					if sibling is RoomInstanceFace:
 						if sibling.box == box:

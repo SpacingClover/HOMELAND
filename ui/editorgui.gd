@@ -1,27 +1,52 @@
-extends PanelContainer
+extends Node
 
-@onready var newbutton : Button = $VBoxContainer/HBoxContainer/Button
-@onready var roomtype : OptionButton = $VBoxContainer/HBoxContainer/OptionButton
-@onready var deleteroom : Button = $VBoxContainer/Button3
-@onready var scalex : SpinBox = $VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/LineEdit
-@onready var scaley : SpinBox = $VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/LineEdit2
-@onready var scalez : SpinBox = $VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/LineEdit3
-@onready var applyscale : Button = $VBoxContainer/PanelContainer/VBoxContainer/Button4
-@onready var editfaces : Button = $VBoxContainer/Button4
-@onready var isolateroom : Button = $VBoxContainer/Button5
-@onready var setfacetype : OptionButton = $VBoxContainer/OptionButton
-@onready var creategame : Button = $VBoxContainer/Button2
-@onready var savegame : Button = $VBoxContainer/Button6
-@onready var opengame : Button = $VBoxContainer/Button7
-@onready var selectfilescontainer : PanelContainer = $Node/PanelContainer
-@onready var fileslist : OptionButton = $Node/PanelContainer/VBoxContainer/OptionButton
-@onready var selectfilebutton : Button = $Node/PanelContainer/VBoxContainer/Button
-@onready var cancelfileslist : Button = $Node/PanelContainer/VBoxContainer/Button2
-@onready var closeeditor : Button = $VBoxContainer/Button8
-@onready var rightclickpopup : PanelContainer = $Node/rightclickpopup
-@onready var popupvbox : VBoxContainer = $Node/rightclickpopup/VBoxContainer
-@onready var submitbutton : Button = $Node/rightclickpopup/VBoxContainer/HBoxContainer/Button
-@onready var labels : PanelContainer = $Node/labels
+##left panel
+@onready var leftpanel : PanelContainer = $leftpanel
+@onready var newbutton : Button = $leftpanel/VBoxContainer/HBoxContainer/Button
+@onready var roomtype : OptionButton = $leftpanel/VBoxContainer/HBoxContainer/OptionButton
+@onready var deleteroom : Button = $leftpanel/VBoxContainer/Button3
+@onready var scalex : SpinBox = $leftpanel/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/LineEdit
+@onready var scaley : SpinBox = $leftpanel/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/LineEdit2
+@onready var scalez : SpinBox = $leftpanel/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/LineEdit3
+@onready var applyscale : Button = $leftpanel/VBoxContainer/PanelContainer/VBoxContainer/Button4
+@onready var editfaces : Button = $leftpanel/VBoxContainer/Button4
+@onready var isolateroom : Button = $leftpanel/VBoxContainer/Button5
+@onready var setfacetype : OptionButton = $leftpanel/VBoxContainer/OptionButton
+@onready var creategame : Button = $leftpanel/VBoxContainer/Button2
+@onready var savegame : Button = $leftpanel/VBoxContainer/Button6
+@onready var opengame : Button = $leftpanel/VBoxContainer/Button7
+@onready var closeeditor : Button = $leftpanel/VBoxContainer/Button8
+
+##right panel
+@onready var rightpanel : PanelContainer = $rightpanel
+@onready var gamename : LineEdit = $rightpanel/VBoxContainer/gamename
+@onready var gamedescription : TextEdit = $rightpanel/VBoxContainer/description
+@onready var cityname : LineEdit = $rightpanel/VBoxContainer/cityname
+@onready var pickcity : OptionButton = $rightpanel/VBoxContainer/HBoxContainer/pickcity
+@onready var newcity : Button = $rightpanel/VBoxContainer/Button
+@onready var switchcity : Button = $rightpanel/VBoxContainer/HBoxContainer/Button
+@onready var deletecity : Button = $rightpanel/VBoxContainer/Button2
+
+##load game popup
+@onready var selectfilescontainer : PanelContainer = $opengamepopup
+@onready var fileslist : OptionButton = $opengamepopup/VBoxContainer/OptionButton
+@onready var selectfilebutton : Button = $opengamepopup/VBoxContainer/Button
+@onready var cancelfileslist : Button = $opengamepopup/VBoxContainer/Button2
+
+##right click menu
+@onready var rightclickpopup : PanelContainer = $rightclickpopup
+@onready var popupvbox : VBoxContainer = $rightclickpopup/VBoxContainer
+@onready var submitbutton : Button = $rightclickpopup/VBoxContainer/HBoxContainer/Button
+@onready var set_tocity : Button = $"rightclickpopup/VBoxContainer/to city/Button"
+@onready var set_toexit : Button = $"rightclickpopup/VBoxContainer/to exit/Button"
+@onready var rightclicklabel : Label = $rightclickpopup/VBoxContainer/Label
+@onready var roomcontents : Button = $rightclickpopup/VBoxContainer/Button
+@onready var lockinput : HBoxContainer = $rightclickpopup/VBoxContainer/HBoxContainer
+@onready var tocityinput : HBoxContainer = $"rightclickpopup/VBoxContainer/to city"
+@onready var toexitinput : HBoxContainer = $"rightclickpopup/VBoxContainer/to exit"
+@onready var lockspinbox : SpinBox = $rightclickpopup/VBoxContainer/HBoxContainer/SpinBox
+@onready var cityspinbox : SpinBox = $"rightclickpopup/VBoxContainer/to city/SpinBox"
+@onready var exitspinbox : SpinBox = $"rightclickpopup/VBoxContainer/to exit/SpinBox"
 
 var last_selected_face : RoomInstance3D.RoomInstanceFace
 
@@ -43,8 +68,26 @@ func _ready()->void:
 	creategame.pressed.connect(create_new_empty_game)
 	savegame.pressed.connect(save_game)
 	submitbutton.pressed.connect(set_face_lock)
-	$"Node/rightclickpopup/VBoxContainer/to city/Button".pressed.connect(set_cityexit_nextcity)
-	$"Node/rightclickpopup/VBoxContainer/to exit/Button".pressed.connect(set_cityexit_corresponding_exit)
+	set_tocity.pressed.connect(set_cityexit_nextcity)
+	set_toexit.pressed.connect(set_cityexit_corresponding_exit)
+	switchcity.pressed.connect(switch_city)
+	gamename.text_changed.connect(func(s:String)->void:Global.current_game.game_name=s)
+	cityname.text_changed.connect(func(s:String)->void:Global.current_region.name=s)
+	gamedescription.text_changed.connect(func(s:String)->void:Global.current_game.description=s)
+	newcity.pressed.connect(create_new_city)
+	close()
+
+func open()->void:
+	leftpanel.show()
+	rightpanel.show()
+	selectfilescontainer.hide()
+	rightclickpopup.hide()
+
+func close()->void:
+	leftpanel.hide()
+	rightpanel.hide()
+	selectfilescontainer.hide()
+	rightclickpopup.hide()
 
 func rescale_room()->void:
 	var roomvisual : RoomInstance3D = Global.world3D.room_last_selected
@@ -120,6 +163,7 @@ func open_game(dir:String)->void:
 	Global.world3D.reset_3d_view()
 	Global.world3D.display_rooms()
 	deleteroom.disabled = true
+	fill_right_panel()
 
 func open_rightclick_popup(obj:Node3D)->void:
 	if not obj:
@@ -128,33 +172,25 @@ func open_rightclick_popup(obj:Node3D)->void:
 	
 	for child : Control in popupvbox.get_children(): child.hide()
 	
-	var room : Room
-	
 	if obj is RoomInstance3D:
-		var label : Label = $Node/rightclickpopup/VBoxContainer/Label
-		label.text = r"Room " + str(obj.data_reference.index)
-		label.show()
-		var contents : Button = $Node/rightclickpopup/VBoxContainer/Button
+		rightclicklabel.text = r"Room " + str(obj.data_reference.index)
+		rightclicklabel.show()
+		var contents : Button = roomcontents
 		contents.text = r"Contains " + str(obj.data_reference.items.size()) + r" items"
 		contents.show()
-		room = obj.data_reference
+		if obj.data_reference is CityExit:
+			tocityinput.show()
+			toexitinput.show()
+			cityspinbox.value = obj.data_reference.nextcity
+			exitspinbox.value = obj.data_reference.corresponding_exit
+			DEV_OUTPUT.push_message(r"this would be better with dropdown menus")
 	elif obj is RoomInstance3D.RoomInstanceFace:
 		last_selected_face = obj
-		var label : Label = $Node/rightclickpopup/VBoxContainer/Label
-		label.text = r"Face " + str(City.DIRECTIONS.find(obj.dir))
-		label.show()
+		rightclicklabel.text = r"Face " + str(City.DIRECTIONS.find(obj.dir))
+		rightclicklabel.show()
 		if obj.box.has_doorway(obj.dir,true,false):
-			var lockinputs : HBoxContainer = $Node/rightclickpopup/VBoxContainer/HBoxContainer
-			$Node/rightclickpopup/VBoxContainer/HBoxContainer/SpinBox.value = obj.box.get_lock(obj.dir)
-			lockinputs.show()
-		room = obj.room
-	
-	if room is CityExit:
-		$"Node/rightclickpopup/VBoxContainer/to city".show()
-		$"Node/rightclickpopup/VBoxContainer/to exit".show()
-		$"Node/rightclickpopup/VBoxContainer/to city/SpinBox".value = room.nextcity
-		$"Node/rightclickpopup/VBoxContainer/to exit/SpinBox".value = room.corresponding_exit
-		DEV_OUTPUT.push_message(r"this would be better with dropdown menus")
+			lockspinbox.value = obj.box.get_lock(obj.dir)
+			lockinput.show()
 	
 	rightclickpopup.show()
 	rightclickpopup.position = get_viewport().get_mouse_position()
@@ -163,12 +199,13 @@ func create_new_empty_game()->void:
 	Global.create_empty_game()
 	Global.world3D.reset_3d_view()
 	Global.world3D.display_rooms()
+	fill_right_panel()
 
 func save_game()->void:
 	ResourceSaver.save(Global.current_game,"res://editorgames/city.res")
 
 func set_face_lock()->void:
-	var val : int = $Node/rightclickpopup/VBoxContainer/HBoxContainer/SpinBox.value
+	var val : int = lockspinbox.value
 	last_selected_face.box.set_lock(last_selected_face.dir,val)
 	match last_selected_face.box.get_door(last_selected_face.dir):
 		Box.DOOR:
@@ -177,7 +214,47 @@ func set_face_lock()->void:
 			last_selected_face.set_face_type(3)
 
 func set_cityexit_nextcity()->void:
-	last_selected_face.room.nextcity = $"Node/rightclickpopup/VBoxContainer/to city/SpinBox".value
+	last_selected_face.room.nextcity = cityspinbox.value
 
 func set_cityexit_corresponding_exit()->void:
-	last_selected_face.room.corresponding_exit = $"Node/rightclickpopup/VBoxContainer/to exit/SpinBox".value
+	last_selected_face.room.corresponding_exit = exitspinbox.value
+
+func fill_right_panel()->void:
+	if Global.current_game:
+		gamename.text = Global.current_game.game_name
+		gamedescription.text = Global.current_game.description
+	else:
+		gamename.text = &""
+		gamedescription.text = &""
+	
+	if Global.current_region:
+		cityname.text = Global.current_region.name
+	else:
+		cityname.text = &""
+	index_cities()
+
+func index_cities()->void:
+	pickcity.clear()
+	var idx : int = 0
+	for city : City in Global.current_game.cities:
+		var string : String
+		if city.name == &"":
+			string = r"city " + str(idx)
+		else:
+			string = city.name
+		pickcity.add_item(string,idx)
+		if city == Global.current_region:
+			pickcity.select(idx)
+		idx += 1
+
+func switch_city()->void:
+	var nextcity : City = Global.current_game.cities[pickcity.selected]
+	if Global.current_region != nextcity:
+		Global.current_region = nextcity
+		Global.world3D.reset_3d_view()
+		Global.world3D.display_rooms()
+		fill_right_panel()
+
+func create_new_city()->void:
+	Global.current_game.cities.append(await City.new())
+	index_cities()

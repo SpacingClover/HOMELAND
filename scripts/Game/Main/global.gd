@@ -108,6 +108,7 @@ func enter_game_transition(game:GameData)->void:
 	
 	hide_menu.emit()
 	menu_hidden = true
+	player.process_mode = Node.PROCESS_MODE_INHERIT
 	
 	TransitionHandler.end_transition()
 	await get_tree().create_timer(1).timeout
@@ -195,6 +196,7 @@ func unload_game_and_exit_to_menu()->void:
 	
 	menu_hidden = false
 	in_game = false
+	player.process_mode = Node.PROCESS_MODE_DISABLED
 	
 	MusicManager.play_song("action")
 
@@ -220,8 +222,9 @@ func launch_level_editor()->void:
 	menu_hidden = true
 	#if player: player.queue_free(); player = null
 	world3D.playermarker.hide()
-	titlescreen.editorgui.show()
-	titlescreen.editorgui.labels.show()
+	titlescreen.editorgui.open()
+	titlescreen.editorgui.fill_right_panel()
+	player.process_mode = Node.PROCESS_MODE_DISABLED
 
 func close_level_editor()->void:
 	screenroots[0].show()
@@ -237,8 +240,7 @@ func close_level_editor()->void:
 	open_menu.emit()
 	menu_hidden = false
 	world3D.playermarker.show()
-	titlescreen.editorgui.hide()
-	titlescreen.editorgui.labels.hide()
+	titlescreen.editorgui.close()
 	in_game = false
 
 func create_empty_game()->void:
