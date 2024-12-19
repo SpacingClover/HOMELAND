@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=3 uid="uid://d1v1m2j033syj"]
+[gd_scene load_steps=6 format=3 uid="uid://d1v1m2j033syj"]
 
 [ext_resource type="Script" path="res://ui/editorgui.gd" id="1_hptt7"]
 
@@ -22,19 +22,10 @@ border_color = Color(0.603922, 0.4, 0, 0.466667)
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_2a3ye"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_vcfbo"]
-bg_color = Color(0, 0, 0, 1)
-border_width_left = 5
-border_width_top = 5
-border_width_right = 5
-border_width_bottom = 5
-border_color = Color(1, 0.376471, 0, 1)
-
 [node name="editorgui" type="Node"]
 script = ExtResource("1_hptt7")
 
 [node name="leftpanel" type="PanelContainer" parent="."]
-visible = false
 offset_left = 5.0
 offset_top = 5.0
 offset_right = 266.0
@@ -175,7 +166,6 @@ layout_mode = 2
 text = "close editor"
 
 [node name="rightpanel" type="PanelContainer" parent="."]
-visible = false
 anchors_preset = 1
 anchor_left = 1.0
 anchor_right = 1.0
@@ -246,12 +236,17 @@ layout_mode = 2
 text = "delete city"
 
 [node name="opengamepopup" type="PanelContainer" parent="."]
-visible = false
-offset_left = 735.0
-offset_top = 393.0
-offset_right = 1241.0
-offset_bottom = 687.0
-theme_override_styles/panel = SubResource("StyleBoxFlat_vcfbo")
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -259.0
+offset_top = -113.0
+offset_right = 274.0
+offset_bottom = 14.0
+grow_horizontal = 2
+grow_vertical = 2
 
 [node name="VBoxContainer" type="VBoxContainer" parent="opengamepopup"]
 layout_mode = 2
@@ -259,23 +254,20 @@ layout_mode = 2
 [node name="Label" type="Label" parent="opengamepopup/VBoxContainer"]
 layout_mode = 2
 text = "select game"
+horizontal_alignment = 1
 
 [node name="OptionButton" type="OptionButton" parent="opengamepopup/VBoxContainer"]
 layout_mode = 2
-size_flags_vertical = 3
 
 [node name="Button" type="Button" parent="opengamepopup/VBoxContainer"]
 layout_mode = 2
-size_flags_vertical = 3
 text = "open game"
 
 [node name="Button2" type="Button" parent="opengamepopup/VBoxContainer"]
 layout_mode = 2
-size_flags_vertical = 3
 text = "cancel"
 
 [node name="rightclickpopup" type="PanelContainer" parent="."]
-visible = false
 offset_left = 871.0
 offset_top = 377.0
 offset_right = 1106.0
@@ -331,3 +323,36 @@ min_value = -1.0
 [node name="Button" type="Button" parent="rightclickpopup/VBoxContainer"]
 layout_mode = 2
 disabled = true
+
+[node name="savegamepopup" type="PanelContainer" parent="."]
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -33.0
+offset_top = -20.0
+offset_right = 409.0
+offset_bottom = 11.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="HBoxContainer" type="VBoxContainer" parent="savegamepopup"]
+layout_mode = 2
+
+[node name="Label" type="Label" parent="savegamepopup/HBoxContainer"]
+layout_mode = 2
+text = "Save Game"
+horizontal_alignment = 1
+
+[node name="addressbar" type="LineEdit" parent="savegamepopup/HBoxContainer"]
+layout_mode = 2
+placeholder_text = "Name your file"
+
+[node name="save" type="Button" parent="savegamepopup/HBoxContainer"]
+layout_mode = 2
+text = "Write"
+
+[node name="cancel" type="Button" parent="savegamepopup/HBoxContainer"]
+layout_mode = 2
+text = "Cancel"

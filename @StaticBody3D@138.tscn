@@ -1,0 +1,410 @@
+[gd_scene load_steps=46 format=3 uid="uid://dfd8p1d24nmhb"]
+
+[ext_resource type="Script" path="res://scripts/Game/Mapdata/box.gd" id="1_6f7dd"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6fxxr"]
+shading_mode = 2
+specular_mode = 2
+disable_ambient_light = true
+metallic_specular = 0.0
+emission = Color(0.635294, 0.847059, 0, 1)
+emission_energy_multiplier = 0.75
+
+[sub_resource type="Resource" id="Resource_stkp3"]
+script = ExtResource("1_6f7dd")
+coords = Vector3i(-4, 0, 2)
+door_right = 1
+door_left = 2
+door_top = 1
+door_bottom = 2
+door_up = 2
+door_down = 2
+state = 0
+validated = true
+lock_right = -1
+lock_left = -1
+lock_top = -1
+lock_bottom = -1
+lock_up = -1
+lock_down = -1
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_0x8ku"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fn07v"]
+shading_mode = 2
+specular_mode = 2
+disable_ambient_light = true
+metallic_specular = 0.0
+emission = Color(0.635294, 0.847059, 0, 1)
+emission_energy_multiplier = 0.75
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_veolm"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_c7xt6"]
+shading_mode = 2
+specular_mode = 2
+disable_ambient_light = true
+metallic_specular = 0.0
+emission = Color(0.635294, 0.847059, 0, 1)
+emission_energy_multiplier = 0.75
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_76n68"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dk6h1"]
+shading_mode = 2
+specular_mode = 2
+disable_ambient_light = true
+metallic_specular = 0.0
+emission = Color(0.635294, 0.847059, 0, 1)
+emission_energy_multiplier = 0.75
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_ffwk6"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3i3h1"]
+shading_mode = 2
+specular_mode = 2
+disable_ambient_light = true
+metallic_specular = 0.0
+emission = Color(0.635294, 0.847059, 0, 1)
+emission_energy_multiplier = 0.75
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_wekf6"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_l0vir"]
+shading_mode = 2
+specular_mode = 2
+disable_ambient_light = true
+metallic_specular = 0.0
+emission = Color(0.635294, 0.847059, 0, 1)
+emission_energy_multiplier = 0.75
+
+[sub_resource type="Resource" id="Resource_ax8vh"]
+script = ExtResource("1_6f7dd")
+coords = Vector3i(-4, 0, 1)
+door_right = 2
+door_left = 1
+door_top = 1
+door_bottom = 8
+door_up = 2
+door_down = 2
+state = 0
+validated = true
+lock_right = -1
+lock_left = -1
+lock_top = -1
+lock_bottom = -1
+lock_up = -1
+lock_down = -1
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_al7dw"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bsa1c"]
+shading_mode = 2
+specular_mode = 2
+disable_ambient_light = true
+metallic_specular = 0.0
+emission = Color(0.635294, 0.847059, 0, 1)
+emission_energy_multiplier = 0.75
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_qinw6"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_1mbg2"]
+shading_mode = 2
+specular_mode = 2
+disable_ambient_light = true
+metallic_specular = 0.0
+emission = Color(0.635294, 0.847059, 0, 1)
+emission_energy_multiplier = 0.75
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_mldsj"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_k3gx2"]
+shading_mode = 2
+specular_mode = 2
+disable_ambient_light = true
+metallic_specular = 0.0
+emission = Color(0.635294, 0.847059, 0, 1)
+emission_energy_multiplier = 0.75
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_lfpkg"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_xeawi"]
+shading_mode = 2
+specular_mode = 2
+disable_ambient_light = true
+metallic_specular = 0.0
+emission = Color(0.635294, 0.847059, 0, 1)
+emission_energy_multiplier = 0.75
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_jp1ni"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_nn318"]
+shading_mode = 2
+specular_mode = 2
+disable_ambient_light = true
+metallic_specular = 0.0
+emission = Color(0.635294, 0.847059, 0, 1)
+emission_energy_multiplier = 0.75
+
+[sub_resource type="Resource" id="Resource_xu1bn"]
+script = ExtResource("1_6f7dd")
+coords = Vector3i(-5, 0, 2)
+door_right = 1
+door_left = 2
+door_top = 2
+door_bottom = 1
+door_up = 2
+door_down = 2
+state = 0
+validated = true
+lock_right = -1
+lock_left = -1
+lock_top = -1
+lock_bottom = -1
+lock_up = -1
+lock_down = -1
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ssqp6"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fgfjj"]
+shading_mode = 2
+specular_mode = 2
+disable_ambient_light = true
+metallic_specular = 0.0
+emission = Color(0.635294, 0.847059, 0, 1)
+emission_energy_multiplier = 0.75
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_a3ktc"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_q5u3r"]
+shading_mode = 2
+specular_mode = 2
+disable_ambient_light = true
+metallic_specular = 0.0
+emission = Color(0.635294, 0.847059, 0, 1)
+emission_energy_multiplier = 0.75
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_i4gxd"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ywixl"]
+shading_mode = 2
+specular_mode = 2
+disable_ambient_light = true
+metallic_specular = 0.0
+emission = Color(0.635294, 0.847059, 0, 1)
+emission_energy_multiplier = 0.75
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_6426k"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_yerao"]
+shading_mode = 2
+specular_mode = 2
+disable_ambient_light = true
+metallic_specular = 0.0
+emission = Color(0.635294, 0.847059, 0, 1)
+emission_energy_multiplier = 0.75
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_gkg64"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_86oqd"]
+shading_mode = 2
+specular_mode = 2
+disable_ambient_light = true
+metallic_specular = 0.0
+emission = Color(0.635294, 0.847059, 0, 1)
+emission_energy_multiplier = 0.75
+
+[sub_resource type="Resource" id="Resource_f7kr2"]
+script = ExtResource("1_6f7dd")
+coords = Vector3i(-5, 0, 1)
+door_right = 2
+door_left = 1
+door_top = 2
+door_bottom = 1
+door_up = 2
+door_down = 2
+state = 0
+validated = true
+lock_right = -1
+lock_left = -1
+lock_top = -1
+lock_bottom = -1
+lock_up = -1
+lock_down = -1
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_uj67m"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_v488t"]
+shading_mode = 2
+specular_mode = 2
+disable_ambient_light = true
+metallic_specular = 0.0
+emission = Color(0.635294, 0.847059, 0, 1)
+emission_energy_multiplier = 0.75
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_108le"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ip6o5"]
+shading_mode = 2
+specular_mode = 2
+disable_ambient_light = true
+metallic_specular = 0.0
+emission = Color(0.635294, 0.847059, 0, 1)
+emission_energy_multiplier = 0.75
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_xg3tu"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_n11w2"]
+shading_mode = 2
+specular_mode = 2
+disable_ambient_light = true
+metallic_specular = 0.0
+emission = Color(0.635294, 0.847059, 0, 1)
+emission_energy_multiplier = 0.75
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_2mo55"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_nrgdw"]
+shading_mode = 2
+specular_mode = 2
+disable_ambient_light = true
+metallic_specular = 0.0
+emission = Color(0.635294, 0.847059, 0, 1)
+emission_energy_multiplier = 0.75
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_l7gst"]
+
+[node name="_StaticBody3D_138" type="StaticBody3D"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0, 1)
+
+[node name="_MeshInstance3D_114" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 1)
+material_override = SubResource("StandardMaterial3D_6fxxr")
+metadata/boxdata = SubResource("Resource_stkp3")
+
+[node name="_CollisionShape3D_115" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 1)
+shape = SubResource("BoxShape3D_0x8ku")
+
+[node name="_MeshInstance3D_116" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.5, 0, 0, 0, -2.18557e-08, -0.5, 0, 0.5, -2.18557e-08, -1, 0, 1.5)
+material_override = SubResource("StandardMaterial3D_fn07v")
+mesh = SubResource("PlaneMesh_veolm")
+metadata/boxdata = SubResource("Resource_stkp3")
+
+[node name="_MeshInstance3D_117" type="MeshInstance3D" parent="."]
+transform = Transform3D(-2.18557e-08, 0.5, 0, 2.18557e-08, 9.55343e-16, -0.5, -0.5, -2.18557e-08, -2.18557e-08, -0.5, 0, 1)
+material_override = SubResource("StandardMaterial3D_c7xt6")
+mesh = SubResource("PlaneMesh_76n68")
+metadata/boxdata = SubResource("Resource_stkp3")
+
+[node name="_MeshInstance3D_118" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, -1, 0.5, 1)
+material_override = SubResource("StandardMaterial3D_dk6h1")
+mesh = SubResource("PlaneMesh_ffwk6")
+metadata/boxdata = SubResource("Resource_stkp3")
+
+[node name="_MeshInstance3D_119" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, -1, -0.5, 1)
+material_override = SubResource("StandardMaterial3D_3i3h1")
+mesh = SubResource("PlaneMesh_wekf6")
+metadata/boxdata = SubResource("Resource_stkp3")
+
+[node name="_MeshInstance3D_120" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 0)
+material_override = SubResource("StandardMaterial3D_l0vir")
+metadata/boxdata = SubResource("Resource_ax8vh")
+
+[node name="_CollisionShape3D_121" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0, 0)
+shape = SubResource("BoxShape3D_al7dw")
+
+[node name="_MeshInstance3D_122" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.5, 0, 0, 0, -2.18557e-08, 0.5, 0, -0.5, -2.18557e-08, -1, 0, -0.5)
+material_override = SubResource("StandardMaterial3D_bsa1c")
+mesh = SubResource("PlaneMesh_qinw6")
+metadata/boxdata = SubResource("Resource_ax8vh")
+
+[node name="_MeshInstance3D_123" type="MeshInstance3D" parent="."]
+transform = Transform3D(-2.18557e-08, 0.5, 0, 2.18557e-08, 9.55343e-16, -0.5, -0.5, -2.18557e-08, -2.18557e-08, -0.5, 0, 0)
+material_override = SubResource("StandardMaterial3D_1mbg2")
+mesh = SubResource("PlaneMesh_mldsj")
+metadata/boxdata = SubResource("Resource_ax8vh")
+
+[node name="_MeshInstance3D_124" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, -1, 0.5, 0)
+material_override = SubResource("StandardMaterial3D_k3gx2")
+mesh = SubResource("PlaneMesh_lfpkg")
+metadata/boxdata = SubResource("Resource_ax8vh")
+
+[node name="_MeshInstance3D_125" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, -1, -0.5, 0)
+material_override = SubResource("StandardMaterial3D_xeawi")
+mesh = SubResource("PlaneMesh_jp1ni")
+metadata/boxdata = SubResource("Resource_ax8vh")
+
+[node name="_MeshInstance3D_126" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 1)
+material_override = SubResource("StandardMaterial3D_nn318")
+metadata/boxdata = SubResource("Resource_xu1bn")
+
+[node name="_CollisionShape3D_127" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 1)
+shape = SubResource("BoxShape3D_ssqp6")
+
+[node name="_MeshInstance3D_128" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.5, 0, 0, 0, -2.18557e-08, -0.5, 0, 0.5, -2.18557e-08, -2, 0, 1.5)
+material_override = SubResource("StandardMaterial3D_fgfjj")
+mesh = SubResource("PlaneMesh_a3ktc")
+metadata/boxdata = SubResource("Resource_xu1bn")
+
+[node name="_MeshInstance3D_129" type="MeshInstance3D" parent="."]
+transform = Transform3D(-2.18557e-08, -0.5, 0, -2.18557e-08, 9.55343e-16, 0.5, -0.5, 2.18557e-08, -2.18557e-08, -2.5, 0, 1)
+material_override = SubResource("StandardMaterial3D_q5u3r")
+mesh = SubResource("PlaneMesh_i4gxd")
+metadata/boxdata = SubResource("Resource_xu1bn")
+
+[node name="_MeshInstance3D_130" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, -2, 0.5, 1)
+material_override = SubResource("StandardMaterial3D_ywixl")
+mesh = SubResource("PlaneMesh_6426k")
+metadata/boxdata = SubResource("Resource_xu1bn")
+
+[node name="_MeshInstance3D_131" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, -2, -0.5, 1)
+material_override = SubResource("StandardMaterial3D_yerao")
+mesh = SubResource("PlaneMesh_gkg64")
+metadata/boxdata = SubResource("Resource_xu1bn")
+
+[node name="_MeshInstance3D_132" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 0)
+material_override = SubResource("StandardMaterial3D_86oqd")
+metadata/boxdata = SubResource("Resource_f7kr2")
+
+[node name="_CollisionShape3D_133" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 0)
+shape = SubResource("BoxShape3D_uj67m")
+
+[node name="_MeshInstance3D_134" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.5, 0, 0, 0, -2.18557e-08, 0.5, 0, -0.5, -2.18557e-08, -2, 0, -0.5)
+material_override = SubResource("StandardMaterial3D_v488t")
+mesh = SubResource("PlaneMesh_108le")
+metadata/boxdata = SubResource("Resource_f7kr2")
+
+[node name="_MeshInstance3D_135" type="MeshInstance3D" parent="."]
+transform = Transform3D(-2.18557e-08, -0.5, 0, -2.18557e-08, 9.55343e-16, 0.5, -0.5, 2.18557e-08, -2.18557e-08, -2.5, 0, 0)
+material_override = SubResource("StandardMaterial3D_ip6o5")
+mesh = SubResource("PlaneMesh_xg3tu")
+metadata/boxdata = SubResource("Resource_f7kr2")
+
+[node name="_MeshInstance3D_136" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, -2, 0.5, 0)
+material_override = SubResource("StandardMaterial3D_n11w2")
+mesh = SubResource("PlaneMesh_2mo55")
+metadata/boxdata = SubResource("Resource_f7kr2")
+
+[node name="_MeshInstance3D_137" type="MeshInstance3D" parent="."]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, -2, -0.5, 0)
+material_override = SubResource("StandardMaterial3D_nrgdw")
+mesh = SubResource("PlaneMesh_l7gst")
+metadata/boxdata = SubResource("Resource_f7kr2")

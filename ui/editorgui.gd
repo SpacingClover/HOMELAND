@@ -48,6 +48,12 @@ extends Node
 @onready var cityspinbox : SpinBox = $"rightclickpopup/VBoxContainer/to city/SpinBox"
 @onready var exitspinbox : SpinBox = $"rightclickpopup/VBoxContainer/to exit/SpinBox"
 
+##save file menu
+@onready var savegamepopup : PanelContainer = $savegamepopup
+@onready var saveaddressinput : LineEdit = $savegamepopup/HBoxContainer/addressbar
+@onready var confirmsave : Button = $savegamepopup/HBoxContainer/save
+@onready var cancelsave : Button = $savegamepopup/HBoxContainer/cancel
+
 var last_selected_face : RoomInstance3D.RoomInstanceFace
 
 var room_isolation_mode : bool = false
@@ -66,7 +72,7 @@ func _ready()->void:
 	cancelfileslist.pressed.connect(selectfilescontainer.hide)
 	closeeditor.pressed.connect(Global.close_level_editor)
 	creategame.pressed.connect(create_new_empty_game)
-	savegame.pressed.connect(save_game)
+	savegame.pressed.connect(open_save_game_popup)
 	submitbutton.pressed.connect(set_face_lock)
 	set_tocity.pressed.connect(set_cityexit_nextcity)
 	set_toexit.pressed.connect(set_cityexit_corresponding_exit)
@@ -75,6 +81,10 @@ func _ready()->void:
 	cityname.text_changed.connect(func(s:String)->void:Global.current_region.name=s)
 	gamedescription.text_changed.connect(func(s:String)->void:Global.current_game.description=s)
 	newcity.pressed.connect(create_new_city)
+	saveaddressinput.text_changed.connect(addressbar_changed)
+	confirmsave.pressed.connect(save_game)
+	cancelsave.pressed.connect(savegamepopup.hide)
+	deletecity.pressed.connect(delete_city)
 	close()
 
 func open()->void:
@@ -82,12 +92,14 @@ func open()->void:
 	rightpanel.show()
 	selectfilescontainer.hide()
 	rightclickpopup.hide()
+	savegamepopup.hide()
 
 func close()->void:
 	leftpanel.hide()
 	rightpanel.hide()
 	selectfilescontainer.hide()
 	rightclickpopup.hide()
+	savegamepopup.hide()
 
 func rescale_room()->void:
 	var roomvisual : RoomInstance3D = Global.world3D.room_last_selected
@@ -149,12 +161,11 @@ func open_files_menu()->void:
 	selectfilescontainer.show()
 	fileslist.clear()
 	var files : Array[String]
-	for file : String in DirAccess.get_files_at("res://demos/"):
-		files.append("res://demos/"+file)
-	for file : String in DirAccess.get_files_at("res://dev_levels/"):
-		files.append("res://dev_levels/"+file)
-	for dir : String in files:
-		fileslist.add_item(dir)
+	for file : String in DirAccess.get_files_at("res://demos/"): files.append("res://demos/"+file)
+	for file : String in DirAccess.get_files_at("res://dev_levels/"): files.append("res://dev_levels/"+file)
+	for dir : String in files: fileslist.add_item(dir)
+	if files.size() != 0: fileslist.selected = 0; selectfilebutton.disabled = false
+	else: selectfilebutton.disabled = true
 
 func open_game(dir:String)->void:
 	selectfilescontainer.hide()
@@ -201,8 +212,22 @@ func create_new_empty_game()->void:
 	Global.world3D.display_rooms()
 	fill_right_panel()
 
+func open_save_game_popup()->void:
+	saveaddressinput.clear()
+	#confirmsave.disabled = true
+	savegamepopup.show()
+
+func addressbar_changed(s:String)->void:
+	pass
+	#confirmsave.disabled = saveaddressinput.text.is_empty()
+
 func save_game()->void:
-	ResourceSaver.save(Global.current_game,"res://editorgames/city.res")
+	var game_save : GameData = Global.current_game
+	var filename : String = saveaddressinput.text
+	if filename.is_valid_filename():
+		DEV_OUTPUT.push_message(error_string(ResourceSaver.save(game_save,r"user://"+filename+r".res")))
+		savegamepopup.hide()
+		DEV_OUTPUT.push_message("if you cant find your file, search \"Godot user path\"")
 
 func set_face_lock()->void:
 	var val : int = lockspinbox.value
@@ -255,6 +280,15 @@ func switch_city()->void:
 		Global.world3D.display_rooms()
 		fill_right_panel()
 
-func create_new_city()->void:
+func create_new_city()->int:
 	Global.current_game.cities.append(await City.new())
+	index_cities()
+	return 0
+
+func delete_city()->void: ####################### doesnt FREAKING work
+	if Global.current_game.cities.size() == 1:
+		create_new_city()
+	Global.current_game.cities.remove_at(Global.current_game.cities.find(Global.current_region))
+	Global.world3D.reset_3d_view()
+	Global.world3D.display_rooms()
 	index_cities()
