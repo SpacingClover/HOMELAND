@@ -135,6 +135,8 @@ func get_room_at(boxcoord:Vector3i)->Room:
 func clear_visuals()->void:
 	for room : Room in rooms:
 		room.delete_room_visual()
+		room.delete_room_interior()
+		room.is_loaded = false
 
 func check_for_adjacient_doors()->void:
 	for room : Room in rooms:

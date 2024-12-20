@@ -1,8 +1,8 @@
 class_name TitleView extends Control
 
-@onready var effect : Sprite2D = $BackBufferCopy/effect
-@onready var effect2: Sprite2D = $BackBufferCopy/effect2
-@onready var effect3: Sprite2D = $BackBufferCopy/effect3
+@onready var effect : Sprite2D = $BackBufferCopy/text/effect
+@onready var effect2: Sprite2D = $BackBufferCopy/text2/effect2
+@onready var effect3: Sprite2D = $BackBufferCopy/text3/effect3
 
 func _init()->void:
 	Global.titlescreen.title = self

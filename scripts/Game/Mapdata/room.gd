@@ -141,10 +141,18 @@ func delete_room_visual()->void:
 		roomvisual.queue_free()
 	roomvisual = null
 
+func delete_room_interior()->void:
+	var pos : int = 0
+	if is_loaded and roominterior and is_instance_valid(roominterior):
+		if self == Global.current_room:
+			Global.shooterscene.room3d = null
+		roominterior.queue_free()
+		roominterior = null
+
 func check_for_adjacient_doors(city_ref:City)->void:
 	for box : Box in boxes:
 		box.check_for_adjacient_doors(city_ref)
-	if Global.current_room == self and is_instance_valid(Global.shooterscene):
+	if Global.current_room == self and Global.current_room.is_loaded and Global.current_room.roominterior and is_instance_valid(Global.shooterscene) and Global.shooterscene.room3d and is_instance_valid(Global.shooterscene.room3d):
 		for door : Door3D in Global.shooterscene.room3d.doors:
 			door.handle_lock_icon()
 

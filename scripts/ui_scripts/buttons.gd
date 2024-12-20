@@ -1,15 +1,17 @@
 class_name ButtonsView extends Control
 
-@onready var effect1 : Sprite2D = $BackBufferCopy/effect2
-@onready var effect2 : Sprite2D = $BackBufferCopy/effect3
-@onready var effect3 : Sprite2D = $BackBufferCopy/effect4
-@onready var effect4 : Sprite2D = $BackBufferCopy/effect5
-@onready var effect5 : Sprite2D = $BackBufferCopy/effect6
+@onready var effect1 : Sprite2D = $BackBufferCopy/text2/effect2
+@onready var effect2 : Sprite2D = $BackBufferCopy/text3/effect3
+@onready var effect3 : Sprite2D = $BackBufferCopy/text4/effect4
+@onready var effect4 : Sprite2D = $BackBufferCopy/text5/effect5
+@onready var effect5 : Sprite2D = $BackBufferCopy/text6/effect6
+@onready var effect6 : Sprite2D = $BackBufferCopy/text7/effect6
 @onready var playbutton     : Button = $interactables/Button
 @onready var playdemobutton : Button = $interactables/Button2
 @onready var settingsbutton : Button = $interactables/Button3
 @onready var tipsbutton     : Button = $interactables/Button4
 @onready var quitbutton     : Button = $interactables/Button5
+@onready var editorbutton   : Button = $interactables/Button6
 
 var playselected     : bool = false
 var playdemoselected : bool = false
@@ -23,24 +25,28 @@ func _init()->void:
 func _ready()->void:
 	reset_frames()
 	playbutton.pressed.connect(press_play)
-	playbutton.focus_entered.connect(enter_focus.bind($interactables/Button/Marker2D,$BackBufferCopy/effect2))
-	playbutton.focus_exited.connect(exit_focus.bind($BackBufferCopy/effect2))
+	playbutton.focus_entered.connect(enter_focus.bind($interactables/Button/Marker2D,effect1))
+	playbutton.focus_exited.connect(exit_focus.bind(effect1))
 	
 	playdemobutton.pressed.connect(press_playdemo)
-	playdemobutton.focus_entered.connect(enter_focus.bind($interactables/Button2/Marker2D,$BackBufferCopy/effect3))
-	playdemobutton.focus_exited.connect(exit_focus.bind($BackBufferCopy/effect3))
+	playdemobutton.focus_entered.connect(enter_focus.bind($interactables/Button2/Marker2D,effect2))
+	playdemobutton.focus_exited.connect(exit_focus.bind(effect2))
 	
 	settingsbutton.pressed.connect(press_settings)
-	settingsbutton.focus_entered.connect(enter_focus.bind($interactables/Button3/Marker2D,$BackBufferCopy/effect4))
-	settingsbutton.focus_exited.connect(exit_focus.bind($BackBufferCopy/effect4))
+	settingsbutton.focus_entered.connect(enter_focus.bind($interactables/Button3/Marker2D,effect3))
+	settingsbutton.focus_exited.connect(exit_focus.bind(effect3))
 	
 	tipsbutton.pressed.connect(press_tips)
-	tipsbutton.focus_entered.connect(enter_focus.bind($interactables/Button4/Marker2D,$BackBufferCopy/effect5))
-	tipsbutton.focus_exited.connect(exit_focus.bind($BackBufferCopy/effect5))
+	tipsbutton.focus_entered.connect(enter_focus.bind($interactables/Button4/Marker2D,effect4))
+	tipsbutton.focus_exited.connect(exit_focus.bind(effect4))
 	
 	quitbutton.pressed.connect(press_exit)
-	quitbutton.focus_entered.connect(enter_focus.bind($interactables/Button5/Marker2D,$BackBufferCopy/effect6))
-	quitbutton.focus_exited.connect(exit_focus.bind($BackBufferCopy/effect6))
+	quitbutton.focus_entered.connect(enter_focus.bind($interactables/Button5/Marker2D,effect5))
+	quitbutton.focus_exited.connect(exit_focus.bind(effect5))
+	
+	editorbutton.pressed.connect(Global.launch_level_editor)
+	editorbutton.focus_entered.connect(enter_focus.bind($interactables/Button6/Marker2D,effect6))
+	editorbutton.focus_exited.connect(exit_focus.bind(effect6))
 
 func reveal()->void:
 	show()
@@ -49,6 +55,7 @@ func reveal()->void:
 	var settingstween : Tween = create_tween()
 	var tipstween     : Tween = create_tween()
 	var exittween     : Tween = create_tween()
+	var editortween   : Tween = create_tween()
 	
 	reset_frames()
 	
@@ -67,6 +74,9 @@ func reveal()->void:
 	
 	playtween.tween_property(effect1,"frame",1,6)
 	playtween.tween_property(effect1,"frame",21,1)
+	
+	editortween.tween_property(effect6,"frame",1,6)
+	editortween.tween_property(effect6,"frame",21,1)
 
 func reveal_finished()->void:
 	playdemobutton.grab_focus()
@@ -75,6 +85,7 @@ func reveal_finished()->void:
 	settingsbutton.mouse_entered.connect(settingsbutton.grab_focus)
 	tipsbutton.mouse_entered.connect(tipsbutton.grab_focus)
 	quitbutton.mouse_entered.connect(quitbutton.grab_focus)
+	editorbutton.mouse_entered.connect(editorbutton.grab_focus)
 
 func reset_frames()->void:
 	effect1.frame = 1
@@ -82,6 +93,7 @@ func reset_frames()->void:
 	effect3.frame = 1
 	effect4.frame = 1
 	effect5.frame = 1
+	effect6.frame = 1
 
 func enter_focus(point:Marker2D,effect:Sprite2D)->void:
 	Global.titlescreen.send_marker_to(point)

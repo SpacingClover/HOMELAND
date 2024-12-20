@@ -236,6 +236,7 @@ layout_mode = 2
 text = "delete city"
 
 [node name="opengamepopup" type="PanelContainer" parent="."]
+visible = false
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -268,10 +269,13 @@ layout_mode = 2
 text = "cancel"
 
 [node name="rightclickpopup" type="PanelContainer" parent="."]
+visible = false
 offset_left = 871.0
 offset_top = 377.0
 offset_right = 1106.0
-offset_bottom = 517.0
+offset_bottom = 400.0
+size_flags_horizontal = 4
+size_flags_vertical = 0
 
 [node name="VBoxContainer" type="VBoxContainer" parent="rightclickpopup"]
 layout_mode = 2
@@ -282,6 +286,7 @@ text = "type - index"
 horizontal_alignment = 1
 
 [node name="HBoxContainer" type="HBoxContainer" parent="rightclickpopup/VBoxContainer"]
+visible = false
 layout_mode = 2
 
 [node name="Button" type="Button" parent="rightclickpopup/VBoxContainer/HBoxContainer"]
@@ -295,6 +300,7 @@ size_flags_horizontal = 3
 min_value = -1.0
 
 [node name="to city" type="HBoxContainer" parent="rightclickpopup/VBoxContainer"]
+visible = false
 layout_mode = 2
 
 [node name="Button" type="Button" parent="rightclickpopup/VBoxContainer/to city"]
@@ -308,6 +314,7 @@ size_flags_horizontal = 3
 min_value = -1.0
 
 [node name="to exit" type="HBoxContainer" parent="rightclickpopup/VBoxContainer"]
+visible = false
 layout_mode = 2
 
 [node name="Button" type="Button" parent="rightclickpopup/VBoxContainer/to exit"]
@@ -321,10 +328,22 @@ size_flags_horizontal = 3
 min_value = -1.0
 
 [node name="Button" type="Button" parent="rightclickpopup/VBoxContainer"]
+visible = false
 layout_mode = 2
 disabled = true
 
+[node name="Button2" type="Button" parent="rightclickpopup/VBoxContainer"]
+visible = false
+layout_mode = 2
+text = "set default spawn"
+
+[node name="Button3" type="Button" parent="rightclickpopup/VBoxContainer"]
+visible = false
+layout_mode = 2
+text = "set debug spawn"
+
 [node name="savegamepopup" type="PanelContainer" parent="."]
+visible = false
 anchors_preset = 8
 anchor_left = 0.5
 anchor_top = 0.5
@@ -356,3 +375,110 @@ text = "Write"
 [node name="cancel" type="Button" parent="savegamepopup/HBoxContainer"]
 layout_mode = 2
 text = "Cancel"
+
+[node name="bottomright" type="PanelContainer" parent="."]
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -268.0
+offset_top = -41.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_tq0sg")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="bottomright"]
+layout_mode = 2
+
+[node name="HBoxContainer4" type="HBoxContainer" parent="bottomright/VBoxContainer"]
+layout_mode = 2
+
+[node name="current room" type="Label" parent="bottomright/VBoxContainer/HBoxContainer4"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "spawn room"
+
+[node name="OptionButton" type="SpinBox" parent="bottomright/VBoxContainer/HBoxContainer4"]
+layout_mode = 2
+size_flags_horizontal = 3
+editable = false
+
+[node name="HBoxContainer5" type="HBoxContainer" parent="bottomright/VBoxContainer"]
+layout_mode = 2
+
+[node name="current room" type="Label" parent="bottomright/VBoxContainer/HBoxContainer5"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "spawn city"
+
+[node name="OptionButton" type="SpinBox" parent="bottomright/VBoxContainer/HBoxContainer5"]
+layout_mode = 2
+size_flags_horizontal = 3
+editable = false
+
+[node name="playtest2" type="Button" parent="bottomright/VBoxContainer"]
+layout_mode = 2
+text = "run level from default spawn"
+
+[node name="HSeparator3" type="HSeparator" parent="bottomright/VBoxContainer"]
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxEmpty_u47yy")
+
+[node name="HSeparator7" type="HSeparator" parent="bottomright/VBoxContainer"]
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxEmpty_u47yy")
+
+[node name="HSeparator8" type="HSeparator" parent="bottomright/VBoxContainer"]
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxEmpty_u47yy")
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="bottomright/VBoxContainer"]
+layout_mode = 2
+
+[node name="current room" type="Label" parent="bottomright/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "test room"
+
+[node name="OptionButton" type="SpinBox" parent="bottomright/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+editable = false
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="bottomright/VBoxContainer"]
+layout_mode = 2
+
+[node name="current room" type="Label" parent="bottomright/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "test city"
+
+[node name="OptionButton" type="SpinBox" parent="bottomright/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+size_flags_horizontal = 3
+editable = false
+
+[node name="playtest" type="Button" parent="bottomright/VBoxContainer"]
+layout_mode = 2
+text = "run level from test location"
+
+[node name="playtestgui" type="PanelContainer" parent="."]
+visible = false
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -268.0
+offset_top = -41.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_tq0sg")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="playtestgui"]
+layout_mode = 2
+
+[node name="playtest" type="Button" parent="playtestgui/VBoxContainer"]
+layout_mode = 2
+text = "end playtest"

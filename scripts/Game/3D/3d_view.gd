@@ -497,7 +497,7 @@ func create_room_movement_border()->void:
 	
 	#room_movement_border.collision_layer = 4
 	
-	if Global.is_level_editor_mode_enabled:
+	if Global.is_level_editor_mode_enabled and not Global.in_game:
 		mesh.hide()
 		col.scale.x *= 100000
 		col.scale.z *= 100000
@@ -505,7 +505,7 @@ func create_room_movement_border()->void:
 
 func update_doors_in_moved_room(room:Room)->void:
 	
-	if Global.current_room == room and Global.shooterscene: #if the affected room is currently loaded in 2.5D scene
+	if Global.current_room == room and Global.shooterscene and Global.in_game: #if the affected room is currently loaded in 2.5D scene
 		for door : Door3D in Global.shooterscene.room3d.doors:
 			if door.is_open:
 				door.close()
@@ -625,3 +625,4 @@ func delete_room()->void:
 		if is_instance_valid(hightlighted_room):
 			hightlighted_room.disable_highlight()
 		hightlighted_room = null
+	Global.titlescreen.editorgui.display_spawn_info()

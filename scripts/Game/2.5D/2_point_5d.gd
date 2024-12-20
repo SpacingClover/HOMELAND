@@ -88,4 +88,3 @@ func take_room_from_buffer(roominterior:RoomInterior3D)->void:
 	room3d = roominterior
 	room_buffer_root.remove_child(room3d)
 	root.add_child(room3d)
-	

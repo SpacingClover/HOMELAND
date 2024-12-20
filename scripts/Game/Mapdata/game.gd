@@ -60,10 +60,14 @@ func open()->void:
 		if not city.validated: city.validate_city()
 	
 	if first_starting:
-		if not startcity: startcity = cities[0]
+		if not startcity:
+			startcity = cities[0]
 		current_city = startcity
-		if not startroom: startroom = current_city.rooms[0]
+		if not startroom:
+			startroom = current_city.rooms[0]
 		current_room = startroom
 	
+	print(current_city.rooms.has(current_room))
+	print(current_city.rooms.find(current_room))
 	Global.set_new_city(cities.find(current_city),current_city.rooms.find(current_room),true)
 	first_starting = false

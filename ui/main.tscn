@@ -1,4 +1,4 @@
-[gd_scene load_steps=32 format=3 uid="uid://c84jwenigb4p3"]
+[gd_scene load_steps=31 format=3 uid="uid://c84jwenigb4p3"]
 
 [ext_resource type="Script" path="res://scripts/ui_scripts/titlescreen.gd" id="1_g6dcv"]
 [ext_resource type="Script" path="res://scripts/ui_scripts/cursor.gd" id="2_x2uka"]
@@ -30,9 +30,6 @@
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tq0sg"]
 bg_color = Color(1, 0.376471, 0, 1)
-
-[sub_resource type="ShaderMaterial" id="ShaderMaterial_glvoe"]
-shader = ExtResource("7_fqb0w")
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_ybgyt"]
 bg_color = Color(0.952941, 0.294118, 0, 1)
@@ -96,7 +93,6 @@ layout_mode = 2
 size_flags_horizontal = 3
 
 [node name="GameView1" parent="HBoxContainer/VBoxContainer" instance=ExtResource("3_ksmll")]
-visible = false
 layout_mode = 2
 shooterscene = true
 
@@ -105,61 +101,60 @@ visible = false
 
 [node name="title" type="ScrollContainer" parent="HBoxContainer/VBoxContainer/GameView1"]
 process_mode = 3
-visible = false
 layout_mode = 2
 horizontal_scroll_mode = 0
 vertical_scroll_mode = 0
 script = ExtResource("5_grq5e")
 
-[node name="BackBufferCopy" type="BackBufferCopy" parent="HBoxContainer/VBoxContainer/GameView1/title"]
+[node name="BackBufferCopy" type="Node2D" parent="HBoxContainer/VBoxContainer/GameView1/title"]
 position = Vector2(740.724, 274.023)
 scale = Vector2(24.2943, 24.2943)
 
-[node name="effect" type="Sprite2D" parent="HBoxContainer/VBoxContainer/GameView1/title/BackBufferCopy"]
-texture = ExtResource("6_qperw")
-hframes = 3
-vframes = 8
-frame = 21
-
 [node name="text" type="Sprite2D" parent="HBoxContainer/VBoxContainer/GameView1/title/BackBufferCopy"]
-material = SubResource("ShaderMaterial_glvoe")
+clip_children = 1
 texture = ExtResource("6_qperw")
 region_enabled = true
 region_rect = Rect2(0, 0, 41, 12)
 
-[node name="effect2" type="Sprite2D" parent="HBoxContainer/VBoxContainer/GameView1/title/BackBufferCopy"]
-position = Vector2(0.73463, 12.6354)
-rotation = 3.14159
-scale = Vector2(0.83, 0.32)
+[node name="effect" type="Sprite2D" parent="HBoxContainer/VBoxContainer/GameView1/title/BackBufferCopy/text"]
 texture = ExtResource("6_qperw")
 hframes = 3
 vframes = 8
 frame = 21
 
 [node name="text2" type="Sprite2D" parent="HBoxContainer/VBoxContainer/GameView1/title/BackBufferCopy"]
-material = SubResource("ShaderMaterial_glvoe")
+clip_children = 1
 position = Vector2(0.73463, 12.6387)
 scale = Vector2(0.83, 0.8)
 texture = ExtResource("8_hsgpq")
 region_enabled = true
 region_rect = Rect2(0, 0, 41, 5)
 
-[node name="effect3" type="Sprite2D" parent="HBoxContainer/VBoxContainer/GameView1/title/BackBufferCopy"]
-position = Vector2(-1.05281, 17.8593)
+[node name="effect2" type="Sprite2D" parent="HBoxContainer/VBoxContainer/GameView1/title/BackBufferCopy/text2"]
+position = Vector2(0, -0.00411987)
 rotation = 3.14159
-scale = Vector2(0.261655, 0.32)
+scale = Vector2(1, 0.4)
 texture = ExtResource("6_qperw")
 hframes = 3
 vframes = 8
 frame = 21
 
 [node name="text3" type="Sprite2D" parent="HBoxContainer/VBoxContainer/GameView1/title/BackBufferCopy"]
-material = SubResource("ShaderMaterial_glvoe")
+clip_children = 1
 position = Vector2(-1.05269, 17.7968)
 scale = Vector2(0.83, 0.8)
 texture = ExtResource("8_hsgpq")
 region_enabled = true
 region_rect = Rect2(0, 6, 13, 5)
+
+[node name="effect3" type="Sprite2D" parent="HBoxContainer/VBoxContainer/GameView1/title/BackBufferCopy/text3"]
+position = Vector2(-0.000144958, 0.0781288)
+rotation = 3.14159
+scale = Vector2(0.315247, 0.4)
+texture = ExtResource("6_qperw")
+hframes = 3
+vframes = 8
+frame = 21
 
 [node name="pausetopleft" type="PanelContainer" parent="HBoxContainer/VBoxContainer/GameView1"]
 visible = false
@@ -218,7 +213,6 @@ theme_override_font_sizes/font_size = 151
 text = "paused"
 
 [node name="GameView2" parent="HBoxContainer/VBoxContainer" instance=ExtResource("3_ksmll")]
-visible = false
 layout_mode = 2
 omniscroll = true
 clicking2d = true
@@ -228,7 +222,6 @@ visible = false
 
 [node name="lists" type="ScrollContainer" parent="HBoxContainer/VBoxContainer/GameView2"]
 process_mode = 3
-visible = false
 layout_mode = 2
 horizontal_scroll_mode = 0
 vertical_scroll_mode = 0
@@ -315,35 +308,24 @@ visible = false
 
 [node name="buttons" type="Control" parent="HBoxContainer/VBoxContainer2/GameView3"]
 process_mode = 3
-visible = false
 layout_mode = 2
 script = ExtResource("16_bwl38")
 
-[node name="BackBufferCopy" type="BackBufferCopy" parent="HBoxContainer/VBoxContainer2/GameView3/buttons"]
-position = Vector2(643.499, 215.352)
+[node name="BackBufferCopy" type="Node2D" parent="HBoxContainer/VBoxContainer2/GameView3/buttons"]
+position = Vector2(592.829, 220.685)
 scale = Vector2(23.6064, 23.6064)
 
-[node name="effect2" type="Sprite2D" parent="HBoxContainer/VBoxContainer2/GameView3/buttons/BackBufferCopy"]
-modulate = Color(1, 1, 1, 0.396078)
-position = Vector2(-16.6387, -2.53621)
-rotation = 6.28318
-scale = Vector2(0.334392, 0.386492)
-texture = ExtResource("6_qperw")
-hframes = 3
-vframes = 8
-frame = 21
-region_rect = Rect2(0, 0, 123, 96)
-
 [node name="text2" type="Sprite2D" parent="HBoxContainer/VBoxContainer2/GameView3/buttons/BackBufferCopy"]
-material = SubResource("ShaderMaterial_glvoe")
+clip_children = 1
 position = Vector2(-16.6511, -2.41787)
 texture = ExtResource("17_xaylg")
 region_enabled = true
 region_rect = Rect2(0, 0, 14, 5)
 
-[node name="effect3" type="Sprite2D" parent="HBoxContainer/VBoxContainer2/GameView3/buttons/BackBufferCopy"]
-position = Vector2(-8.29369, 3.86861)
-scale = Vector2(0.748183, 0.386492)
+[node name="effect2" type="Sprite2D" parent="HBoxContainer/VBoxContainer2/GameView3/buttons/BackBufferCopy/text2"]
+modulate = Color(1, 1, 1, 0.396078)
+position = Vector2(0.0123991, 0.135847)
+scale = Vector2(0.334392, 0.428856)
 texture = ExtResource("6_qperw")
 hframes = 3
 vframes = 8
@@ -351,15 +333,15 @@ frame = 21
 region_rect = Rect2(0, 0, 123, 96)
 
 [node name="text3" type="Sprite2D" parent="HBoxContainer/VBoxContainer2/GameView3/buttons/BackBufferCopy"]
-material = SubResource("ShaderMaterial_glvoe")
+clip_children = 1
 position = Vector2(-8.24355, 4.0298)
 texture = ExtResource("17_xaylg")
 region_enabled = true
 region_rect = Rect2(0, 15, 31, 5)
 
-[node name="effect4" type="Sprite2D" parent="HBoxContainer/VBoxContainer2/GameView3/buttons/BackBufferCopy"]
-position = Vector2(-8.5695, 10.3591)
-scale = Vector2(0.728011, 0.386492)
+[node name="effect3" type="Sprite2D" parent="HBoxContainer/VBoxContainer2/GameView3/buttons/BackBufferCopy/text3"]
+position = Vector2(-0.0501404, 0.0212186)
+scale = Vector2(0.748183, 0.416894)
 texture = ExtResource("6_qperw")
 hframes = 3
 vframes = 8
@@ -367,15 +349,15 @@ frame = 21
 region_rect = Rect2(0, 0, 123, 96)
 
 [node name="text4" type="Sprite2D" parent="HBoxContainer/VBoxContainer2/GameView3/buttons/BackBufferCopy"]
-material = SubResource("ShaderMaterial_glvoe")
+clip_children = 1
 position = Vector2(-8.56593, 10.3984)
 texture = ExtResource("17_xaylg")
 region_enabled = true
 region_rect = Rect2(0, 10, 30, 5)
 
-[node name="effect5" type="Sprite2D" parent="HBoxContainer/VBoxContainer2/GameView3/buttons/BackBufferCopy"]
-position = Vector2(-17.0776, 16.4053)
-scale = Vector2(0.312983, 0.386492)
+[node name="effect4" type="Sprite2D" parent="HBoxContainer/VBoxContainer2/GameView3/buttons/BackBufferCopy/text4"]
+position = Vector2(-0.00357056, -0.039299)
+scale = Vector2(0.728011, 0.386492)
 texture = ExtResource("6_qperw")
 hframes = 3
 vframes = 8
@@ -383,15 +365,15 @@ frame = 21
 region_rect = Rect2(0, 0, 123, 96)
 
 [node name="text5" type="Sprite2D" parent="HBoxContainer/VBoxContainer2/GameView3/buttons/BackBufferCopy"]
-material = SubResource("ShaderMaterial_glvoe")
+clip_children = 1
 position = Vector2(-17.1091, 16.5237)
 texture = ExtResource("17_xaylg")
 region_enabled = true
 region_rect = Rect2(0, 20, 13, 5)
 
-[node name="effect6" type="Sprite2D" parent="HBoxContainer/VBoxContainer2/GameView3/buttons/BackBufferCopy"]
-position = Vector2(-16.5824, 22.6389)
-scale = Vector2(0.338109, 0.411189)
+[node name="effect5" type="Sprite2D" parent="HBoxContainer/VBoxContainer2/GameView3/buttons/BackBufferCopy/text5"]
+position = Vector2(0.0314941, 0.122107)
+scale = Vector2(0.312983, 0.426577)
 texture = ExtResource("6_qperw")
 hframes = 3
 vframes = 8
@@ -399,11 +381,37 @@ frame = 21
 region_rect = Rect2(0, 0, 123, 96)
 
 [node name="text6" type="Sprite2D" parent="HBoxContainer/VBoxContainer2/GameView3/buttons/BackBufferCopy"]
-material = SubResource("ShaderMaterial_glvoe")
+clip_children = 1
 position = Vector2(-16.5824, 22.609)
 texture = ExtResource("17_xaylg")
 region_enabled = true
 region_rect = Rect2(0, 5, 14, 5)
+
+[node name="effect6" type="Sprite2D" parent="HBoxContainer/VBoxContainer2/GameView3/buttons/BackBufferCopy/text6"]
+position = Vector2(0, 0.0299034)
+scale = Vector2(0.338109, 0.411189)
+texture = ExtResource("6_qperw")
+hframes = 3
+vframes = 8
+frame = 21
+region_rect = Rect2(0, 0, 123, 96)
+
+[node name="text7" type="Sprite2D" parent="HBoxContainer/VBoxContainer2/GameView3/buttons/BackBufferCopy"]
+clip_children = 1
+position = Vector2(24.402, 22.1425)
+scale = Vector2(1, 0.994154)
+texture = ExtResource("17_xaylg")
+region_enabled = true
+region_rect = Rect2(0, 25, 22, 5)
+
+[node name="effect6" type="Sprite2D" parent="HBoxContainer/VBoxContainer2/GameView3/buttons/BackBufferCopy/text7"]
+position = Vector2(0.0564854, 0.0805648)
+scale = Vector2(0.537307, 0.419633)
+texture = ExtResource("6_qperw")
+hframes = 3
+vframes = 8
+frame = 21
+region_rect = Rect2(0, 0, 123, 96)
 
 [node name="interactables" type="Control" parent="HBoxContainer/VBoxContainer2/GameView3/buttons"]
 modulate = Color(0, 0, 0, 0)
@@ -466,6 +474,16 @@ offset_bottom = 687.052
 [node name="Marker2D" type="Marker2D" parent="HBoxContainer/VBoxContainer2/GameView3/buttons/interactables/Button5"]
 position = Vector2(296.945, 56.3545)
 
+[node name="Button6" type="Button" parent="HBoxContainer/VBoxContainer2/GameView3/buttons/interactables"]
+layout_mode = 0
+offset_left = 780.0
+offset_top = 579.0
+offset_right = 1216.0
+offset_bottom = 683.0
+
+[node name="Marker2D" type="Marker2D" parent="HBoxContainer/VBoxContainer2/GameView3/buttons/interactables/Button6"]
+position = Vector2(-49.5595, 53.9038)
+
 [node name="pausetopright" type="PanelContainer" parent="HBoxContainer/VBoxContainer2/GameView3"]
 visible = false
 self_modulate = Color(1, 1, 1, 0)
@@ -502,7 +520,6 @@ theme_override_font_sizes/font_size = 106
 text = "SETTINGS"
 
 [node name="GameView4" parent="HBoxContainer/VBoxContainer2" instance=ExtResource("3_ksmll")]
-visible = false
 layout_mode = 2
 orbit3d = true
 mapview = true
@@ -718,6 +735,7 @@ corner = 3
 
 [node name="dev_output" type="Control" parent="."]
 process_mode = 3
+visible = false
 top_level = true
 layout_mode = 1
 anchors_preset = 2

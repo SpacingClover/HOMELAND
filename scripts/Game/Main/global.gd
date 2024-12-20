@@ -97,6 +97,7 @@ func enter_game_transition(game:GameData)->void:
 	in_game = true
 	current_game = game
 	if mapview: mapview.display_map(current_game)
+	if player: player.process_mode = Node.PROCESS_MODE_INHERIT; world3D.playermarker.show()
 	current_game.open()
 	if circuitboard: circuitboard.load_board()
 	if world3D: world3D.room_movement_axis = current_game.current_axis
@@ -108,7 +109,6 @@ func enter_game_transition(game:GameData)->void:
 	
 	hide_menu.emit()
 	menu_hidden = true
-	player.process_mode = Node.PROCESS_MODE_INHERIT
 	
 	TransitionHandler.end_transition()
 	await get_tree().create_timer(1).timeout
@@ -116,6 +116,7 @@ func enter_game_transition(game:GameData)->void:
 	MusicManager.play_song("ambience")
 
 func set_new_city(city_idx:int,room_idx:int=-1,loading_game:bool=false)->void:
+	pass
 	if not loading_game:
 		TransitionHandler.begin_transition(TransitionHandler.ANIM_CITY_TRANSITION_0)
 		if mapview:
@@ -176,29 +177,26 @@ func resume()->void:
 	PopUps.prompt.show()
 
 func unload_game_and_exit_to_menu()->void:
-	
-	resume_game.emit()
-	PopUps.prompt.hide()
-	
 	current_game = null
 	current_region = null
 	current_room = null
 	
+	end_play_session()
+	
+	open_menu.emit()
+	menu_hidden = false
+	MusicManager.play_song("action")
+
+func end_play_session()->void:
+	resume_game.emit()
+	PopUps.prompt.hide()
 	world3D.reset_3d_view()
 	shooterscene.reset()
 	circuitboard.clear_board()
 	mapview.reset_map()
 	debug_reset()
-	#titlescreen.extra.hide()
-	#titlescreen.lists.hide()
-	
-	open_menu.emit()
-	
-	menu_hidden = false
 	in_game = false
 	player.process_mode = Node.PROCESS_MODE_DISABLED
-	
-	MusicManager.play_song("action")
 
 func debug_reset()->void:
 	var inv : Node2D = titlescreen.get_node_or_null(^"25d_topbar_root")
@@ -209,10 +207,6 @@ func debug_reset()->void:
 		Global.player.DEBUG_inventory.clear()
 
 func launch_level_editor()->void:
-	screenroots[0].hide()
-	screenroots[1].hide()
-	screenroots[3].hide()
-	titlescreen.get_node(^"HBoxContainer/VBoxContainer").hide()
 	is_level_editor_mode_enabled = true
 	create_empty_game()
 	world3D.reset_3d_view()
@@ -227,10 +221,6 @@ func launch_level_editor()->void:
 	player.process_mode = Node.PROCESS_MODE_DISABLED
 
 func close_level_editor()->void:
-	screenroots[0].show()
-	screenroots[1].show()
-	screenroots[3].show()
-	titlescreen.get_node(^"HBoxContainer/VBoxContainer").show()
 	is_level_editor_mode_enabled = false
 	world3D.selecting_faces_directly = false
 	current_game = null
