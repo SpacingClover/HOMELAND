@@ -229,6 +229,10 @@ func update_raycast()->void:
 	
 	raycast.position = Vector3(mouse_pos.x,-mouse_pos.y,0)
 	
+	raycast.clear_exceptions()
+	if Global.current_room and Global.in_game:
+		raycast.add_exception(Global.current_room.roomvisual)
+	
 	raycast.force_raycast_update()
 
 func get_clicked()->PhysicsBody3D:

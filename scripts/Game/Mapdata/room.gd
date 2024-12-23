@@ -25,7 +25,8 @@ static var TWOBYTWO : Vector3i   = Vector3i(2,1,2)
 var roomvisual : RoomInstance3D
 var roominterior : RoomInterior3D
 var index : int
-var is_loaded : bool = false
+var is_loaded : bool = false:
+	set(x): is_loaded = x
 
 func _init(size:Vector3i=Vector3i.ZERO,pos:Vector3i=Vector3i.ZERO,being_generated:bool=false)->void:
 	if being_generated:

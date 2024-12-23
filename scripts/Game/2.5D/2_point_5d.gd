@@ -35,6 +35,7 @@ func load_room_interior(room:Room,make_current:bool=false)->void:
 		room_buffer_root.add_child(buffroom)
 
 func send_entity_to_room(entity:Node3D,room:Room,tobox:Box=null,frombox:Box=null,fromroom:Room=null)->void:
+	await get_tree().process_frame
 	var is_constructing_room : bool = false
 	if not room.is_loaded:
 		is_constructing_room = true
@@ -62,6 +63,10 @@ func send_entity_to_room(entity:Node3D,room:Room,tobox:Box=null,frombox:Box=null
 			fromroom.roominterior.unload_room()
 
 func can_unload_room(room:Room)->bool:
+	DEV_OUTPUT.push_message(str(room3d.roomdata.get_room_connections(Global.current_region)))
+	DEV_OUTPUT.push_message(r"ridx "+str(room.index))
+	if room3d.roomdata.get_room_connections(Global.current_region).has(room.index):
+		return false
 	if room and room.is_loaded and room != Global.current_room:
 		for child : Node3D in room.roominterior.get_children():
 			if child is NPC or child is Player3D:
@@ -81,6 +86,11 @@ func reset()->void:
 	room3d = null
 
 func move_room_to_buffer(roominterior:RoomInterior3D)->void:
+	#var call : Callable = func()->void:
+		#root.remove_child(room3d)
+		#room_buffer_root.add_child(room3d)
+	#call.call_deferred()
+	#await get_tree().process_frame
 	root.remove_child(room3d)
 	room_buffer_root.add_child(room3d)
 

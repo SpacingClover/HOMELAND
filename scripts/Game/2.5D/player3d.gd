@@ -58,6 +58,8 @@ func _process(delta:float)->void:
 	interacted_this_frame = false
 	if not is_on_floor():
 		walking_direction.y -= 2
+	else:
+		walking_direction.y = 0
 	velocity = Vector3(walking_direction.x,walking_direction.y,walking_direction.z)
 	move_and_slide()
 	if walking and Global.world3D:
@@ -131,7 +133,8 @@ func mouse_motion()->void:
 			mousepos.y *= -1
 			sprite.frame = -floor(((round(playerpos.angle_to(mousepos)*5)+10)/15)*12)+10
 		SPRITE_SECTIONS.DEFAULT:
-			sprite.frame = 17
+			#sprite.frame = 17
+			pass
 
 func e_interaction()->void:
 	if DEBUG_mode_place_item and OS.is_debug_build():

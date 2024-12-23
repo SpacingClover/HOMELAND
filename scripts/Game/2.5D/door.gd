@@ -108,14 +108,21 @@ func open()->void: # any non-opening cases must return
 			return
 	
 	var nextbox : Box = Global.current_region.get_box_at(box.coords+direction)
+	
 	if nextbox and nextbox.has_opposite_doorway(direction) and nextbox.state != Box.RUBBLE:
-		anim.play(&"dooropenfront")
 		state = OPENIN
+		anim.play(&"dooropenfront")
 		box.set_door(direction,Box.OPEN)
 		nextbox.set_door(-direction,Box.OPEN_OUT)
+		if Global.current_region.get_room_at(nextbox.coords).is_loaded:
+			var nextdoor : Door3D = nextbox.get_door_instance(-direction).door3dinstance
+			nextdoor.state = OPENOUT
+			nextdoor.anim.play(&"dooropenback")
+			
 	elif is_victory_door:
 		anim.play(&"dooropenfront")
 		state = OPENIN
+		
 	else:
 		tried_to_open_failed.emit()
 		return
@@ -147,6 +154,13 @@ func close()->void:
 	var nextbox : Box = Global.current_region.get_box_at(box.coords+direction)
 	if nextbox and nextbox.has_opposite_doorway(direction):
 		nextbox.set_door(-direction,Box.DOOR)
+		if Global.current_region.get_room_at(nextbox.coords).is_loaded:
+			var nextdoor : Door3D = nextbox.get_door_instance(-direction).door3dinstance
+			if nextdoor.state == OPENIN:
+				nextdoor.anim.play_backwards(&"dooropenfront")
+			elif nextdoor.state == OPENOUT:
+				nextdoor.anim.play_backwards(&"dooropenback")
+			nextdoor.state = CLOSED
 		
 	door_closed.emit()
 
@@ -242,7 +256,7 @@ func set_transparency(to:float)->void:
 	doorframe.transparency = to
 	lock_icon.transparency = to
 
-func _exit_tree()->void:
-	var ref : Box.Door3DInstanceReference = box.get_door_instance(direction)
-	var idx : int = box.doorinstances.find(ref)
-	box.doorinstances.remove_at(idx)
+#func _exit_tree()->void:
+	#var ref : Box.Door3DInstanceReference = box.get_door_instance(direction)
+	#var idx : int = box.doorinstances.find(ref)
+	#box.doorinstances.remove_at(idx)

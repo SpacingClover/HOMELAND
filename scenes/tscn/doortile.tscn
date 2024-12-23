@@ -98,7 +98,7 @@ blend_shape_mode = 0
 shadow_mesh = SubResource("ArrayMesh_36i2f")
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_e1pfk"]
-size = Vector3(0.00832812, 2.998, 1.2666)
+size = Vector3(0.0932686, 2.998, 1.2666)
 
 [sub_resource type="Animation" id="Animation_211yn"]
 resource_name = "doorfalldownback"
@@ -205,7 +205,7 @@ collision_mask = 2
 input_ray_pickable = false
 
 [node name="col4" type="CollisionShape3D" parent="area"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0072508, -0.497498, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.049721, -0.497498, 0)
 shape = SubResource("BoxShape3D_e1pfk")
 
 [node name="AnimationPlayer" type="AnimationPlayer" parent="."]

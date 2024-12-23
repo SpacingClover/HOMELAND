@@ -2,20 +2,19 @@ class_name NPC extends CharacterBody3D
 
 @onready var area : Area3D = $area
 @onready var navagent : NavigationAgent3D = $navagent
-var path_between_rooms : PackedInt64Array
-var path_between_rooms_index : int
-var is_navigating_between_rooms : bool = false
+
 var target_object : Node3D
-var target_room : int
-var navigation_current_global_offset : Vector3
-var local_nav_started_in_buffer : bool = false
+var inside_room : Room
+var inside_city : City
 
 var speed : float = 3
 
-var has_nav_target : bool = false
+var path_between_rooms : PackedInt64Array
+var path_between_rooms_index : int
+var target_room : int
 
-var inside_room : Room
-var inside_city : City
+var has_nav_target : bool = false
+var is_navigating_between_rooms : bool = false
 
 func _init()->void:
 	pass
@@ -48,8 +47,6 @@ func update_target_location(target_pos:Vector3)->void:
 	
 	navagent.target_position = target_pos
 	if navagent.is_target_reachable():
-		navigation_current_global_offset = inside_room.roominterior.global_position
-		local_nav_started_in_buffer = not inside_room == Global.current_room
 		has_nav_target = true
 	else:
 		DEV_OUTPUT.push_message("target unreachable")

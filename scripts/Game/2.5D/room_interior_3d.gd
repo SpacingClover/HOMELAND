@@ -215,6 +215,7 @@ func give_player_camera_info(player:Player3D)->void:
 		Global.player.centered_room_pos = get_child(0).global_position.x
 
 func unload_room()->void:
-	roomdata.is_loaded = false
 	save_room_objects()
+	roomdata.is_loaded = false
+	roomdata.roominterior = null
 	queue_free()

@@ -51,8 +51,8 @@ var doorinstances : Array[Door3DInstanceReference] ##2.5d view doors
 func _init(pos:Vector3i=Vector3i.ZERO)->void:
 	coords = pos
 
-func get_room()->Room:
-	return Global.get_room_has_coord(coords)
+#func get_room()->Room:
+	#return Global.get_room_has_coord(coords)
 
 func get_door(direction:Vector3i)->int:
 	match direction:
@@ -180,7 +180,8 @@ func check_for_adjacient_doors(city_ref:City)->Array[int]:
 					set_door_color(dir,red)
 					adjbox.set_door_color(-dir,red)
 					adjacient_rooms.append(city_ref.get_room_at(adjbox.coords).index)##
-					return adjacient_rooms
+					continue
+					#return adjacient_rooms
 				else:
 					adjbox.set_door_color(-dir,brown)
 					if adjbox.get_door(-dir) == OPEN or adjbox.get_door(-dir) == OPEN_OUT:
@@ -195,7 +196,7 @@ func check_for_adjacient_doors(city_ref:City)->Array[int]:
 				if city_ref.get_room_at(coords) == Global.current_room:
 					get_door_instance(dir).door3dinstance.close()
 					get_door_instance(dir).door3dinstance.handle_lock_icon()
-	return []
+	return adjacient_rooms
 
 class DoorVisualReference extends RefCounted:
 	var doorvisual : MeshInstance3D:
