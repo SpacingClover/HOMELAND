@@ -43,9 +43,7 @@ var mapvisual : CityMarker3D
 func _init(being_generated:bool=false)->void:
 	await Global.get_tree().process_frame
 	var idx : int = 0
-	for room : Room in rooms:
-		room.index = idx
-		idx += 1
+	update_indecies()
 
 func enter_city()->void:
 	if mapvisual:
@@ -56,26 +54,57 @@ func exit_city()->void:
 		mapvisual.mark_normal()
 
 func validate_city()->void:
+	var idx : int = 0
+	for room : Room in rooms:
+		if not room or not is_instance_valid(room):
+			delete_room(null,idx)
+		idx += 1
 	for room : Room in rooms:
 		if not room.validated:
 			room.validate(self)
-	#set_doors()
-	#remove_doubles() #not good at all
+	update_indecies()
 	count_exits()
 	validated = true
 
-func create_room(size:Vector3i,pos:Vector3i)->void:
-	rooms.append(Room.new(size,pos,true))
+func create_room(size:Vector3i=Vector3i(1,1,1),pos:Vector3i=Vector3i(1,1,1))->Room:
+	var room : Room = Room.new(size,pos,true)
+	rooms.append(room)
+	return room
 
-func create_city_exit(size:Vector3i,pos:Vector3i,dir:Vector3i)->void:
-	rooms.append(CityExit.new(size,pos,true,dir))
-	exits.append(rooms.back())
+func create_feature(size:Vector3i=Vector3i(1,1,1),pos:Vector3i=Vector3i(1,1,1))->Feature:
+	var feature : Feature = Feature.new(Vector3i(1,1,1),Vector3i(1,1,1),true)
+	rooms.append(feature)
+	return feature
+
+func create_city_exit(size:Vector3i=Vector3i(1,1,1),pos:Vector3i=Vector3i(1,1,1),dir:Vector3i=Vector3i.ZERO)->CityExit:
+	var exit : CityExit = CityExit.new(size,pos,true,dir)
+	rooms.append(exit)
+	exits.append(exit)
+	return exit
 
 func count_exits()->void:
 	exits.clear()
 	for room : Room in rooms:
 		if room is CityExit:
 			exits.append(room)
+
+func delete_room(room:Room=null,idx:int=-1)->void:
+	if room and idx == -1:
+		idx = room.index
+	
+	rooms.remove_at(idx)
+	if room is Feature:
+		if room is CityExit:
+			exits.remove_at(idx)
+			##handle removing cityexit
+	
+	update_indecies()
+
+func update_indecies()->void:
+	var idx : int = 0
+	for room : Room in rooms:
+		room.index = idx
+		idx += 1
 
 #func set_doors()->void: #this might need to be threaded
 	#for room : Room in rooms:

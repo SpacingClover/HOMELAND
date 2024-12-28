@@ -1,4 +1,4 @@
-[gd_scene load_steps=5 format=3 uid="uid://cbk7dxwq20ano"]
+[gd_scene load_steps=6 format=3 uid="uid://cbk7dxwq20ano"]
 
 [ext_resource type="Script" path="res://scripts/Game/2.5D/npc.gd" id="1_8gxpt"]
 [ext_resource type="Texture2D" uid="uid://ymfms1vtlpue" path="res://visuals/spritesheets/characters/brown_sandals.png" id="2_f6sff"]
@@ -7,6 +7,10 @@
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_muk8t"]
 height = 1.0
 radius = 0.473445
+
+[sub_resource type="CylinderShape3D" id="CylinderShape3D_t5ifd"]
+height = 1.0
+radius = 2.14075
 
 [node name="npc" type="CharacterBody3D"]
 collision_layer = 0
@@ -30,7 +34,7 @@ vframes = 3
 [node name="body" type="Sprite3D" parent="."]
 transform = Transform3D(6.19144, 0, 0, 0, 6.19144, 0, 0, 0, 6.19144, 0, 0.557489, 0)
 layers = 2
-modulate = Color(0.443137, 1, 1, 1)
+modulate = Color(0.653373, 0.960511, 1, 1)
 billboard = 2
 texture_filter = 0
 texture = ExtResource("2_f6sff")
@@ -52,5 +56,21 @@ input_ray_pickable = false
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 shape = SubResource("CylinderShape3D_muk8t")
 
+[node name="entityarea" type="Area3D" parent="."]
+collision_layer = 0
+collision_mask = 2
+input_ray_pickable = false
+
+[node name="col" type="CollisionShape3D" parent="entityarea"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+shape = SubResource("CylinderShape3D_t5ifd")
+
 [node name="navagent" type="NavigationAgent3D" parent="."]
 path_postprocessing = 1
+
+[node name="updatestatetimer" type="Timer" parent="."]
+wait_time = 0.5
+autostart = true
+
+[node name="attack_cooldown" type="Timer" parent="."]
+one_shot = true

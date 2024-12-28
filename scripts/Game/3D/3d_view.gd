@@ -150,7 +150,7 @@ func set_marker_position(object:Object)->void:
 		return
 	if object == Global.player:
 		var pos : Vector3 = object.global_position
-		playermarker.position = Vector3(pos.z,Global.current_room.roomvisual.global_position.y,-pos.x)/11.75
+		playermarker.position = Vector3(pos.z,Global.current_room.coords.y*2,-pos.x)/11.75
 		if room_movement_axis != AXIS_Y:
 			playermarker.position += loaded_room_marker_offset/5.85
 		else:
@@ -607,10 +607,9 @@ class RoomVisualBoundsInformation extends RefCounted:
 func create_room(of_type:int)->void:
 	var room : Room
 	match of_type:
-		0: room = Room.new(Vector3i(1,1,1),Vector3i.ZERO,true)
-		1: room = CityExit.new(Vector3i(1,1,1),Vector3i.ZERO,true)
-		2: room = Feature.new(Vector3i(1,1,1),Vector3i.ZERO,true)
-	Global.current_region.rooms.append(room)
+		0: room = Global.current_region.create_room()
+		1: room = Global.current_region.create_city_exit()
+		2: room = Global.current_region.create_feature()
 	Global.current_region.validate_city()
 	display_room(room)
 	select_room(room.roomvisual)
@@ -622,7 +621,7 @@ func delete_room()->void:
 	if room_last_selected:
 		if selected_room:
 			drop_selected_visual()
-		Global.current_region.rooms.remove_at(room_last_selected.data_reference.index)
+		Global.current_region.delete_room(room_last_selected.data_reference)
 		room_last_selected.queue_free()
 		Global.titlescreen.editorgui.deleteroom.disabled = true
 	if hightlighted_room:

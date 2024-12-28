@@ -56,6 +56,7 @@ func send_entity_to_room(entity:Node3D,room:Room,tobox:Box=null,frombox:Box=null
 		if is_constructing_room and not room3d.is_node_ready():
 			await room3d.room_constructed
 		room3d.give_player_camera_info(player)
+		Global.world3D.set_marker_position(player)
 	else:
 		if can_unload_room(fromroom):
 			await get_tree().process_frame #has to await twice to get the next frame, because function is initiated via physics frame
@@ -67,7 +68,9 @@ func can_unload_room(room:Room)->bool:
 	DEV_OUTPUT.push_message(r"ridx "+str(room.index))
 	if room3d.roomdata.get_room_connections(Global.current_region).has(room.index):
 		return false
-	if room and room.is_loaded and room != Global.current_room:
+	if room == Global.current_room:
+		return false
+	if room and room.is_loaded:
 		for child : Node3D in room.roominterior.get_children():
 			if child is NPC or child is Player3D:
 				return false

@@ -160,7 +160,6 @@ func enter_room(room:Room,startbox:Box=null,frombox:Box=null,loading_game:bool=f
 		world3D.loaded_room_marker_offset = Vector3.ZERO
 		world3D.loaded_room_marker_PREVIOUS_offset = Vector3.ZERO
 		world3D.recenter_camera()
-		world3D.set_marker_position(player)
 
 func win_game()->void:
 	TransitionHandler.begin_transition(TransitionHandler.MOVEMENTDEMO_COMPLETED)
