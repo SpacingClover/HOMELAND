@@ -64,13 +64,3 @@ input_ray_pickable = false
 [node name="col" type="CollisionShape3D" parent="entityarea"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 shape = SubResource("CylinderShape3D_t5ifd")
-
-[node name="navagent" type="NavigationAgent3D" parent="."]
-path_postprocessing = 1
-
-[node name="updatestatetimer" type="Timer" parent="."]
-wait_time = 0.5
-autostart = true
-
-[node name="attack_cooldown" type="Timer" parent="."]
-one_shot = true

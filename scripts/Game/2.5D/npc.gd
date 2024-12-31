@@ -12,19 +12,23 @@ enum MOVEMENTSTATES{
 	MOVE_TO_ENTITY
 }
 
-@onready var area : Area3D = $area
-@onready var entityarea : Area3D = $entityarea
-@onready var navagent : NavigationAgent3D = $navagent
-@onready var updatestatetimer : Timer = $updatestatetimer
-@onready var attack_cooldown_timer : Timer = $attack_cooldown
+## own components
+@onready var area : Area3D = $area ## detect targets and interactables
+@onready var entityarea : Area3D = $entityarea ## detect entities
+var navagent : NavigationAgent3D
+var updatestatetimer : Timer
+var attack_cooldown_timer : Timer
 
+## object references
 var target_enemy : Node3D
 var target_object : Node3D
 var inside_room : Room
 var inside_city : City
 
+## stats
 var speed : float = 2
 
+## npc state tracking
 var path_between_rooms : PackedInt64Array
 var path_between_rooms_index : int
 var target_room : int
@@ -37,7 +41,16 @@ var is_navigating_between_rooms : bool = false
 var attack_cooldown : bool = false
 
 func _init()->void:
-	pass
+	navagent = NavigationAgent3D.new()
+	navagent.path_postprocessing = NavigationPathQueryParameters3D.PATH_POSTPROCESSING_EDGECENTERED
+	add_child(navagent)
+	updatestatetimer = Timer.new()
+	updatestatetimer.wait_time = 0.5
+	updatestatetimer.autostart = true
+	add_child(updatestatetimer)
+	attack_cooldown_timer = Timer.new()
+	attack_cooldown_timer.one_shot = true
+	add_child(attack_cooldown_timer)
 
 func _ready()->void:
 	area.area_entered.connect(area_entered_area)
@@ -48,7 +61,7 @@ func _ready()->void:
 	inside_room = get_parent().roomdata
 
 func _physics_process(delta:float)->void:
-	if has_nav_target:
+	if movementstate != MOVEMENTSTATES.IDLE:
 		if navagent.distance_to_target() <= 0.5: has_nav_target = false
 		velocity = navagent.get_next_path_position()
 		velocity -= global_position
@@ -58,13 +71,7 @@ func _physics_process(delta:float)->void:
 	velocity *= 0.85
 
 func _process(delta:float)->void:
-	match mainstate:
-		MAINSTATES.IDLE:
-			pass
-		MAINSTATES.COMBAT:
-			pass
-		MAINSTATES.DEAD:
-			pass
+	pass
 
 func pick_state()->void:
 	match mainstate:
@@ -133,7 +140,9 @@ func entered_room()->void:  ##############call every time the npc enters a room#
 		path_between_rooms_index += 1
 		if inside_room.index == target_room:
 			is_navigating_between_rooms = false
-			#pick_random_target_vec()
+			return
+		if path_between_rooms.size() == 0:
+			movementstate = MOVEMENTSTATES.IDLE
 			return
 		go_to_room(path_between_rooms[path_between_rooms_index])
 		
