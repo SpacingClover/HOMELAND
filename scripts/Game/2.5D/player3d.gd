@@ -51,6 +51,9 @@ var DEBUG_mode_place_item : bool = false
 var DEBUG_place_item_args : Array
 var DEBUG_inventory : Array[RoomItem]
 
+var inside_room : Room:
+	get: return Global.current_room
+
 func _init()->void:
 	Global.player = self
 

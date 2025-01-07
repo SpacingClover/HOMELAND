@@ -12,9 +12,15 @@ enum MOVEMENTSTATES{
 	MOVE_TO_ENTITY
 }
 
+enum COMBATMODES{
+	MELEE,
+	GUN
+}
+
 ## own components
 @onready var area : Area3D = $area ## detect targets and interactables
 @onready var entityarea : Area3D = $entityarea ## detect entities
+@onready var shotcast : RayCast3D = $shottrace ## detect where shot goes
 var navagent : NavigationAgent3D
 var updatestatetimer : Timer
 var attack_cooldown_timer : Timer
@@ -35,6 +41,7 @@ var target_room : int
 
 var mainstate : MAINSTATES = MAINSTATES.IDLE
 var movementstate : MOVEMENTSTATES = MOVEMENTSTATES.IDLE
+var combatmode : COMBATMODES = COMBATMODES.GUN
 
 var has_nav_target : bool = false
 var is_navigating_between_rooms : bool = false
@@ -45,7 +52,6 @@ func _init()->void:
 	navagent.path_postprocessing = NavigationPathQueryParameters3D.PATH_POSTPROCESSING_EDGECENTERED
 	add_child(navagent)
 	updatestatetimer = Timer.new()
-	updatestatetimer.wait_time = 0.5
 	updatestatetimer.autostart = true
 	add_child(updatestatetimer)
 	attack_cooldown_timer = Timer.new()
@@ -62,11 +68,14 @@ func _ready()->void:
 
 func _physics_process(delta:float)->void:
 	if movementstate != MOVEMENTSTATES.IDLE:
-		if navagent.distance_to_target() <= 0.5: has_nav_target = false
-		velocity = navagent.get_next_path_position()
-		velocity -= global_position
-		velocity.y = 0
-		velocity = velocity.normalized() * speed
+		if navagent.distance_to_target() <= 0.5:
+			has_nav_target = false
+			movementstate = MOVEMENTSTATES
+		else:
+			velocity = navagent.get_next_path_position()
+			velocity -= global_position
+			velocity.y = 0
+			velocity = velocity.normalized() * speed
 	move_and_collide(velocity*delta)
 	velocity *= 0.85
 
@@ -78,22 +87,61 @@ func pick_state()->void:
 		MAINSTATES.IDLE:
 			pass
 		MAINSTATES.COMBAT:
-			match movementstate:
-				MOVEMENTSTATES.MOVE_TO_ENTITY:
-					update_target_object(target_enemy)
-			if not attack_cooldown:
-				attack()
-				
+			match combatmode:
+				COMBATMODES.MELEE:
+					match movementstate:
+						MOVEMENTSTATES.IDLE:
+							update_target_object(target_enemy)
+						MOVEMENTSTATES.MOVE_TO_ENTITY:
+							update_target_object(target_enemy)
+					if not attack_cooldown:
+						try_attack_melee()
+				COMBATMODES.GUN:
+					if target_enemy.inside_room != inside_room: ##give player inside_room property
+						pathfind_between_rooms_to_room(target_enemy.inside_room.index,target_enemy.global_position)
+					elif has_shot_at_target(target_enemy):
+						if not attack_cooldown:
+							shoot_at_target(target_enemy)
+					else:
+						DEV_OUTPUT.push_message(r"shot blocked")
+						pass #find position that has a shot, and can be navigated to. if cannot find, just shoot at target.
+						shoot_at_target(target_enemy)
 		MAINSTATES.DEAD:
 			pass
 
-func attack()->void:
+## combat ##
+
+func private_aim_shotcast_at_pos(pos:Vector3,cap_length:bool=true)->void:
+	shotcast.target_position = Vector3.FORWARD
+	shotcast.look_at(pos)
+	shotcast.target_position *= shotcast.global_position.distance_to(pos) if cap_length else 99999
+	shotcast.force_raycast_update()
+
+func has_shot_at_target(target:Node3D)->bool:
+	var targetpos : Vector3 = target.global_position
+	if target is Player3D: targetpos.y += 1
+	private_aim_shotcast_at_pos(targetpos)
+	return shotcast.get_collider() == target
+
+func shoot_at_target(target:Node3D)->void:
+	var targetpos : Vector3 = target.global_position
+	if target is Player3D: targetpos.y += 1
+	private_aim_shotcast_at_pos(targetpos,false)
+	
+	await get_tree().create_timer(0.2).timeout #replace with a relevant shot delay
+	
+	Flash3D.new(shotcast.get_collision_point())
+	attack_cooldown = true
+	attack_cooldown_timer.start(1) #replace with the gun's real reload time
+	DEV_OUTPUT.push_message(r"shoot")
+
+func try_attack_melee()->void:
 	if not target_enemy:
 		return
 	
 	if global_position.distance_to(target_enemy.global_position) < 0.75:
 		attack_cooldown = true
-		attack_cooldown_timer.start()
+		attack_cooldown_timer.start(0.5)
 		DEV_OUTPUT.push_message(r"stab")
 
 ## navigation ##
@@ -101,11 +149,15 @@ func attack()->void:
 func update_target_object(object:Node3D)->void:
 	var targetpos : Vector3 = object.global_position
 	if object is Door3D: targetpos -= -Vector3(object.direction.z,object.direction.y,-object.direction.x)/4
-	update_target_location(targetpos)
+	private_update_target_location(targetpos)
 	target_object = object
 	check_if_target_object_inside_area()
+	movementstate = MOVEMENTSTATES.MOVE_TO_ENTITY
 
-func update_target_location(target_pos:Vector3)->void:
+func update_target_location(pos:Vector3)->void:
+	private_update_target_location(pos)
+
+func private_update_target_location(target_pos:Vector3)->void:
 	Global.shooterscene.room3d.bake_navigation_mesh(true)
 	await Global.shooterscene.room3d.bake_finished
 	
@@ -123,7 +175,7 @@ func go_to_room(target_room_idx:int)->void:
 		update_target_object(door)
 
 func pick_random_target_vec()->void:
-	update_target_location(NavigationServer3D.region_get_random_point(inside_room.roominterior.get_region_rid(),0,false))
+	private_update_target_location(NavigationServer3D.region_get_random_point(inside_room.roominterior.get_region_rid(),0,false))
 
 func pathfind_between_rooms_to_room(room:int,target:Vector3=Vector3.ZERO)->void:
 	var astar : AStar3D = inside_city.get_rooms_as_astar()
@@ -160,10 +212,12 @@ func area_entered_area(col_area:Area3D)->void:
 func body_entered_area(col_body:PhysicsBody3D)->void:
 	if col_body is Player3D and col_body == Global.player and inside_room == Global.current_room:
 		DEV_OUTPUT.push_message(r"target player")
-		update_target_object(col_body)
-		movementstate = MOVEMENTSTATES.MOVE_TO_ENTITY
-		mainstate = MAINSTATES.COMBAT
 		target_enemy = col_body
+		mainstate = MAINSTATES.COMBAT
+		
+		
+		#update_target_object(col_body)
+		#movementstate = MOVEMENTSTATES.MOVE_TO_ENTITY
 
 func check_if_target_object_inside_area()->void:
 	for body : Area3D in area.get_overlapping_areas():
