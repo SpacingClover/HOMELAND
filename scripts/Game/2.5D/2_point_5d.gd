@@ -9,7 +9,11 @@ var player : Player3D:
 
 var room3d : RoomInterior3D
 var camera : Camera3D:
-	get: return player.camera
+	get:
+		if player and is_instance_valid(player):
+			return player.camera
+		return null
+
 var viewport : GameView
 
 func load_room_interior(room:Room,make_current:bool=false)->void:

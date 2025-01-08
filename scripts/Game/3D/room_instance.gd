@@ -139,7 +139,6 @@ func embedded_tutorial_setup()->void:
 		room_instance_placed.connect(PopUps.call_tutorial.bind(PopUps.TUTORIAL.DROP_ROOM),CONNECT_ONE_SHOT)
 
 func show_tag()->void:
-	print("show")
 	tag.show()
 
 func toggle_collision()->void:

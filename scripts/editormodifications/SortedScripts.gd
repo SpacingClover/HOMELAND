@@ -26,8 +26,6 @@ func _enter_tree()->void:
 	
 	#loading goes here
 	
-	print(scripts_list)
-	
 	scripts_list.gui_input.connect(save_script_order)
 
 func save_script_order(event:InputEvent)->void:
@@ -64,7 +62,3 @@ func search_tree(branch:Node,first_call:bool=true)->ItemList:
 	#item list at this location, but in future versions it may not be the first
 	
 	return chosen_list
-
-
-
-

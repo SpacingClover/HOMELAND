@@ -130,7 +130,8 @@ func pick_state()->void:
 
 func find_pos_can_see_target(target:Node3D)->Vector3: #if cannot find pos, return current position of NPC
 	state_process_mutex = true
-	inside_room.roominterior.bake_navigation_mesh()
+	if not inside_room.roominterior.is_baking():
+		inside_room.roominterior.bake_navigation_mesh()
 	await inside_room.roominterior.bake_finished
 
 	var targetpos : Vector3 = target.global_position

@@ -1,3 +1,4 @@
+@tool
 class_name RoomItemInstance extends RigidBody3D
 
 @export var is_interactable : bool
@@ -6,6 +7,9 @@ class_name RoomItemInstance extends RigidBody3D
 
 @onready var nav_ob : NavigationObstacle3D = get_node_or_null(^"NavigationObstacle3D")
 @onready var animplayer : AnimationPlayer = get_node_or_null(^"AnimationPlayer")
+
+func _init()->void:
+	pass
 
 func pass_args(args:Array=[])->void:
 	pass
@@ -21,7 +25,12 @@ func _ready()->void:
 		original_points.append_array(nav_ob.vertices)
 	update_obstacle()
 
-#func _process(delta:float)->void:
+func _process(delta:float)->void:
+	update_obstacle()
+	var arr : Array[Vector2]
+	for vertex : Vector3 in nav_ob.vertices:
+		arr.append(Vector2(vertex.z,vertex.x))
+	$CSGPolygon3D.polygon = PackedVector2Array(arr)
 	#update_obstacle()
 
 var original_points : Array[Vector3]
@@ -31,4 +40,4 @@ func update_obstacle()->void:
 	
 	for i : int in nav_ob.vertices.size():
 		nav_ob.vertices[i] = original_points[i] * global_transform.basis.inverse()
-		nav_ob.vertices[i] *= scale /2
+		nav_ob.vertices[i] *= 2

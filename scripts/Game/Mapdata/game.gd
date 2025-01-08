@@ -67,7 +67,5 @@ func open()->void:
 			startroom = current_city.rooms[0]
 		current_room = startroom
 	
-	print(current_city.rooms.has(current_room))
-	print(current_city.rooms.find(current_room))
 	Global.set_new_city(cities.find(current_city),current_city.rooms.find(current_room),true)
 	first_starting = false

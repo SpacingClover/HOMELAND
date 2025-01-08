@@ -115,7 +115,6 @@ func set_boxvisual_reference(mesh:MeshInstance3D)->void:
 	boxvisual = mesh
 
 func add_door_reference(mesh:MeshInstance3D,dir:Vector3i)->void:
-	print(mesh)
 	doorvisuals.append(DoorVisualReference.new(mesh,dir))
 
 func get_door_reference(dir:Vector3i)->MeshInstance3D:

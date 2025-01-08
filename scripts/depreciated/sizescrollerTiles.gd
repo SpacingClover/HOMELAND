@@ -69,8 +69,6 @@ func load_room(room:City.Room)->void:
 		create_wall(x,y,box,box.door_up,    City.UP)
 		create_wall(x,y,box,box.door_down,  City.DOWN)
 	
-	print(rightside)
-	
 	leftside *= tilesize
 	rightside *= tilesize
 	highest *= tilesize
@@ -145,8 +143,6 @@ func set_display_bounds(left:float,right:float,top:float,bottom:float)->void:
 	
 	frame1.position.x = left
 	frame2.position.x = right
-	print("\n")
-	print(right)
 	frame3.position.y = bottom + (tilesize*2)
 	frame4.position.y = top
 	

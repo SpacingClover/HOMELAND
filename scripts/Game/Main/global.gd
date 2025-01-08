@@ -236,3 +236,4 @@ func create_empty_game()->void:
 	current_game = GameData.new()
 	current_game.cities.append(await City.new())
 	current_region = current_game.cities[0]
+	current_game.startcity = current_region

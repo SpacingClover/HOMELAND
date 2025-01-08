@@ -143,7 +143,7 @@ func e_interaction()->void:
 	if DEBUG_mode_place_item and OS.is_debug_build():
 		if not DEBUG_place_item_type:
 			DEV_OUTPUT.current.push_message("no item type set"); return
-		var scn : PackedScene = load("res://scenes/scn/"+DEBUG_place_item_type+".scn")
+		var scn : PackedScene = ResourceLoader.load("res://scenes/scn/"+DEBUG_place_item_type+".scn",&"",ResourceLoader.CACHE_MODE_IGNORE)
 		if not scn: return
 		var obj : RoomItemInstance = scn.instantiate()
 		obj.item_id = RoomItem.item_ids.find(DEBUG_place_item_type)

@@ -815,10 +815,10 @@ horizontal_alignment = 2
 vertical_alignment = 1
 autowrap_mode = 2
 
-[node name="editorgui" parent="." instance=ExtResource("24_0wili")]
-
 [node name="25d_topbar_root" type="Node2D" parent="."]
 position = Vector2(441, 155)
+
+[node name="editorgui" parent="." instance=ExtResource("24_0wili")]
 
 [node name="MusicManager" type="Node" parent="."]
 script = ExtResource("23_ldrbm")

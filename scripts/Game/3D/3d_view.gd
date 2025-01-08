@@ -391,7 +391,6 @@ func create_visual(room:RoomInstance3D)->void:
 			if not (min_touching and max_touching):
 				var center : Vector3 = room.get_center()
 				var col_midpoint : Vector3 = bounds_info.col_midpoint()
-				print(bounds_info.length() * 5.9)
 				match axis:
 					AXIS_X: vpart.global_position = Vector3(col_midpoint.x,center.y,center.z); vpart.scale.x = bounds_info.length() * 5.9
 					AXIS_Y: vpart.global_position = Vector3(center.x,col_midpoint.y,center.z); vpart.scale.y = bounds_info.length() * 5.9

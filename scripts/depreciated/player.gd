@@ -102,7 +102,6 @@ func shake_camera()->void:
 		camera_shaking = false
 
 func _shoot(coords:Vector2,object:Node2D=null)->void:
-	print(position)
 	var flash : Flash = Global.flash.instantiate()
 	world.add_child(flash)
 	flash.flash(coords)
