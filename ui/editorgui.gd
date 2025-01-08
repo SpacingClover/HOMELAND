@@ -126,6 +126,8 @@ func open()->void:
 	Global.screenroots[3].hide()
 	Global.titlescreen.get_node(^"HBoxContainer/VBoxContainer").hide()
 	Global.world3D.playermarker.hide()
+	if not Global.current_game:
+		create_new_empty_game()
 
 func close()->void:
 	leftpanel.hide()

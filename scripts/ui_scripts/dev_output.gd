@@ -228,6 +228,12 @@ func _input(event:InputEvent)->void:
 							push_message("args x y z")
 						else:
 							Global.world3D.create_room(0)
+			"bake":
+				match msg_parts[1]:
+					"navmesh":
+						Global.current_room.roominterior.bake_navigation_mesh()
+						await Global.current_room.roominterior.bake_finished
+						push_message(r"bake finished")
 
 static func push_message(text:String)->void:
 	var label : Label = Label.new()

@@ -1,30 +1,31 @@
-[gd_scene load_steps=31 format=3 uid="uid://c84jwenigb4p3"]
+[gd_scene load_steps=32 format=3]
 
-[ext_resource type="Script" path="res://scripts/ui_scripts/titlescreen.gd" id="1_g6dcv"]
-[ext_resource type="Script" path="res://scripts/ui_scripts/cursor.gd" id="2_x2uka"]
-[ext_resource type="PackedScene" uid="uid://4hls5yhc7can" path="res://ui/GameView.tscn" id="3_ksmll"]
-[ext_resource type="PackedScene" uid="uid://c4e2ehsrm1opl" path="res://scenes/tscn/2_point_5d.tscn" id="4_qe4dl"]
-[ext_resource type="Script" path="res://scripts/ui_scripts/title.gd" id="5_grq5e"]
-[ext_resource type="Texture2D" uid="uid://b18s7s46v30pi" path="res://visuals/spritesheets/ui/title2.png" id="6_qperw"]
-[ext_resource type="Shader" path="res://visuals/shaders/overlay.gdshader" id="7_fqb0w"]
-[ext_resource type="Texture2D" uid="uid://cec8ciklin8ok" path="res://visuals/spritesheets/ui/subtitle.png" id="8_hsgpq"]
-[ext_resource type="Script" path="res://ui/pausescreen.gd" id="9_myjrj"]
-[ext_resource type="Texture2D" uid="uid://clam76w2ghcwa" path="res://visuals/spritesheets/animations/spinny_outline.png" id="10_ibory"]
-[ext_resource type="PackedScene" uid="uid://tw37dldaisdv" path="res://scenes/tscn/circuitboard.tscn" id="10_o6hli"]
-[ext_resource type="Script" path="res://scripts/ui_scripts/lists.gd" id="11_syu00"]
-[ext_resource type="Theme" uid="uid://3ijvhmp2ffkw" path="res://visuals/themes/new_theme.tres" id="12_k1pjk"]
-[ext_resource type="FontFile" uid="uid://dwyueijbfacs3" path="res://visuals/fonts/PixeloidSans.ttf" id="13_3wi7r"]
-[ext_resource type="Texture2D" uid="uid://byeccdr3sgofy" path="res://visuals/spritesheets/ui/listslines.png" id="14_ovj8m"]
-[ext_resource type="PackedScene" uid="uid://ch5ifg15rdpl5" path="res://scenes/tscn/3d_view.tscn" id="15_or3fd"]
-[ext_resource type="Script" path="res://scripts/ui_scripts/buttons.gd" id="16_bwl38"]
-[ext_resource type="Texture2D" uid="uid://clgw7lwx6wysw" path="res://visuals/spritesheets/ui/meu.png" id="17_xaylg"]
-[ext_resource type="PackedScene" uid="uid://c2la75hc0d25e" path="res://scenes/scn/map_view.scn" id="18_72ip8"]
-[ext_resource type="Script" path="res://scripts/ui_scripts/extra.gd" id="19_3l68v"]
-[ext_resource type="Texture2D" uid="uid://ckpsxewlt1t7w" path="res://visuals/spritesheets/ui/buttonss.png" id="20_hinjx"]
-[ext_resource type="PackedScene" uid="uid://dlvp4vkjg4we" path="res://ui/transition.tscn" id="21_v0n60"]
-[ext_resource type="Script" path="res://scripts/ui_scripts/dev_output.gd" id="22_ok02m"]
-[ext_resource type="Script" path="res://scripts/Game/Main/MusicManager.gd" id="23_ldrbm"]
-[ext_resource type="PackedScene" uid="uid://d1v1m2j033syj" path="res://ui/editorgui.tscn" id="24_0wili"]
+[ext_resource type="Script" path="res://scripts/ui_scripts/titlescreen.gd" id="1_3cw8y"]
+[ext_resource type="Script" path="res://scripts/ui_scripts/cursor.gd" id="2_c8ufj"]
+[ext_resource type="PackedScene" path="res://ui/GameView.tscn" id="3_qa28j"]
+[ext_resource type="PackedScene" path="res://scenes/tscn/2_point_5d.tscn" id="4_2c381"]
+[ext_resource type="Script" path="res://ui/pausescreen.gd" id="5_xsxwx"]
+[ext_resource type="Script" path="res://scripts/ui_scripts/title.gd" id="6_ml1wd"]
+[ext_resource type="Texture2D" path="res://visuals/spritesheets/ui/title2.png" id="7_hw0u1"]
+[ext_resource type="Texture2D" path="res://visuals/spritesheets/ui/subtitle.png" id="8_38ckx"]
+[ext_resource type="Texture2D" path="res://visuals/spritesheets/animations/spinny_outline.png" id="9_rn08e"]
+[ext_resource type="Theme" path="res://visuals/themes/new_theme.tres" id="10_mqcqb"]
+[ext_resource type="PackedScene" path="res://scenes/tscn/circuitboard.tscn" id="11_4nq3p"]
+[ext_resource type="Script" path="res://scripts/ui_scripts/lists.gd" id="12_62rrs"]
+[ext_resource type="Shader" path="res://visuals/shaders/overlay.gdshader" id="13_o461m"]
+[ext_resource type="FontFile" path="res://visuals/fonts/PixeloidSans.ttf" id="14_tapv5"]
+[ext_resource type="Texture2D" path="res://visuals/spritesheets/ui/listslines.png" id="15_o11kw"]
+[ext_resource type="PackedScene" path="res://scenes/tscn/3d_view.tscn" id="16_ball0"]
+[ext_resource type="Script" path="res://scripts/ui_scripts/buttons.gd" id="17_1l0x4"]
+[ext_resource type="Texture2D" path="res://visuals/spritesheets/ui/meu.png" id="18_yug3s"]
+[ext_resource type="PackedScene" path="res://scenes/scn/map_view.scn" id="19_wx0yu"]
+[ext_resource type="Script" path="res://scripts/ui_scripts/extra.gd" id="20_3dscl"]
+[ext_resource type="Texture2D" path="res://visuals/spritesheets/ui/buttonss.png" id="21_qjdsj"]
+[ext_resource type="PackedScene" path="res://ui/transition.tscn" id="22_gh8b7"]
+[ext_resource type="Script" path="res://scripts/ui_scripts/dev_output.gd" id="23_viqa6"]
+[ext_resource type="PackedScene" path="res://ui/editorgui.tscn" id="24_vnms6"]
+[ext_resource type="Script" path="res://scripts/Game/Main/MusicManager.gd" id="25_0b2mf"]
+[ext_resource type="AudioStream" path="res://audio/songs/ambience.wav" id="26_wigyp"]
 
 [sub_resource type="SphereMesh" id="SphereMesh_wvrte"]
 
@@ -35,7 +36,7 @@ bg_color = Color(1, 0.376471, 0, 1)
 bg_color = Color(0.952941, 0.294118, 0, 1)
 
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_v3qwv"]
-shader = ExtResource("7_fqb0w")
+shader = ExtResource("13_o461m")
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4r8kd"]
 bg_color = Color(0, 0, 0, 0.333333)
@@ -48,17 +49,17 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
-script = ExtResource("1_g6dcv")
+script = ExtResource("1_3cw8y")
 
 [node name="cursor" type="MeshInstance2D" parent="."]
 process_mode = 3
 self_modulate = Color(1, 0.52549, 0, 1)
 top_level = true
 z_index = 1
-position = Vector2(155.75, 53.7602)
+position = Vector2(171.357, 1069.98)
 scale = Vector2(18.5204, 18.5204)
 mesh = SubResource("SphereMesh_wvrte")
-script = ExtResource("2_x2uka")
+script = ExtResource("2_c8ufj")
 
 [node name="cursor2" type="MeshInstance2D" parent="cursor"]
 modulate = Color(0.952941, 0.294118, 0, 1)
@@ -92,19 +93,27 @@ scale = Vector2(0.374972, 0.374972)
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="GameView1" parent="HBoxContainer/VBoxContainer" instance=ExtResource("3_ksmll")]
+[node name="GameView1" parent="HBoxContainer/VBoxContainer" instance=ExtResource("3_qa28j")]
 layout_mode = 2
+omniscroll = false
+orbit3d = false
+clicking2d = false
+has_player = false
 shooterscene = true
+mapview = false
 
-[node name="2point5D" parent="HBoxContainer/VBoxContainer/GameView1" instance=ExtResource("4_qe4dl")]
+[node name="2point5D" parent="HBoxContainer/VBoxContainer/GameView1" instance=ExtResource("4_2c381")]
+process_mode = 2
+physics_interpolation_mode = 2
 visible = false
+script = ExtResource("5_xsxwx")
 
 [node name="title" type="ScrollContainer" parent="HBoxContainer/VBoxContainer/GameView1"]
 process_mode = 3
 layout_mode = 2
 horizontal_scroll_mode = 0
 vertical_scroll_mode = 0
-script = ExtResource("5_grq5e")
+script = ExtResource("6_ml1wd")
 
 [node name="BackBufferCopy" type="Node2D" parent="HBoxContainer/VBoxContainer/GameView1/title"]
 position = Vector2(740.724, 274.023)
@@ -112,12 +121,12 @@ scale = Vector2(24.2943, 24.2943)
 
 [node name="text" type="Sprite2D" parent="HBoxContainer/VBoxContainer/GameView1/title/BackBufferCopy"]
 clip_children = 1
-texture = ExtResource("6_qperw")
+texture = ExtResource("7_hw0u1")
 region_enabled = true
 region_rect = Rect2(0, 0, 41, 12)
 
 [node name="effect" type="Sprite2D" parent="HBoxContainer/VBoxContainer/GameView1/title/BackBufferCopy/text"]
-texture = ExtResource("6_qperw")
+texture = ExtResource("7_hw0u1")
 hframes = 3
 vframes = 8
 frame = 21
@@ -126,7 +135,7 @@ frame = 21
 clip_children = 1
 position = Vector2(0.73463, 12.6387)
 scale = Vector2(0.83, 0.8)
-texture = ExtResource("8_hsgpq")
+texture = ExtResource("8_38ckx")
 region_enabled = true
 region_rect = Rect2(0, 0, 41, 5)
 
@@ -134,7 +143,7 @@ region_rect = Rect2(0, 0, 41, 5)
 position = Vector2(0, -0.00411987)
 rotation = 3.14159
 scale = Vector2(1, 0.4)
-texture = ExtResource("6_qperw")
+texture = ExtResource("7_hw0u1")
 hframes = 3
 vframes = 8
 frame = 21
@@ -143,7 +152,7 @@ frame = 21
 clip_children = 1
 position = Vector2(-1.05269, 17.7968)
 scale = Vector2(0.83, 0.8)
-texture = ExtResource("8_hsgpq")
+texture = ExtResource("8_38ckx")
 region_enabled = true
 region_rect = Rect2(0, 6, 13, 5)
 
@@ -151,16 +160,18 @@ region_rect = Rect2(0, 6, 13, 5)
 position = Vector2(-0.000144958, 0.0781288)
 rotation = 3.14159
 scale = Vector2(0.315247, 0.4)
-texture = ExtResource("6_qperw")
+texture = ExtResource("7_hw0u1")
 hframes = 3
 vframes = 8
 frame = 21
 
 [node name="pausetopleft" type="PanelContainer" parent="HBoxContainer/VBoxContainer/GameView1"]
+process_mode = 2
 visible = false
 light_mask = 0
 layout_mode = 2
-script = ExtResource("9_myjrj")
+script = ExtResource("5_xsxwx")
+screen_pos = 0
 
 [node name="Panel" type="Panel" parent="HBoxContainer/VBoxContainer/GameView1/pausetopleft"]
 light_mask = 0
@@ -170,7 +181,7 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_ybgyt")
 [node name="sprite3" type="Sprite2D" parent="HBoxContainer/VBoxContainer/GameView1/pausetopleft/Panel"]
 position = Vector2(415.815, 428.701)
 scale = Vector2(49.8562, 49.8562)
-texture = ExtResource("10_ibory")
+texture = ExtResource("9_rn08e")
 hframes = 5
 vframes = 7
 frame = 20
@@ -179,7 +190,7 @@ frame = 20
 position = Vector2(1013.19, 428.701)
 rotation = -3.14159
 scale = Vector2(49.8562, 49.8562)
-texture = ExtResource("10_ibory")
+texture = ExtResource("9_rn08e")
 hframes = 5
 vframes = 7
 frame = 20
@@ -187,7 +198,7 @@ frame = 20
 [node name="sprite1" type="Sprite2D" parent="HBoxContainer/VBoxContainer/GameView1/pausetopleft/Panel"]
 position = Vector2(538.042, 442.035)
 scale = Vector2(29.7461, 29.7461)
-texture = ExtResource("10_ibory")
+texture = ExtResource("9_rn08e")
 hframes = 5
 vframes = 7
 frame = 20
@@ -196,7 +207,7 @@ frame = 20
 position = Vector2(892.736, 442.035)
 rotation = -3.14159
 scale = Vector2(29.7461, 29.7461)
-texture = ExtResource("10_ibory")
+texture = ExtResource("9_rn08e")
 hframes = 5
 vframes = 7
 frame = 20
@@ -208,24 +219,34 @@ offset_top = 340.694
 offset_right = 1074.7
 offset_bottom = 547.694
 scale = Vector2(0.862978, 0.862978)
-theme = ExtResource("12_k1pjk")
+theme = ExtResource("10_mqcqb")
 theme_override_font_sizes/font_size = 151
 text = "paused"
 
-[node name="GameView2" parent="HBoxContainer/VBoxContainer" instance=ExtResource("3_ksmll")]
+[node name="GameView2" parent="HBoxContainer/VBoxContainer" instance=ExtResource("3_qa28j")]
 layout_mode = 2
 omniscroll = true
+orbit3d = false
 clicking2d = true
+has_player = false
+shooterscene = false
+mapview = false
 
-[node name="circuitboard" parent="HBoxContainer/VBoxContainer/GameView2" instance=ExtResource("10_o6hli")]
+[node name="circuitboard" parent="HBoxContainer/VBoxContainer/GameView2" instance=ExtResource("11_4nq3p")]
+process_mode = 2
+physics_interpolation_mode = 2
 visible = false
+self_modulate = Color(1, 1, 1, 0)
+light_mask = 0
+script = ExtResource("5_xsxwx")
 
 [node name="lists" type="ScrollContainer" parent="HBoxContainer/VBoxContainer/GameView2"]
 process_mode = 3
+visible = false
 layout_mode = 2
 horizontal_scroll_mode = 0
 vertical_scroll_mode = 0
-script = ExtResource("11_syu00")
+script = ExtResource("12_62rrs")
 
 [node name="Control" type="Control" parent="HBoxContainer/VBoxContainer/GameView2/lists"]
 material = SubResource("ShaderMaterial_v3qwv")
@@ -249,8 +270,8 @@ size_flags_vertical = 3
 
 [node name="Button" type="Button" parent="HBoxContainer/VBoxContainer/GameView2/lists/Control/ScrollContainer/VBoxContainer"]
 layout_mode = 2
-theme = ExtResource("12_k1pjk")
-theme_override_fonts/font = ExtResource("13_3wi7r")
+theme = ExtResource("10_mqcqb")
+theme_override_fonts/font = ExtResource("14_tapv5")
 theme_override_font_sizes/font_size = 80
 text = "SAMPLETEXT"
 alignment = 0
@@ -262,7 +283,7 @@ position = Vector2(-83.6154, 46.5385)
 [node name="Sprite2D" type="Sprite2D" parent="HBoxContainer/VBoxContainer/GameView2/lists/Control"]
 position = Vector2(578.045, 436.771)
 scale = Vector2(27.9953, 27.9953)
-texture = ExtResource("14_ovj8m")
+texture = ExtResource("15_o11kw")
 region_enabled = true
 region_rect = Rect2(0, 1, 32, 26)
 
@@ -274,19 +295,20 @@ offset_top = 92.7452
 offset_right = 887.683
 offset_bottom = 190.745
 scale = Vector2(1.13087, 1.13684)
-theme = ExtResource("12_k1pjk")
+theme = ExtResource("10_mqcqb")
 theme_override_colors/font_color = Color(1, 0.596078, 0, 1)
-theme_override_fonts/font = ExtResource("13_3wi7r")
+theme_override_fonts/font = ExtResource("14_tapv5")
 theme_override_font_sizes/font_size = 80
 text = "CATAGORY TITLE"
 vertical_alignment = 2
 
 [node name="pausebottomleft" type="PanelContainer" parent="HBoxContainer/VBoxContainer/GameView2"]
+process_mode = 2
 visible = false
 self_modulate = Color(1, 1, 1, 0)
 light_mask = 0
 layout_mode = 2
-script = ExtResource("9_myjrj")
+script = ExtResource("5_xsxwx")
 screen_pos = 2
 
 [node name="Panel" type="Panel" parent="HBoxContainer/VBoxContainer/GameView2/pausebottomleft"]
@@ -298,18 +320,26 @@ theme_override_styles/panel = SubResource("StyleBoxFlat_ybgyt")
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="GameView3" parent="HBoxContainer/VBoxContainer2" instance=ExtResource("3_ksmll")]
+[node name="GameView3" parent="HBoxContainer/VBoxContainer2" instance=ExtResource("3_qa28j")]
 layout_mode = 2
+omniscroll = false
 orbit3d = true
+clicking2d = false
+has_player = false
+shooterscene = false
+mapview = false
 
-[node name="3d view" parent="HBoxContainer/VBoxContainer2/GameView3" instance=ExtResource("15_or3fd")]
+[node name="3d view" parent="HBoxContainer/VBoxContainer2/GameView3" instance=ExtResource("16_ball0")]
+process_mode = 2
+physics_interpolation_mode = 2
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.00182092, 0, 0)
 visible = false
+script = ExtResource("5_xsxwx")
 
 [node name="buttons" type="Control" parent="HBoxContainer/VBoxContainer2/GameView3"]
 process_mode = 3
 layout_mode = 2
-script = ExtResource("16_bwl38")
+script = ExtResource("17_1l0x4")
 
 [node name="BackBufferCopy" type="Node2D" parent="HBoxContainer/VBoxContainer2/GameView3/buttons"]
 position = Vector2(592.829, 220.685)
@@ -318,7 +348,7 @@ scale = Vector2(23.6064, 23.6064)
 [node name="text2" type="Sprite2D" parent="HBoxContainer/VBoxContainer2/GameView3/buttons/BackBufferCopy"]
 clip_children = 1
 position = Vector2(-16.6511, -2.41787)
-texture = ExtResource("17_xaylg")
+texture = ExtResource("18_yug3s")
 region_enabled = true
 region_rect = Rect2(0, 0, 14, 5)
 
@@ -326,7 +356,7 @@ region_rect = Rect2(0, 0, 14, 5)
 modulate = Color(1, 1, 1, 0.396078)
 position = Vector2(0.0123991, 0.135847)
 scale = Vector2(0.334392, 0.428856)
-texture = ExtResource("6_qperw")
+texture = ExtResource("7_hw0u1")
 hframes = 3
 vframes = 8
 frame = 21
@@ -335,14 +365,14 @@ region_rect = Rect2(0, 0, 123, 96)
 [node name="text3" type="Sprite2D" parent="HBoxContainer/VBoxContainer2/GameView3/buttons/BackBufferCopy"]
 clip_children = 1
 position = Vector2(-8.24355, 4.0298)
-texture = ExtResource("17_xaylg")
+texture = ExtResource("18_yug3s")
 region_enabled = true
 region_rect = Rect2(0, 15, 31, 5)
 
 [node name="effect3" type="Sprite2D" parent="HBoxContainer/VBoxContainer2/GameView3/buttons/BackBufferCopy/text3"]
 position = Vector2(-0.0501404, 0.0212186)
 scale = Vector2(0.748183, 0.416894)
-texture = ExtResource("6_qperw")
+texture = ExtResource("7_hw0u1")
 hframes = 3
 vframes = 8
 frame = 21
@@ -351,14 +381,14 @@ region_rect = Rect2(0, 0, 123, 96)
 [node name="text4" type="Sprite2D" parent="HBoxContainer/VBoxContainer2/GameView3/buttons/BackBufferCopy"]
 clip_children = 1
 position = Vector2(-8.56593, 10.3984)
-texture = ExtResource("17_xaylg")
+texture = ExtResource("18_yug3s")
 region_enabled = true
 region_rect = Rect2(0, 10, 30, 5)
 
 [node name="effect4" type="Sprite2D" parent="HBoxContainer/VBoxContainer2/GameView3/buttons/BackBufferCopy/text4"]
 position = Vector2(-0.00357056, -0.039299)
 scale = Vector2(0.728011, 0.386492)
-texture = ExtResource("6_qperw")
+texture = ExtResource("7_hw0u1")
 hframes = 3
 vframes = 8
 frame = 21
@@ -367,14 +397,14 @@ region_rect = Rect2(0, 0, 123, 96)
 [node name="text5" type="Sprite2D" parent="HBoxContainer/VBoxContainer2/GameView3/buttons/BackBufferCopy"]
 clip_children = 1
 position = Vector2(-17.1091, 16.5237)
-texture = ExtResource("17_xaylg")
+texture = ExtResource("18_yug3s")
 region_enabled = true
 region_rect = Rect2(0, 20, 13, 5)
 
 [node name="effect5" type="Sprite2D" parent="HBoxContainer/VBoxContainer2/GameView3/buttons/BackBufferCopy/text5"]
 position = Vector2(0.0314941, 0.122107)
 scale = Vector2(0.312983, 0.426577)
-texture = ExtResource("6_qperw")
+texture = ExtResource("7_hw0u1")
 hframes = 3
 vframes = 8
 frame = 21
@@ -383,14 +413,14 @@ region_rect = Rect2(0, 0, 123, 96)
 [node name="text6" type="Sprite2D" parent="HBoxContainer/VBoxContainer2/GameView3/buttons/BackBufferCopy"]
 clip_children = 1
 position = Vector2(-16.5824, 22.609)
-texture = ExtResource("17_xaylg")
+texture = ExtResource("18_yug3s")
 region_enabled = true
 region_rect = Rect2(0, 5, 14, 5)
 
 [node name="effect6" type="Sprite2D" parent="HBoxContainer/VBoxContainer2/GameView3/buttons/BackBufferCopy/text6"]
 position = Vector2(0, 0.0299034)
 scale = Vector2(0.338109, 0.411189)
-texture = ExtResource("6_qperw")
+texture = ExtResource("7_hw0u1")
 hframes = 3
 vframes = 8
 frame = 21
@@ -400,14 +430,14 @@ region_rect = Rect2(0, 0, 123, 96)
 clip_children = 1
 position = Vector2(24.402, 22.1425)
 scale = Vector2(1, 0.994154)
-texture = ExtResource("17_xaylg")
+texture = ExtResource("18_yug3s")
 region_enabled = true
 region_rect = Rect2(0, 25, 22, 5)
 
 [node name="effect6" type="Sprite2D" parent="HBoxContainer/VBoxContainer2/GameView3/buttons/BackBufferCopy/text7"]
 position = Vector2(0.0564854, 0.0805648)
 scale = Vector2(0.537307, 0.419633)
-texture = ExtResource("6_qperw")
+texture = ExtResource("7_hw0u1")
 hframes = 3
 vframes = 8
 frame = 21
@@ -485,11 +515,12 @@ offset_bottom = 683.0
 position = Vector2(-49.5595, 53.9038)
 
 [node name="pausetopright" type="PanelContainer" parent="HBoxContainer/VBoxContainer2/GameView3"]
+process_mode = 2
 visible = false
 self_modulate = Color(1, 1, 1, 0)
 light_mask = 0
 layout_mode = 2
-script = ExtResource("9_myjrj")
+script = ExtResource("5_xsxwx")
 screen_pos = 1
 
 [node name="Panel" type="Panel" parent="HBoxContainer/VBoxContainer2/GameView3/pausetopright"]
@@ -504,7 +535,7 @@ offset_top = 170.015
 offset_right = 564.46
 offset_bottom = 324.015
 scale = Vector2(1.53482, 1.53482)
-theme = ExtResource("12_k1pjk")
+theme = ExtResource("10_mqcqb")
 theme_override_font_sizes/font_size = 106
 text = "RESUME"
 
@@ -515,17 +546,24 @@ offset_top = 442.035
 offset_right = 564.46
 offset_bottom = 596.035
 scale = Vector2(1.53482, 1.53482)
-theme = ExtResource("12_k1pjk")
+theme = ExtResource("10_mqcqb")
 theme_override_font_sizes/font_size = 106
 text = "SETTINGS"
 
-[node name="GameView4" parent="HBoxContainer/VBoxContainer2" instance=ExtResource("3_ksmll")]
+[node name="GameView4" parent="HBoxContainer/VBoxContainer2" instance=ExtResource("3_qa28j")]
 layout_mode = 2
+omniscroll = false
 orbit3d = true
+clicking2d = false
+has_player = false
+shooterscene = false
 mapview = true
 
-[node name="map view" parent="HBoxContainer/VBoxContainer2/GameView4" instance=ExtResource("18_72ip8")]
+[node name="map view" parent="HBoxContainer/VBoxContainer2/GameView4" instance=ExtResource("19_wx0yu")]
+process_mode = 2
+physics_interpolation_mode = 2
 visible = false
+script = ExtResource("5_xsxwx")
 
 [node name="extra" type="ScrollContainer" parent="HBoxContainer/VBoxContainer2/GameView4"]
 process_mode = 3
@@ -533,7 +571,7 @@ visible = false
 layout_mode = 2
 horizontal_scroll_mode = 0
 vertical_scroll_mode = 0
-script = ExtResource("19_3l68v")
+script = ExtResource("20_3dscl")
 
 [node name="level_screen" type="Control" parent="HBoxContainer/VBoxContainer2/GameView4/extra"]
 layout_mode = 2
@@ -555,7 +593,7 @@ grow_vertical = 2
 [node name="title" type="Label" parent="HBoxContainer/VBoxContainer2/GameView4/extra/level_screen/VBoxContainer"]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.596078, 0, 1)
-theme_override_fonts/font = ExtResource("13_3wi7r")
+theme_override_fonts/font = ExtResource("14_tapv5")
 theme_override_font_sizes/font_size = 65
 text = "SAMPLETEXT"
 horizontal_alignment = 1
@@ -579,7 +617,7 @@ layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_colors/font_color = Color(1, 0.596078, 0, 1)
-theme_override_fonts/font = ExtResource("13_3wi7r")
+theme_override_fonts/font = ExtResource("14_tapv5")
 theme_override_font_sizes/font_size = 50
 text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua."
 autowrap_mode = 2
@@ -593,7 +631,7 @@ layout_mode = 2
 [node name="datetime" type="Label" parent="HBoxContainer/VBoxContainer2/GameView4/extra/level_screen/VBoxContainer"]
 layout_mode = 2
 theme_override_colors/font_color = Color(1, 0.596078, 0, 1)
-theme_override_fonts/font = ExtResource("13_3wi7r")
+theme_override_fonts/font = ExtResource("14_tapv5")
 theme_override_font_sizes/font_size = 60
 text = "Datetime: mm/dd/yy"
 horizontal_alignment = 1
@@ -611,13 +649,13 @@ size_flags_vertical = 3
 [node name="Button" type="Button" parent="HBoxContainer/VBoxContainer2/GameView4/extra/level_screen/VBoxContainer/buttons"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme = ExtResource("12_k1pjk")
+theme = ExtResource("10_mqcqb")
 text = " "
 
 [node name="playbutton" type="Sprite2D" parent="HBoxContainer/VBoxContainer2/GameView4/extra/level_screen/VBoxContainer/buttons/Button"]
 position = Vector2(117, 45.1538)
 scale = Vector2(13.8258, 13.8258)
-texture = ExtResource("20_hinjx")
+texture = ExtResource("21_qjdsj")
 region_enabled = true
 region_rect = Rect2(0, 0, 14, 5)
 
@@ -635,14 +673,14 @@ size_flags_stretch_ratio = 0.4
 [node name="Button2" type="Button" parent="HBoxContainer/VBoxContainer2/GameView4/extra/level_screen/VBoxContainer/buttons"]
 layout_mode = 2
 size_flags_horizontal = 3
-theme = ExtResource("12_k1pjk")
+theme = ExtResource("10_mqcqb")
 theme_override_font_sizes/font_size = 60
 text = " "
 
 [node name="backbutton" type="Sprite2D" parent="HBoxContainer/VBoxContainer2/GameView4/extra/level_screen/VBoxContainer/buttons/Button2"]
 position = Vector2(237.462, 48.2307)
 scale = Vector2(13.8258, 13.8258)
-texture = ExtResource("20_hinjx")
+texture = ExtResource("21_qjdsj")
 region_enabled = true
 region_rect = Rect2(22, 5, 12, 5)
 
@@ -650,11 +688,12 @@ region_rect = Rect2(22, 5, 12, 5)
 position = Vector2(76.6925, 49.6924)
 
 [node name="pausebottomright" type="PanelContainer" parent="HBoxContainer/VBoxContainer2/GameView4"]
+process_mode = 2
 visible = false
 self_modulate = Color(1, 1, 1, 0)
 light_mask = 0
 layout_mode = 2
-script = ExtResource("9_myjrj")
+script = ExtResource("5_xsxwx")
 screen_pos = 3
 
 [node name="Panel" type="Panel" parent="HBoxContainer/VBoxContainer2/GameView4/pausebottomright"]
@@ -669,7 +708,7 @@ offset_top = 596.783
 offset_right = 963.481
 offset_bottom = 709.783
 scale = Vector2(1.69996, 1.69996)
-theme = ExtResource("12_k1pjk")
+theme = ExtResource("10_mqcqb")
 theme_override_font_sizes/font_size = 76
 text = "QUIT TO MENU"
 
@@ -678,8 +717,9 @@ anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
 
-[node name="transition" parent="animations" instance=ExtResource("21_v0n60")]
+[node name="transition" parent="animations" instance=ExtResource("22_gh8b7")]
 visible = false
+modulate = Color(1, 1, 1, 0)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -690,9 +730,14 @@ offset_left = 388.0
 offset_top = 174.0
 offset_right = 947.0
 offset_bottom = 498.0
+corner = 0
 
-[node name="transition2" parent="animations" instance=ExtResource("21_v0n60")]
+[node name="@Timer@933" type="Timer" parent="animations/transition"]
+wait_time = 2.0
+
+[node name="transition2" parent="animations" instance=ExtResource("22_gh8b7")]
 visible = false
+modulate = Color(1, 1, 1, 0)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -705,8 +750,12 @@ offset_right = 1528.0
 offset_bottom = 498.0
 corner = 2
 
-[node name="transition3" parent="animations" instance=ExtResource("21_v0n60")]
+[node name="@Timer@934" type="Timer" parent="animations/transition2"]
+wait_time = 2.0
+
+[node name="transition3" parent="animations" instance=ExtResource("22_gh8b7")]
 visible = false
+modulate = Color(1, 1, 1, 0)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -719,8 +768,12 @@ offset_right = 947.0
 offset_bottom = 846.0
 corner = 1
 
-[node name="transition4" parent="animations" instance=ExtResource("21_v0n60")]
+[node name="@Timer@935" type="Timer" parent="animations/transition3"]
+wait_time = 2.0
+
+[node name="transition4" parent="animations" instance=ExtResource("22_gh8b7")]
 visible = false
+modulate = Color(1, 1, 1, 0)
 layout_mode = 1
 anchors_preset = 8
 anchor_left = 0.5
@@ -733,9 +786,11 @@ offset_right = 1528.0
 offset_bottom = 846.0
 corner = 3
 
+[node name="@Timer@936" type="Timer" parent="animations/transition4"]
+wait_time = 2.0
+
 [node name="dev_output" type="Control" parent="."]
 process_mode = 3
-visible = false
 top_level = true
 layout_mode = 1
 anchors_preset = 2
@@ -744,7 +799,7 @@ anchor_bottom = 1.0
 offset_top = -192.0
 offset_right = 229.0
 grow_vertical = 0
-script = ExtResource("22_ok02m")
+script = ExtResource("23_viqa6")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="dev_output"]
 layout_mode = 1
@@ -773,6 +828,7 @@ theme_override_font_sizes/font_size = 20
 placeholder_text = "dev input"
 
 [node name="credits" type="Control" parent="."]
+modulate = Color(1, 1, 1, 0)
 anchors_preset = 0
 offset_right = 40.0
 offset_bottom = 40.0
@@ -791,7 +847,7 @@ offset_right = 368.52
 offset_bottom = 37.0
 pivot_offset = Vector2(368, 37.5)
 theme_override_colors/font_color = Color(1, 0.596078, 0, 1)
-theme_override_fonts/font = ExtResource("13_3wi7r")
+theme_override_fonts/font = ExtResource("14_tapv5")
 theme_override_font_sizes/font_size = 60
 text = "A SpacingClover Game"
 horizontal_alignment = 1
@@ -806,7 +862,7 @@ offset_right = 2178.0
 offset_bottom = 1098.0
 scale = Vector2(0.502591, 0.502591)
 theme_override_colors/font_color = Color(1, 0.596078, 0, 1)
-theme_override_fonts/font = ExtResource("13_3wi7r")
+theme_override_fonts/font = ExtResource("14_tapv5")
 theme_override_font_sizes/font_size = 60
 text = "Made by SpacingClover
 Music by Xanaxbvby
@@ -815,15 +871,17 @@ horizontal_alignment = 2
 vertical_alignment = 1
 autowrap_mode = 2
 
-[node name="editorgui" parent="." instance=ExtResource("24_0wili")]
+[node name="editorgui" parent="." instance=ExtResource("24_vnms6")]
 
 [node name="25d_topbar_root" type="Node2D" parent="."]
 position = Vector2(441, 155)
 
 [node name="MusicManager" type="Node" parent="."]
-script = ExtResource("23_ldrbm")
+script = ExtResource("25_0b2mf")
 muted = true
 
 [node name="stream_1" type="AudioStreamPlayer" parent="MusicManager"]
 process_mode = 3
+stream = ExtResource("26_wigyp")
+volume_db = -80.0
 max_polyphony = 10

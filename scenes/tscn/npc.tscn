@@ -1,7 +1,8 @@
-[gd_scene load_steps=6 format=3 uid="uid://cbk7dxwq20ano"]
+[gd_scene load_steps=7 format=3 uid="uid://cbk7dxwq20ano"]
 
 [ext_resource type="Script" path="res://scripts/Game/2.5D/npc.gd" id="1_8gxpt"]
 [ext_resource type="Texture2D" uid="uid://ymfms1vtlpue" path="res://visuals/spritesheets/characters/brown_sandals.png" id="2_f6sff"]
+[ext_resource type="Texture2D" uid="uid://bvrxagxspye0a" path="res://visuals/spritesheets/characters/invading_soldier.png" id="3_ka3li"]
 [ext_resource type="Shape3D" uid="uid://ctdv55soccak8" path="res://geometry/2point5Dcollider.shape" id="3_rnj2j"]
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_muk8t"]
@@ -34,10 +35,9 @@ vframes = 3
 [node name="body" type="Sprite3D" parent="."]
 transform = Transform3D(6.19144, 0, 0, 0, 6.19144, 0, 0, 0, 6.19144, 0, 0.557489, 0)
 layers = 2
-modulate = Color(0.653373, 0.960511, 1, 1)
 billboard = 2
 texture_filter = 0
-texture = ExtResource("2_f6sff")
+texture = ExtResource("3_ka3li")
 hframes = 2
 vframes = 3
 frame = 4

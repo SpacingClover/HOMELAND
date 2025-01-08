@@ -1,4 +1,3 @@
-@tool
 class_name RoomItemInstance extends RigidBody3D
 
 @export var is_interactable : bool
@@ -22,8 +21,8 @@ func _ready()->void:
 		original_points.append_array(nav_ob.vertices)
 	update_obstacle()
 
-func _process(delta:float)->void:
-	update_obstacle()
+#func _process(delta:float)->void:
+	#update_obstacle()
 
 var original_points : Array[Vector3]
 
@@ -32,3 +31,4 @@ func update_obstacle()->void:
 	
 	for i : int in nav_ob.vertices.size():
 		nav_ob.vertices[i] = original_points[i] * global_transform.basis.inverse()
+		nav_ob.vertices[i] *= scale /2
