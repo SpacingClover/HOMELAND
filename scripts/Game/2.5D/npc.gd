@@ -5,7 +5,8 @@ class_name NPC extends CharacterBody3D
 enum MAINSTATES{
 	IDLE,
 	COMBAT,
-	DEAD
+	DEAD,
+	DEBUGSTATE
 }
 
 enum MOVEMENTSTATES{
@@ -41,7 +42,7 @@ var path_between_rooms : PackedInt64Array
 var path_between_rooms_index : int
 var target_room : int
 
-var mainstate : MAINSTATES = MAINSTATES.IDLE
+var mainstate : MAINSTATES = MAINSTATES.DEBUGSTATE
 var movementstate : MOVEMENTSTATES = MOVEMENTSTATES.IDLE
 var combatmode : COMBATMODES = COMBATMODES.GUN
 
@@ -91,6 +92,8 @@ var state_process_mutex : bool = false
 func pick_state()->void:
 	if state_process_mutex:
 		return
+	go_to_cover_from_target(target_enemy)
+	return
 	match mainstate:
 		MAINSTATES.IDLE:
 			pass
@@ -125,10 +128,23 @@ func pick_state()->void:
 							pass
 		MAINSTATES.DEAD:
 			pass
+		MAINSTATES.DEBUGSTATE:
+			pass
 
 ## combat ##
 
+func go_to_cover_from_target(target:Node3D)->void:
+	var pos : Vector3 = await find_pos_cannot_see_target(target)
+	if pos != global_position:
+		update_target_location(pos)
+
 func find_pos_can_see_target(target:Node3D)->Vector3: #if cannot find pos, return current position of NPC
+	return await private_find_pos_can_or_cant_see_target(target)
+
+func find_pos_cannot_see_target(target:Node3D)->Vector3:
+	return await private_find_pos_can_or_cant_see_target(target,false)
+
+func private_find_pos_can_or_cant_see_target(target:Node3D,checking_can_see:bool=true)->Vector3:
 	state_process_mutex = true
 	if not inside_room.roominterior.is_baking():
 		inside_room.roominterior.bake_navigation_mesh()
@@ -142,7 +158,9 @@ func find_pos_can_see_target(target:Node3D)->Vector3: #if cannot find pos, retur
 	for i : int in 100:
 		var pos : Vector3 = NavigationServer3D.region_get_random_point(inside_room.roominterior.get_region_rid(),0,true)
 		var cast_results : Dictionary = get_world_3d().direct_space_state.intersect_ray(PhysicsRayQueryParameters3D.create(pos+Vector3(0,shotcast.global_position.y,0),targetpos,shotcast.collision_mask))
-		if cast_results.collider == target:
+		if cast_results.collider == target and checking_can_see:
+			points_see_target.append(pos)
+		elif cast_results.collider != target and not checking_can_see:
 			points_see_target.append(pos)
 	
 	var best_point : Vector3 #point that takes the least time to walk to

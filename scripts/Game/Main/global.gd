@@ -1,5 +1,12 @@
 extends Node
 
+enum SCREENS{
+	TOPLEFT,
+	BOTTOMLEFT,
+	TOPRIGHT,
+	BOTTOMRIGHT
+}
+
 const current_debug_load : String = "res://demos/demo_levels_1.res"
 
 var screenroots : Array[GameViewExports]
@@ -231,6 +238,17 @@ func close_level_editor()->void:
 	world3D.playermarker.show()
 	titlescreen.editorgui.close()
 	in_game = false
+
+func focus_on_screen(screen:SCREENS)->void:
+	match screen:
+		SCREENS.TOPLEFT:
+			pass
+		SCREENS.BOTTOMLEFT:
+			pass
+		SCREENS.TOPRIGHT:
+			pass
+		SCREENS.BOTTOMRIGHT:
+			pass
 
 func create_empty_game()->void:
 	current_game = GameData.new()
