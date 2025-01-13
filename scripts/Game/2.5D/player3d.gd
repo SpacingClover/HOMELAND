@@ -1,4 +1,4 @@
-class_name Player3D extends CharacterBody3D
+class_name Player3D extends Entity
 
 enum SPRITE_SECTIONS{ ##this will be an offset in the spritesheet depending on what the player is holding
 	DEFAULT,
@@ -18,8 +18,6 @@ static var textureatlas : CompressedTexture2D = preload("res://visuals/spriteshe
 
 @onready var camera : Camera3D = $cam
 @onready var area   : Area3D   = $area
-@onready var sprite : Sprite3D = $body
-@onready var legs   : Sprite3D = $legs
 
 signal report_click_position(pos:Vector3)
 
@@ -51,8 +49,8 @@ var DEBUG_mode_place_item : bool = false
 var DEBUG_place_item_args : Array
 var DEBUG_inventory : Array[RoomItem]
 
-var inside_room : Room:
-	get: return Global.current_room
+#relations
+var faction : int
 
 func _init()->void:
 	Global.player = self
@@ -298,7 +296,7 @@ func get_coords_for_3D_view()->Vector3:
 	return vec
 
 func entered_room()->void:
-	pass
+	inside_room = Global.current_room
 
 func DEBUG_add_item_to_inventory(item:GrabbableItemInstance)->void:
 	var icon : Sprite2D = item.get_as_sprite()
@@ -306,3 +304,6 @@ func DEBUG_add_item_to_inventory(item:GrabbableItemInstance)->void:
 	icon.scale *= 10
 	Global.titlescreen.get_node("25d_topbar_root").add_child(icon)
 	DEBUG_inventory.append(item.get_data())
+
+func get_faction()->int:
+	return faction

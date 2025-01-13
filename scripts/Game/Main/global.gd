@@ -143,6 +143,7 @@ func set_new_city(city_idx:int,room_idx:int=-1,loading_game:bool=false)->void:
 		room_idx = 0
 	enter_room(current_region.rooms[room_idx],null,null,loading_game)
 	
+	player.inside_city = current_region
 	current_region.enter_city()
 	
 	if not loading_game:

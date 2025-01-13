@@ -1,24 +1,6 @@
-class_name NPC extends CharacterBody3D
+class_name NPC extends Entity
 ##class used by npcs of all kinds
 ##only extend if you are adding new behavior
-
-enum MAINSTATES{
-	IDLE,
-	COMBAT,
-	DEAD,
-	DEBUGSTATE
-}
-
-enum MOVEMENTSTATES{
-	IDLE,
-	MOVE_TO_POS,
-	MOVE_TO_ENTITY
-}
-
-enum COMBATMODES{
-	MELEE,
-	GUN
-}
 
 ## own components
 @onready var area : Area3D = $area ## detect targets and interactables
@@ -28,12 +10,6 @@ var navagent : NavigationAgent3D
 var updatestatetimer : Timer
 var attack_cooldown_timer : Timer
 
-## object references
-var target_enemy : Node3D
-var target_object : Node3D
-var inside_room : Room
-var inside_city : City
-
 ## stats
 var speed : float = 2
 
@@ -42,13 +18,12 @@ var path_between_rooms : PackedInt64Array
 var path_between_rooms_index : int
 var target_room : int
 
-var mainstate : MAINSTATES = MAINSTATES.DEBUGSTATE
-var movementstate : MOVEMENTSTATES = MOVEMENTSTATES.IDLE
-var combatmode : COMBATMODES = COMBATMODES.GUN
-
 var has_nav_target : bool = false
 var is_navigating_between_rooms : bool = false
 var attack_cooldown : bool = false
+
+#relations
+var faction : int = OROTOF_CIVILIAN
 
 func _init()->void:
 	if not navagent:
@@ -63,6 +38,23 @@ func _init()->void:
 		attack_cooldown_timer = Timer.new()
 		attack_cooldown_timer.one_shot = true
 		add_child(attack_cooldown_timer)
+
+func configure(faction_:int=0,weapon:int=1)->void:
+	faction = faction_
+	match faction:
+		OROTOF_CIVILIAN: # orotof civilian
+			var tex : CompressedTexture2D = load("res://visuals/spritesheets/characters/ally-1.png")
+			sprite.texture = tex
+			legs.texture = tex
+		OROTOF_GOVERNMENT: # orotof soldier
+			var tex : CompressedTexture2D = load("res://visuals/spritesheets/characters/homeland_soldier-9.png")
+			sprite.texture = tex
+			legs.texture = tex
+		CAMTO_GOVERNMENT: # camto
+			var tex : CompressedTexture2D = load("res://visuals/spritesheets/characters/invading_soldier_9.png")
+			sprite.texture = tex
+			legs.texture = tex
+	combatmode = weapon
 
 func _ready()->void:
 	area.area_entered.connect(area_entered_area)
@@ -92,8 +84,6 @@ var state_process_mutex : bool = false
 func pick_state()->void:
 	if state_process_mutex:
 		return
-	go_to_cover_from_target(target_enemy)
-	return
 	match mainstate:
 		MAINSTATES.IDLE:
 			pass
@@ -130,6 +120,28 @@ func pick_state()->void:
 			pass
 		MAINSTATES.DEBUGSTATE:
 			pass
+
+## NPC relations ##
+
+func react_to_entity(entity:PhysicsBody3D)->void:
+	if target_enemy:
+		return
+	if entity.mainstate == MAINSTATES.DEAD:
+		return
+	
+	match get_faction_relation(get_faction(),entity.get_faction()):
+		NEUTRAL:
+			pass
+		FRIENDLY:
+			pass ##react to ally
+		ENEMY:
+			target_enemy = entity
+			mainstate = MAINSTATES.COMBAT
+			
+	### needs behavior for running away
+
+func get_faction()->int:
+	return faction
 
 ## combat ##
 
@@ -200,12 +212,20 @@ func has_shot_at_target(target:Node3D)->bool:
 
 func shoot_at_target(target:Node3D)->void:
 	var targetpos : Vector3 = target.global_position
-	if target is Player3D: targetpos.y += 1
+	#if target is Player3D:
+	targetpos.y += 0.67
 	private_aim_shotcast_at_pos(targetpos,false)
 	
 	await get_tree().create_timer(0.2).timeout #replace with a relevant shot delay
 	
 	Flash3D.new(shotcast.get_collision_point()) #physics should be applied to hit object, so it gets pushed
+	if shotcast.get_collider() is Entity:
+		var shot_response : AttackResponse = shotcast.get_collider().shoot_and_get_data()
+		if shot_response.killed:
+			target_enemy = null
+			movementstate = MOVEMENTSTATES.IDLE
+			mainstate = MAINSTATES.IDLE
+			##maybe it should look for a new target here
 	attack_cooldown = true
 	attack_cooldown_timer.start(1) #replace with the gun's real reload time
 
@@ -216,7 +236,12 @@ func try_attack_melee()->void:
 	if global_position.distance_to(target_enemy.global_position) < 0.75:
 		attack_cooldown = true
 		attack_cooldown_timer.start(0.5)
-		DEV_OUTPUT.push_message(r"stab")
+		var attack_response : AttackResponse = target_enemy.melee_and_get_data()
+		if attack_response.killed:
+			target_enemy = null
+			movementstate = MOVEMENTSTATES.IDLE
+			mainstate = MAINSTATES.IDLE
+			##maybe it should look for a new target here
 
 ## navigation ##
 
@@ -284,14 +309,10 @@ func area_entered_area(col_area:Area3D)->void:
 		target_object = null
 
 func body_entered_area(col_body:PhysicsBody3D)->void:
-	if col_body is Player3D and col_body == Global.player and inside_room == Global.current_room:
-		DEV_OUTPUT.push_message(r"target player")
-		target_enemy = col_body
-		mainstate = MAINSTATES.COMBAT
-		
-		
-		#update_target_object(col_body)
-		#movementstate = MOVEMENTSTATES.MOVE_TO_ENTITY
+	if col_body is Entity and col_body.inside_room == inside_room:
+		react_to_entity(col_body)
+	#if (col_body is Player3D and col_body == Global.player and inside_room == Global.current_room)\
+		#or (col_body is NPC and col_body.inside_room == inside_room):
 
 func check_if_target_object_inside_area()->void:
 	for body : Area3D in area.get_overlapping_areas():

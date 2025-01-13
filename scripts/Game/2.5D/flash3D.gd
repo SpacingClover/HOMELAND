@@ -1,6 +1,7 @@
 class_name Flash3D extends Sprite3D
 
 static var image : CompressedTexture2D = preload("res://visuals/spritesheets/effects/muzzleflashes.png")
+static var shot : AudioStreamWAV = preload("res://audio/sound_effects/shot.wav")
 
 func _init(pos:Vector3)->void:
 	texture = image
@@ -18,7 +19,12 @@ func _init(pos:Vector3)->void:
 	global_position.x += 0.5
 	scale *= 5
 	
-	var timer : Timer = Timer.new()
-	add_child(timer)
-	timer.start(0.1)
-	timer.timeout.connect(queue_free)
+	var sound : AudioStreamPlayer = AudioStreamPlayer.new()
+	sound.stream = shot
+	sound.autoplay = true
+	sound.volume_db = 30
+	add_child(sound)
+	sound.finished.connect(queue_free)
+	
+	await get_tree().create_timer(0.1).timeout
+	hide()

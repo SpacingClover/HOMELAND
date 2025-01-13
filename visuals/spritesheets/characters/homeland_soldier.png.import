@@ -3,20 +3,19 @@
 importer="texture"
 type="CompressedTexture2D"
 uid="uid://2kv2ij0iqc5h"
-path.s3tc="res://.godot/imported/homeland_soldier.png-9437b2386af39d4d12e3317c3b9b2d6b.s3tc.ctex"
+path="res://.godot/imported/homeland_soldier.png-9437b2386af39d4d12e3317c3b9b2d6b.ctex"
 metadata={
-"imported_formats": ["s3tc_bptc"],
-"vram_texture": true
+"vram_texture": false
 }
 
 [deps]
 
 source_file="res://visuals/spritesheets/characters/homeland_soldier.png"
-dest_files=["res://.godot/imported/homeland_soldier.png-9437b2386af39d4d12e3317c3b9b2d6b.s3tc.ctex"]
+dest_files=["res://.godot/imported/homeland_soldier.png-9437b2386af39d4d12e3317c3b9b2d6b.ctex"]
 
 [params]
 
-compress/mode=2
+compress/mode=0
 compress/high_quality=false
 compress/lossy_quality=0.7
 compress/hdr_compression=1

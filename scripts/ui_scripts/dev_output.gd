@@ -170,6 +170,10 @@ func _input(event:InputEvent)->void:
 					"output":
 						for child : Label in message_container.get_children():
 							message_container.remove_child(child)
+					"npcs":
+						for child : Node3D in Global.shooterscene.room3d.get_children():
+							if child is NPC:
+								child.queue_free()
 			"display":
 				match msg_parts[1]:
 					"3d":
@@ -206,6 +210,12 @@ func _input(event:InputEvent)->void:
 						Global.shooterscene.room3d.add_child(npc)
 						npc.global_position = Global.player.global_position
 						npc.scale /= 2
+						if msg_parts.size() > 2:
+							var args : PackedInt64Array = get_args_int(msg_parts,2)
+							if args.size() >= 2:
+								npc.faction = args[0]
+								npc.combatmode = args[1]
+								npc.configure(args[0],args[1])
 			"list":
 				match msg_parts[1]:
 					"dev_levels":
