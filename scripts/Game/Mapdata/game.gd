@@ -4,6 +4,7 @@ class_name GameData extends Resource
 @export var cities : Array[City]
 @export var current_city : City
 @export var current_room : Room
+@export var city_connections_register : CityConnectionsRegister ## in mapview editor, add option to create cityconnection on city, which adds it to the register
 
 @export_subgroup("Starting Location")
 @export var startcity : City
@@ -30,6 +31,8 @@ class_name GameData extends Resource
 
 func _init(being_generated:bool=false)->void:
 	
+	index_cities()
+	
 	if demo:
 		return
 	
@@ -40,17 +43,6 @@ func _init(being_generated:bool=false)->void:
 		return
 	
 	first_starting = true
-	##for city generation
-	#first create all the cities, and use astar to connect the closest ones
-	#use this, and the city size, to place the cityexits in appropriate places along the edges of each city
-	#give each exit the corresponding city idx
-	#give each exit the corresponding exit idx
-	
-	#generate features, and fill in rooms to connect all features and exits
-	#validate city HERE
-	#depending on circumstances, break some connections, create rubble
-	#place npcs
-	#place loot / items
 
 func open()->void:
 	
@@ -69,3 +61,121 @@ func open()->void:
 	
 	Global.set_new_city(cities.find(current_city),current_city.rooms.find(current_room),true)
 	first_starting = false
+
+func index_cities()->void:
+	for i : int in cities.size():
+		cities[i].index = i
+
+func create_new_city()->City:
+	var newcity : City = await City.new()
+	cities.append(newcity)
+	var breakloop : bool
+	for i : int in 1000: #1000 maximum iterations before it just gives up
+		breakloop = true
+		for city : City in cities:
+			if city != newcity and city.coords == newcity.coords:
+				breakloop = false
+		if breakloop:
+			break
+		else:
+			newcity.coords += Vector2i(randi_range(0,1),randi_range(0,1))
+	index_cities()
+	return newcity
+
+func remove_city(city:City)->void:
+	cities.remove_at(city.index)
+	index_cities()
+
+class CityConnectionsRegister extends Resource:
+	@export var connections : Array[CityConnection]
+	var connection_id : String = Global.create_random_name(4)
+	func _init()->void:
+		if Global.current_game.cities.is_empty():
+			DEV_OUTPUT.push_message(r"ERROR CITYCONNECTIONSREGISTER LOADED BEFORE CITIES")
+			print(r"ERROR CITYCONNECTIONSREGISTER LOADED BEFORE CITIES")
+			breakpoint
+		update_refs()
+	func create_new_connection(fromcity:City)->void:
+		connections.append(CityConnection.new(fromcity))
+	func get_corresponding(city:City,room:Room)->ConnectionResponse:
+		for connection : CityConnection in connections:
+			var response : ConnectionResponse = connection.get_corresponding(city,room)
+			if response:
+				return response
+		return null
+	func update_indecies()->void:
+		for connection : CityConnection in connections:
+			connection.update_indecies()
+	func update_refs()->void:
+		for connection : CityConnection in connections:
+			connection.update_refs()
+
+class CityConnection extends Resource:
+	@export var cityA_idx : int = -1
+	@export var roomA_idx : int = -1
+	@export var cityB_idx : int = -1
+	@export var roomB_idx : int = -1
+	var cityA : City
+	var roomA : Room
+	var cityB : City
+	var roomB : Room
+	func _init(city:City)->void:
+		connect_city(city)
+	func connect_city(city:City)->void:
+		if cityA:
+			cityB = city
+			cityB_idx = city.index
+		else:
+			cityA = cityA
+			cityA_idx = city.index
+	func get_corresponding(city:City,room:Room)->ConnectionResponse:
+		if cityA == city and roomA == room:
+			return ConnectionResponse.new(cityA,roomA)
+		elif cityB == city and roomB == room:
+			return ConnectionResponse.new(cityB,roomB)
+		return null
+	func update_indecies()->void:
+		if cityA:
+			cityA_idx = cityA.index
+			if roomA:
+				roomA_idx = roomA.index
+			else:
+				roomA_idx = -1
+		else:
+			cityA_idx = -1
+			roomA_idx = -1
+		if cityB:
+			cityB_idx = cityB.index
+			if roomB:
+				roomB_idx = roomB.index
+			else:
+				roomB_idx = -1
+		else:
+			cityB_idx = -1
+			roomB_idx = -1
+	func update_refs()->void:
+		if cityA_idx != -1:
+			cityA = Global.current_game.cities[cityA_idx]
+			if roomA_idx != -1:
+				roomA = cityA.rooms[roomA_idx]
+			else:
+				roomA = null
+		else:
+			cityA = null
+			roomA = null
+		if cityB_idx != -1:
+			cityB = Global.current_game.cities[cityB_idx]
+			if roomB_idx != -1:
+				roomB = cityB.rooms[roomB_idx]
+			else:
+				roomB = null
+		else:
+			cityB = null
+			roomB = null
+
+class ConnectionResponse extends Resource:
+	var city : City
+	var room : Room
+	func _init(city_:City,room_:Room)->void:
+		city = city_
+		room = room_

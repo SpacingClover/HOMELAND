@@ -16,6 +16,8 @@ var viewport : GameView
 var cameratween : Tween
 var targeted_node : CityMarker3D
 
+var selected_node : CityMarker3D
+
 func _init()->void:
 	Global.mapview = self
 	MapView.current = self
@@ -25,13 +27,31 @@ func _ready()->void:
 
 func _input(event:InputEvent)->void:
 	if event is InputEventMouseMotion:
-		var marker : CityMarker3D = get_cursor_object()
-		if not marker: markerinfo.hide(); return
-		display_city_info(marker.city)
+		if Global.is_level_editor_mode_enabled and selected_node:
+			var pos : Vector3 = get_cursor_pos()
+			if pos == Vector3.ZERO:
+				return
+			pos /= MAP_SPACING_SCALE
+			pos = round(pos)
+			pos *= MAP_SPACING_SCALE
+			selected_node.global_position = pos
+			return
+		var obj : PhysicsBody3D = get_cursor_object()
+		if not obj or not obj is CityMarker3D: markerinfo.hide(); return
+		display_city_info(obj.city)
 	elif event.is_action_pressed(&"scroll_up"):
 		camera.position /= 1.1
 	elif event.is_action_pressed(&"scroll_down"):
 		camera.position *= 1.1
+	elif Global.is_level_editor_mode_enabled:
+		if event.is_action_pressed(&"click"):
+			if not selected_node:
+				var obj : PhysicsBody3D = get_cursor_object()
+				if obj is CityMarker3D:
+					selected_node = obj
+			else:
+				selected_node.city.coords = Vector2i(Vector2(selected_node.global_position.x,selected_node.global_position.z) / MapView.MAP_SPACING_SCALE)
+				selected_node = null
 
 func orbit(vel:Vector2,lockvert:bool=false)->void:
 	camera_root.global_rotation_degrees.y += vel.x
@@ -93,16 +113,27 @@ func reset_map()->void:
 		child.queue_free()
 	targeted_node = null
 
-func get_cursor_object()->CityMarker3D:
+func get_cursor_object()->PhysicsBody3D:
 	var mousepos : Vector2 = get_viewport().get_mouse_position()
 	var from : Vector3 = camera.project_ray_origin(mousepos)
-	var to : Vector3 = from + camera.project_ray_normal(mousepos)*10
+	var to : Vector3 = from + camera.project_ray_normal(mousepos)*1000
 	var query : PhysicsRayQueryParameters3D = PhysicsRayQueryParameters3D.create(from,to,16)
 	var result : Dictionary = get_world_3d().direct_space_state.intersect_ray(query)
 	if result.keys().is_empty():
 		return null
 	else:
 		return result["collider"]
+
+func get_cursor_pos()->Vector3:
+	var mousepos : Vector2 = get_viewport().get_mouse_position()
+	var from : Vector3 = camera.project_ray_origin(mousepos)
+	var to : Vector3 = from + camera.project_ray_normal(mousepos)*1000
+	var query : PhysicsRayQueryParameters3D = PhysicsRayQueryParameters3D.create(from,to,256)
+	var result : Dictionary = get_world_3d().direct_space_state.intersect_ray(query)
+	if result.keys().is_empty():
+		return Vector3.ZERO
+	else:
+		return result["position"]
 
 func display_city_info(city:City)->void:
 	markerinfotitle.text = &" "+city.name+&" "

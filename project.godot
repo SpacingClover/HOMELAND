@@ -223,6 +223,7 @@ enter={
 3d_physics/layer_6="2.5D_view (entities cannot touch these)"
 3d_physics/layer_7="2.5D_wall_collision_only"
 3d_physics/layer_8="2.5D_entities"
+3d_physics/layer_9="mapview_collision_plane"
 
 [rendering]
 

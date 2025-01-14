@@ -281,6 +281,13 @@ func unfocus_screens()->void:
 
 func create_empty_game()->void:
 	current_game = GameData.new()
-	current_game.cities.append(await City.new())
+	current_game.create_new_city()
 	current_region = current_game.cities[0]
 	current_game.startcity = current_region
+
+func create_random_name(length:int)->String:
+	var alphabet : String = "abcdefghijklmnopqrstuvwxyz0123456789"
+	var string : String = ""
+	for i : int in length:
+		string += alphabet[randi_range(0,alphabet.length()-1)]
+	return string

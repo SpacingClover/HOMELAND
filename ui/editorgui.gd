@@ -81,6 +81,8 @@ var last_selected_face : RoomInstance3D.RoomInstanceFace
 var interacted_room : Room
 
 var room_isolation_mode : bool = false
+var interiorview : bool = false
+var mapvieweditor : bool = false
 
 func _ready()->void:
 	newbutton.pressed.connect(func()->void:Global.world3D.create_room(roomtype.selected))
@@ -134,6 +136,9 @@ func open()->void:
 	Global.world3D.playermarker.hide()
 	if not Global.current_game:
 		create_new_empty_game()
+	mapvieweditor = false
+	interiorview = false
+	update_display()
 
 func close()->void:
 	leftpanel.hide()
@@ -152,14 +157,25 @@ func open_city_editor()->void:
 	Global.focus_on_screen(Global.SCREENS.BOTTOMRIGHT)
 	Global.mapview.display_map(Global.current_game)
 	Global.mapview.show()
+	mapvieweditor = true
+	update_display()
 
 func open_roominterior_editor()->void:
 	if Global.world3D.room_last_selected:
 		Global.focus_on_screen(Global.SCREENS.TOPLEFT)
 		Global.shooterscene.load_room_interior(Global.world3D.room_last_selected.data_reference)
+		interiorview = false
+		update_display()
 
 func update_display()->void:
-	pass
+	newbutton.disabled = room_isolation_mode or Global.world3D.selected_room or Global.world3D.selecting_faces_directly or mapvieweditor or interiorview
+	roomtype.disabled = newbutton.disabled
+	applyscale.disabled = Global.world3D.selecting_faces_directly or mapvieweditor or interiorview or not(Global.world3D.room_last_selected and is_instance_valid(Global.world3D.room_last_selected))
+	scalex.disabled = applyscale.disabled
+	scaley.disabled = applyscale.disabled
+	scalez.disabled = applyscale.disabled
+	editfaces.disabled = mapvieweditor or interiorview or not(Global.world3D.room_last_selected and is_instance_valid(Global.world3D.room_last_selected))
+	isolateroom.disabled = editfaces.disabled
 
 func rescale_room()->void:
 	var roomvisual : RoomInstance3D = Global.world3D.room_last_selected
@@ -174,6 +190,7 @@ func rescale_room()->void:
 	Global.world3D.display_room(room)
 	Global.world3D.room_last_selected = room.roomvisual
 	check_scale_value()
+	update_display()
 
 func new_room_selected()->void:
 	var roomvisual : RoomInstance3D = Global.world3D.room_last_selected
@@ -184,6 +201,7 @@ func new_room_selected()->void:
 	scalez.value = roomvisual.data_reference.scale.z
 	check_scale_value()
 	deleteroom.disabled = false
+	update_display()
 
 func check_scale_value(value:float=0.0)->void:
 	var roominstance : RoomInstance3D = Global.world3D.room_last_selected
@@ -206,6 +224,7 @@ func edit_faces()->void:
 	isolateroom.disabled = Global.world3D.selecting_faces_directly
 	editfaces.text = ("disable" if Global.world3D.selecting_faces_directly else "enable") + " edit faces"
 	setfacetype.disabled = not Global.world3D.selecting_faces_directly
+	update_display()
 
 func isolate_room()->void:
 	for roomvisual : RoomInstance3D in Global.world3D.root.get_children():
@@ -216,6 +235,7 @@ func isolate_room()->void:
 	newbutton.disabled = room_isolation_mode
 	deleteroom.disabled = room_isolation_mode
 	isolateroom.text = ("disable" if room_isolation_mode else "enable") + " isolate room"
+	update_display()
 
 func open_files_menu()->void:
 	selectfilescontainer.show()
@@ -239,6 +259,7 @@ func open_game(dir:String)->void:
 	deleteroom.disabled = true
 	fill_right_panel()
 	display_spawn_info()
+	update_display()
 
 func open_rightclick_popup(obj:Node3D)->void:
 	if not obj:
@@ -273,6 +294,7 @@ func open_rightclick_popup(obj:Node3D)->void:
 	
 	rightclickpopup.show()
 	rightclickpopup.position = get_viewport().get_mouse_position()
+	update_display()
 
 func create_new_empty_game()->void:
 	Global.create_empty_game()
@@ -280,6 +302,7 @@ func create_new_empty_game()->void:
 	Global.world3D.display_rooms()
 	fill_right_panel()
 	display_spawn_info()
+	update_display()
 
 func open_save_game_popup()->void:
 	saveaddressinput.clear()
@@ -297,6 +320,7 @@ func save_game()->void:
 		DEV_OUTPUT.push_message(error_string(ResourceSaver.save(game_save,r"user://editor_levels/"+filename+r".res")))
 		savegamepopup.hide()
 		#DEV_OUTPUT.push_message("if you cant find your file, search \"Godot user path\"")
+	update_display()
 
 func set_face_lock()->void:
 	var val : int = lockspinbox.value
@@ -306,6 +330,7 @@ func set_face_lock()->void:
 			last_selected_face.set_face_type(2)
 		Box.CITY_EXIT_DOOR:
 			last_selected_face.set_face_type(3)
+	update_display()
 
 func set_cityexit_nextcity()->void:
 	interacted_room.nextcity = cityspinbox.value
@@ -348,21 +373,24 @@ func switch_city()->void:
 		Global.world3D.reset_3d_view()
 		Global.world3D.display_rooms()
 		fill_right_panel()
+		update_display()
 
 func create_new_city()->int:
-	Global.current_game.cities.append(await City.new())
+	await Global.current_game.create_new_city()
 	index_cities()
 	display_spawn_info()
+	update_display()
 	return 0
 
 func delete_city()->void: ####################### doesnt FREAKING work
 	if Global.current_game.cities.size() == 1:
 		create_new_city()
-	Global.current_game.cities.remove_at(Global.current_game.cities.find(Global.current_region))
+	Global.current_game.remove_city(Global.current_region)
 	Global.world3D.reset_3d_view()
 	Global.world3D.display_rooms()
 	index_cities()
 	display_spawn_info()
+	update_display()
 
 func test_level(default_spawn:bool=true)->void:
 	if Global.current_game.cities.size() == 0 or (Global.current_game.cities.size() == 1 and Global.current_game.cities[0].rooms.size() == 0):
@@ -380,6 +408,7 @@ func test_level(default_spawn:bool=true)->void:
 	Global.current_game.position = Vector3.ZERO
 	Global.enter_game_transition(Global.current_game)
 	playtestgui.show()
+	update_display()
 
 func exit_playtest()->void:
 	Global.end_play_session()
@@ -390,6 +419,7 @@ func exit_playtest()->void:
 	Global.current_room = Global.current_region.rooms[0]
 	Global.world3D.reset_3d_view()
 	Global.world3D.display_rooms()
+	update_display()
 
 func display_spawn_info()->void:
 	if Global.current_game.cities.size() != 0:
@@ -427,6 +457,7 @@ func set_spawn_info(v:int=-1)->void:
 	elif spawn_room.value != Global.current_game.startcity.rooms.find(Global.current_game.startroom):
 		Global.current_game.startroom = Global.current_game.startcity.rooms[spawn_room.value]
 	display_spawn_info()
+	update_display()
 
 func set_room_default_spawn()->void:
 	var room : Room = interacted_room
@@ -434,6 +465,7 @@ func set_room_default_spawn()->void:
 	spawn_room.value = Global.current_region.rooms.find(room)
 	set_spawn_info()
 	rightclickpopup.hide()
+	update_display()
 
 func set_room_debug_spawn()->void:
 	var room : Room = interacted_room
@@ -441,3 +473,4 @@ func set_room_debug_spawn()->void:
 	debug_room.value = Global.current_region.rooms.find(room)
 	set_spawn_info()
 	rightclickpopup.hide()
+	update_display()

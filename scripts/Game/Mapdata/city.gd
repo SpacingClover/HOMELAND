@@ -40,6 +40,8 @@ static var MINES : int = 16
 
 var mapvisual : CityMarker3D
 
+var index : int
+
 func _init(being_generated:bool=false)->void:
 	await Global.get_tree().process_frame
 	var idx : int = 0
