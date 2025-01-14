@@ -222,6 +222,7 @@ enter={
 3d_physics/layer_5="Mapview_city_markers"
 3d_physics/layer_6="2.5D_view (entities cannot touch these)"
 3d_physics/layer_7="2.5D_wall_collision_only"
+3d_physics/layer_8="2.5D_entities"
 
 [rendering]
 

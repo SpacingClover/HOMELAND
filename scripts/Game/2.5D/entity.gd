@@ -122,6 +122,25 @@ static func get_faction_relation(own_faction:int,other_faction:int)->int:
 		return NEUTRAL
 	return faction_relations_data[own_faction][other_faction]
 
+static func get_faction_string(faction_idx:int)->StringName: #this will have to be extended to include different names that different groups call each faction
+	match faction_idx:
+		OROTOF_CIVILIAN:
+			return &"Civilian"
+		OROTOF_RESISTANCE:
+			return &"Resistance"
+		OROTOF_GOVERNMENT:
+			return &"Orotov"
+		OROTOF_WITCHES:
+			return &"Witches"
+		UNDERGROUND_MONSTER:
+			return &"Monster"
+		CAMTO_GOVERNMENT:
+			return &"Camto"
+		RAKATLAND_GOVERNMENT:
+			return &"Rakatland"
+		_:
+			return &"ERROR INVALID FACTION"
+
 @onready var sprite : Sprite3D = $body
 @onready var legs   : Sprite3D = $legs
 

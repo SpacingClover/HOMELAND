@@ -243,13 +243,41 @@ func close_level_editor()->void:
 func focus_on_screen(screen:SCREENS)->void:
 	match screen:
 		SCREENS.TOPLEFT:
-			pass
+			screenroots[0].show()
+			screenroots[1].hide()
+			screenroots[2].hide()
+			screenroots[3].hide()
+			titlescreen.get_node(^"HBoxContainer/VBoxContainer").show()
+			titlescreen.get_node(^"HBoxContainer/VBoxContainer2").hide()
 		SCREENS.BOTTOMLEFT:
-			pass
+			screenroots[0].hide()
+			screenroots[1].show()
+			screenroots[2].hide()
+			screenroots[3].hide()
+			titlescreen.get_node(^"HBoxContainer/VBoxContainer").show()
+			titlescreen.get_node(^"HBoxContainer/VBoxContainer2").hide()
 		SCREENS.TOPRIGHT:
-			pass
+			screenroots[0].hide()
+			screenroots[1].hide()
+			screenroots[2].show()
+			screenroots[3].hide()
+			titlescreen.get_node(^"HBoxContainer/VBoxContainer").hide()
+			titlescreen.get_node(^"HBoxContainer/VBoxContainer2").show()
 		SCREENS.BOTTOMRIGHT:
-			pass
+			screenroots[0].hide()
+			screenroots[1].hide()
+			screenroots[2].hide()
+			screenroots[3].show()
+			titlescreen.get_node(^"HBoxContainer/VBoxContainer").hide()
+			titlescreen.get_node(^"HBoxContainer/VBoxContainer2").show()
+
+func unfocus_screens()->void:
+	screenroots[0].show()
+	screenroots[1].show()
+	screenroots[2].show()
+	screenroots[3].show()
+	titlescreen.get_node(^"HBoxContainer/VBoxContainer").show()
+	titlescreen.get_node(^"HBoxContainer/VBoxContainer2").show()
 
 func create_empty_game()->void:
 	current_game = GameData.new()

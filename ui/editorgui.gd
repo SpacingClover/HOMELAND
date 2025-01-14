@@ -1,75 +1,80 @@
 extends Node
 
 ##left panel
-@onready var leftpanel : PanelContainer = $leftpanel
-@onready var newbutton : Button = $leftpanel/VBoxContainer/HBoxContainer/Button
-@onready var roomtype : OptionButton = $leftpanel/VBoxContainer/HBoxContainer/OptionButton
-@onready var deleteroom : Button = $leftpanel/VBoxContainer/Button3
-@onready var scalex : SpinBox = $leftpanel/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/LineEdit
-@onready var scaley : SpinBox = $leftpanel/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/LineEdit2
-@onready var scalez : SpinBox = $leftpanel/VBoxContainer/PanelContainer/VBoxContainer/HBoxContainer/LineEdit3
-@onready var applyscale : Button = $leftpanel/VBoxContainer/PanelContainer/VBoxContainer/Button4
-@onready var editfaces : Button = $leftpanel/VBoxContainer/Button4
-@onready var isolateroom : Button = $leftpanel/VBoxContainer/Button5
-@onready var setfacetype : OptionButton = $leftpanel/VBoxContainer/OptionButton
-@onready var creategame : Button = $leftpanel/VBoxContainer/Button2
-@onready var savegame : Button = $leftpanel/VBoxContainer/Button6
-@onready var opengame : Button = $leftpanel/VBoxContainer/Button7
-@onready var closeeditor : Button = $leftpanel/VBoxContainer/Button8
+@onready var leftpanel : PanelContainer = %leftpanel
+@onready var newbutton : Button = %create_new_room
+@onready var roomtype : OptionButton = %create_new_room_options
+@onready var deleteroom : Button = %delete_room
+@onready var scalex : SpinBox = %scalex
+@onready var scaley : SpinBox = %scaley
+@onready var scalez : SpinBox = %scalez
+@onready var applyscale : Button = %apply_scale
+@onready var editfaces : Button = %edit_faces_toggle
+@onready var isolateroom : Button = %isolate_room_toggle
+@onready var setfacetype : OptionButton = %face_type
+@onready var creategame : Button = %new_game
+@onready var savegame : Button = %save_game
+@onready var opengame : Button = %open_game
+@onready var closeeditor : Button = %close_editor
 
 ##right panel
-@onready var rightpanel : PanelContainer = $rightpanel
-@onready var gamename : LineEdit = $rightpanel/VBoxContainer/gamename
-@onready var gamedescription : TextEdit = $rightpanel/VBoxContainer/description
-@onready var cityname : LineEdit = $rightpanel/VBoxContainer/cityname
-@onready var pickcity : OptionButton = $rightpanel/VBoxContainer/HBoxContainer/pickcity
-@onready var newcity : Button = $rightpanel/VBoxContainer/Button
-@onready var switchcity : Button = $rightpanel/VBoxContainer/HBoxContainer/Button
-@onready var deletecity : Button = $rightpanel/VBoxContainer/Button2
+@onready var rightpanel : PanelContainer = %rightpanel
+@onready var gamename : LineEdit = %gamename
+@onready var gamedescription : TextEdit = %description
+@onready var cityname : LineEdit = %cityname
+@onready var pickcity : OptionButton = %pickcity_list
+@onready var newcity : Button = %create_new_city
+@onready var switchcity : Button = %switch_city_confirm
+@onready var deletecity : Button = %delete_city
+
+@onready var citypanel : PanelContainer = %citypanel
+@onready var open_mapview_editor : Button = %open_mapview_editor
 
 ##load game popup
-@onready var selectfilescontainer : PanelContainer = $opengamepopup
-@onready var fileslist : OptionButton = $opengamepopup/VBoxContainer/OptionButton
-@onready var selectfilebutton : Button = $opengamepopup/VBoxContainer/Button
-@onready var cancelfileslist : Button = $opengamepopup/VBoxContainer/Button2
+@onready var selectfilescontainer : PanelContainer = %opengamepopup
+@onready var fileslist : OptionButton = %loadable_games_list
+@onready var selectfilebutton : Button = %load_selected_game
+@onready var cancelfileslist : Button = %close_opengamepopup
 
 ##right click menu
-@onready var rightclickpopup : PanelContainer = $rightclickpopup
-@onready var popupvbox : VBoxContainer = $rightclickpopup/VBoxContainer
-@onready var submitbutton : Button = $rightclickpopup/VBoxContainer/HBoxContainer/Button
-@onready var set_tocity : Button = $"rightclickpopup/VBoxContainer/to city/Button"
-@onready var set_toexit : Button = $"rightclickpopup/VBoxContainer/to exit/Button"
-@onready var rightclicklabel : Label = $rightclickpopup/VBoxContainer/Label
-@onready var roomcontents : Button = $rightclickpopup/VBoxContainer/Button
-@onready var lockinput : HBoxContainer = $rightclickpopup/VBoxContainer/HBoxContainer
-@onready var tocityinput : HBoxContainer = $"rightclickpopup/VBoxContainer/to city"
-@onready var toexitinput : HBoxContainer = $"rightclickpopup/VBoxContainer/to exit"
-@onready var lockspinbox : SpinBox = $rightclickpopup/VBoxContainer/HBoxContainer/SpinBox
-@onready var cityspinbox : SpinBox = $"rightclickpopup/VBoxContainer/to city/SpinBox"
-@onready var exitspinbox : SpinBox = $"rightclickpopup/VBoxContainer/to exit/SpinBox"
-@onready var default_spawn_setter : Button = $rightclickpopup/VBoxContainer/Button2
-@onready var debug_spawn_setter : Button = $rightclickpopup/VBoxContainer/Button3
+@onready var rightclickpopup : PanelContainer = %rightclickpopup
+@onready var popupvbox : VBoxContainer = %popupvbox
+@onready var submitbutton : Button = %set_lock_confirm
+@onready var set_tocity : Button = %set_tocity_confirm
+@onready var set_toexit : Button = %set_toexit_confirm
+@onready var rightclicklabel : Label = %rightclicklabel
+@onready var roomcontents : Button = %roomcontents_display
+@onready var lockinput : HBoxContainer = %lockinput
+@onready var tocityinput : HBoxContainer = %tocityinput
+@onready var toexitinput : HBoxContainer = %toexitinput
+@onready var lockspinbox : SpinBox = %pick_lock_value
+@onready var cityspinbox : SpinBox = %pick_tocity_value
+@onready var exitspinbox : SpinBox = %pick_toexit_value
+@onready var default_spawn_setter : Button = %set_room_default_spawn
+@onready var debug_spawn_setter : Button = %set_room_debug_spawn
 
 ##save file menu
-@onready var savegamepopup : PanelContainer = $savegamepopup
-@onready var saveaddressinput : LineEdit = $savegamepopup/HBoxContainer/addressbar
-@onready var confirmsave : Button = $savegamepopup/HBoxContainer/save
-@onready var cancelsave : Button = $savegamepopup/HBoxContainer/cancel
+@onready var savegamepopup : PanelContainer = %savegamepopup
+@onready var saveaddressinput : LineEdit = %savegame_filename_input
+@onready var confirmsave : Button = %savegame_confirm
+@onready var cancelsave : Button = %savegame_cancel
+@onready var open_rooms_editor : Button = %open_rooms_editor
 
+@onready var open_interior_editor : Button = %open_interior_editor
 
 ##playtesting stuff
-@onready var bottomright : PanelContainer = $bottomright
-@onready var playtest : Button = $bottomright/VBoxContainer/playtest2
-@onready var playtest_debugspawn : Button = $bottomright/VBoxContainer/playtest
+@onready var bottomright : PanelContainer = %bottomright
+@onready var playtest : Button = %launch_game_default
+@onready var playtest_debugspawn : Button = %debug_launch
 
-@onready var spawn_room : SpinBox = $bottomright/VBoxContainer/HBoxContainer4/OptionButton
-@onready var spawn_city : SpinBox = $bottomright/VBoxContainer/HBoxContainer5/OptionButton
+@onready var spawn_room : SpinBox = %spawn_room_display
+@onready var spawn_city : SpinBox = %spawn_city_display
 
-@onready var debug_city : SpinBox = $bottomright/VBoxContainer/HBoxContainer3/OptionButton
-@onready var debug_room : SpinBox = $bottomright/VBoxContainer/HBoxContainer2/OptionButton
+@onready var debug_city : SpinBox = %debug_city_display
+@onready var debug_room : SpinBox = %debug_room_display
 
-@onready var playtestgui : PanelContainer = $playtestgui
-@onready var endplaytest : Button = $playtestgui/VBoxContainer/playtest
+@onready var playtestgui : PanelContainer = %playtestgui
+@onready var endplaytest : Button = %quit_playtest
 
 var last_selected_face : RoomInstance3D.RoomInstanceFace
 
@@ -111,6 +116,9 @@ func _ready()->void:
 	spawn_city.value_changed.connect(set_spawn_info)
 	default_spawn_setter.pressed.connect(set_room_default_spawn)
 	debug_spawn_setter.pressed.connect(set_room_debug_spawn)
+	open_mapview_editor.pressed.connect(open_city_editor)
+	open_rooms_editor.pressed.connect(open)
+	open_interior_editor.pressed.connect(open_roominterior_editor)
 	close()
 
 func open()->void:
@@ -121,10 +129,8 @@ func open()->void:
 	rightclickpopup.hide()
 	savegamepopup.hide()
 	playtestgui.hide()
-	Global.screenroots[0].hide()
-	Global.screenroots[1].hide()
-	Global.screenroots[3].hide()
-	Global.titlescreen.get_node(^"HBoxContainer/VBoxContainer").hide()
+	citypanel.show()
+	Global.focus_on_screen(Global.SCREENS.TOPRIGHT)
 	Global.world3D.playermarker.hide()
 	if not Global.current_game:
 		create_new_empty_game()
@@ -137,12 +143,23 @@ func close()->void:
 	rightclickpopup.hide()
 	savegamepopup.hide()
 	playtestgui.hide()
-	Global.screenroots[0].show()
-	Global.screenroots[1].show()
-	Global.screenroots[3].show()
-	Global.titlescreen.get_node(^"HBoxContainer/VBoxContainer").show()
+	citypanel.hide()
+	Global.unfocus_screens()
 	Global.world3D.playermarker.hide()
 	if Global.world3D.selecting_faces_directly: edit_faces()
+
+func open_city_editor()->void:
+	Global.focus_on_screen(Global.SCREENS.BOTTOMRIGHT)
+	Global.mapview.display_map(Global.current_game)
+	Global.mapview.show()
+
+func open_roominterior_editor()->void:
+	if Global.world3D.room_last_selected:
+		Global.focus_on_screen(Global.SCREENS.TOPLEFT)
+		Global.shooterscene.load_room_interior(Global.world3D.room_last_selected.data_reference)
+
+func update_display()->void:
+	pass
 
 func rescale_room()->void:
 	var roomvisual : RoomInstance3D = Global.world3D.room_last_selected

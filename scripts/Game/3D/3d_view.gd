@@ -46,6 +46,7 @@ var dragging_room : bool = false
 var motion_in_progress : bool = false
 var change_axis_locked : bool = false
 var selecting_faces_directly : bool = false
+var is_shift_held : bool = false
 
 func _init()->void:
 	Global.world3D = self
@@ -62,12 +63,14 @@ func _input(event:InputEvent)->void:
 		Lclick()
 	elif event.is_action_pressed(&"rclick"):
 		Rclick()
-	#elif Input.is_action_just_pressed(&"space"):
-		#switch_axis()
 	elif event.is_action_pressed(&"scroll_up"):
 		change_zoom_amount(-1)
 	elif event.is_action_pressed(&"scroll_down"):
 		change_zoom_amount(1)
+	elif event.is_action_pressed(&"shift"):
+		is_shift_held = true
+	elif event.is_action_released(&"shift"):
+		is_shift_held = false
 		
 
 func change_zoom_amount(by:float)->void:
@@ -76,11 +79,14 @@ func change_zoom_amount(by:float)->void:
 	mouse_motion()
 
 func orbit(vel:Vector2,lockvert:bool=false)->void:
-	camera_root.global_rotation_degrees.y += vel.x
-	if not lockvert:
-		camera_root.rotation_degrees.x = clamp(camera_root.rotation_degrees.x+vel.y,-70,70)
-	overlay_camera.global_rotation = camera.global_rotation
-	axismarker.global_rotation = Vector3.ZERO
+	if not is_shift_held:
+		camera_root.global_rotation_degrees.y += vel.x
+		if not lockvert:
+			camera_root.rotation_degrees.x = clamp(camera_root.rotation_degrees.x+vel.y,-70,70)
+		overlay_camera.global_rotation = camera.global_rotation
+		axismarker.global_rotation = Vector3.ZERO
+	else:
+		camera_root.position += (Vector3(vel.x,0,vel.y) * camera.size / 400).rotated(Vector3.UP,camera_root.rotation.y)
 
 func mouse_motion()->void:
 	var room : PhysicsBody3D = get_clicked()

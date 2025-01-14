@@ -1,4 +1,3 @@
-@tool
 class_name RoomItemInstance extends RigidBody3D
 
 @export var is_interactable : bool
