@@ -30,8 +30,11 @@ class_name GameData extends Resource
 
 func _init(being_generated:bool=false)->void:
 	
+	await Global.get_tree().process_frame
+	await Global.get_tree().process_frame
+	
 	index_cities()
-	city_connections_register.update_refs()
+	#city_connections_register.update_refs()
 	
 	if demo:
 		return
@@ -88,125 +91,5 @@ func remove_city(city:City)->void:
 	index_cities()
 
 func save()->GameData:
-	city_connections_register.update_indecies()
+	#city_connections_register.update_indecies()
 	return self
-
-class CityConnectionsRegister extends Resource:
-	@export var connections : Array[CityConnection]
-	func create_new_connection(fromcity:City,fromroom:Room)->void:
-		connections.append(CityConnection.new(fromcity,fromroom))
-	func remove_whole_connection(withcity:City)->void:
-		for connection : CityConnection in connections:
-			if connection.has_city(withcity):
-				connections.remove_at(connections.find(connection))
-				return
-	func connection_exists(city:City,room:Room)->bool:
-		return get_corresponding(city,room) != null
-	func get_corresponding(city:City,room:Room)->ConnectionResponse:
-		for connection : CityConnection in connections:
-			var response : ConnectionResponse = connection.get_corresponding(city,room)
-			if response:
-				return response
-		return null
-	func update_indecies()->void:
-		for connection : CityConnection in connections:
-			connection.update_indecies()
-	func update_refs()->void:
-		for connection : CityConnection in connections:
-			connection.update_refs()
-	func get_open_connections()->Array[CityConnection]:
-		var array : Array[CityConnection]
-		for connection : CityConnection in connections:
-			if connection.is_open():
-				array.append(connection)
-		return array
-	func get_city_connections(city:City)->Array[ConnectionResponse]:
-		var array : Array[ConnectionResponse]
-		for connection : CityConnection in connections:
-			if connection.has_city(city):
-				array.append(connection.get_corresponding(city))
-		return array
-
-class CityConnection extends Resource:
-	@export var cityA_idx : int = -1
-	@export var roomA_idx : int = -1
-	@export var cityB_idx : int = -1
-	@export var roomB_idx : int = -1
-	var cityA : City
-	var roomA : Room
-	var cityB : City
-	var roomB : Room
-	var connection_id : String = r"<<"+Global.create_random_name(4)+r">>"
-	func _init(city:City=null,room:Room=null)->void:
-		if not city: return
-		connect_city(city,room)
-	func connect_city(city:City,room:Room)->void:
-		if cityA:
-			cityB = city
-			cityB_idx = city.index
-			roomB = room
-			roomB_idx = room.index
-		else:
-			cityA = city
-			cityA_idx = city.index
-			roomA = room
-			roomA_idx = room.index
-	func get_corresponding(city:City,room:Room=null)->ConnectionResponse:
-		if cityA == city and (roomA == room or room == null):
-			return ConnectionResponse.new(cityB,roomB)
-		elif cityB == city and (roomB == room or room == null):
-			return ConnectionResponse.new(cityA,roomA)
-		return null
-	func has_city(city:City)->bool:
-		return cityA == city or cityB == city
-	func is_open()->bool:
-		return cityA == null or cityB == null
-	func update_indecies()->void:
-		if cityA:
-			cityA_idx = cityA.index
-			if roomA:
-				roomA_idx = roomA.index
-			else:
-				roomA_idx = -1
-		else:
-			cityA_idx = -1
-			roomA_idx = -1
-		if cityB:
-			cityB_idx = cityB.index
-			if roomB:
-				roomB_idx = roomB.index
-			else:
-				roomB_idx = -1
-		else:
-			cityB_idx = -1
-			roomB_idx = -1
-	func update_refs()->void:
-		if cityA_idx != -1:
-			cityA = Global.current_game.cities[cityA_idx]
-			if roomA_idx != -1:
-				roomA = cityA.rooms[roomA_idx]
-			else:
-				roomA = null
-		else:
-			cityA = null
-			roomA = null
-		if cityB_idx != -1:
-			cityB = Global.current_game.cities[cityB_idx]
-			if roomB_idx != -1:
-				roomB = cityB.rooms[roomB_idx]
-			else:
-				roomB = null
-		else:
-			cityB = null
-			roomB = null
-	func get_index()->int:
-		return Global.current_game.city_connections_register.connections.find(self)
-	func get_connection_string()->String:
-		return connection_id + &":  " + cityA.get_city_string() + &"  CityExit " + str(roomA.index)
-
-class ConnectionResponse extends Resource:
-	var city : City
-	var room : Room
-	func _init(city_:City=null,room_:Room=null)->void:
-		city = city_
-		room = room_

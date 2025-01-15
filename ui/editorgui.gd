@@ -249,6 +249,7 @@ func open_files_menu()->void:
 		DirAccess.make_dir_absolute(r"user://editor_levels/")
 	var files : Array[String]
 	for file : String in DirAccess.get_files_at(r"user://editor_levels/"):
+		if file == "temp.res": continue
 		var string : String = file.split(&".")[0] + &"   -----   " + Time.get_datetime_string_from_unix_time(FileAccess.get_modified_time(r"user://editor_levels/"+file),true)
 		files.append(string)
 	for dir : String in files: fileslist.add_item(dir)
@@ -405,7 +406,7 @@ func test_level(default_spawn:bool=true)->void:
 		DEV_OUTPUT.push_message(r"come on, make something!")
 		return
 	close()
-	DEV_OUTPUT.push_message(error_string(ResourceSaver.save(Global.current_game.save(),"user://temp.res",ResourceSaver.FLAG_BUNDLE_RESOURCES)))
+	DEV_OUTPUT.push_message(error_string(ResourceSaver.save(Global.current_game.save(),"user://editor_levels/temp.res")))
 	if default_spawn:
 		Global.current_game.first_starting = true
 	else:
@@ -421,13 +422,14 @@ func test_level(default_spawn:bool=true)->void:
 func exit_playtest()->void:
 	Global.end_play_session()
 	open()
-	Global.current_region.clear_visuals()
-	Global.current_game = ResourceLoader.load("user://temp.res",&"",ResourceLoader.CACHE_MODE_IGNORE)
-	Global.current_region = Global.current_game.cities[0]
-	Global.current_room = Global.current_region.rooms[0]
-	Global.world3D.reset_3d_view()
-	Global.world3D.display_rooms()
-	update_display()
+	open_game("temp")
+	#Global.current_region.clear_visuals()
+	#Global.current_game = ResourceLoader.load("user://temp.res")
+	#Global.current_region = Global.current_game.cities[0]
+	#Global.current_room = Global.current_region.rooms[0]
+	#Global.world3D.reset_3d_view()
+	#Global.world3D.display_rooms()
+	#update_display()
 
 func display_spawn_info()->void:
 	if Global.current_game.cities.size() != 0:
@@ -485,5 +487,5 @@ func set_room_debug_spawn()->void:
 
 func populate_connection_list()->void:
 	choose_connection.get_popup().clear()
-	for connection : GameData.CityConnection in Global.current_game.city_connections_register.get_open_connections():
+	for connection : CityConnection in Global.current_game.city_connections_register.get_open_connections():
 		choose_connection.get_popup().add_item(connection.get_connection_string(),connection.get_index())

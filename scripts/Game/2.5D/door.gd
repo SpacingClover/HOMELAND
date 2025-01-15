@@ -180,7 +180,7 @@ func send_entity_through_door(entity:Node3D)->void:
 				entity.velocity -= Vector3(direction.z,direction.y,-direction.x) * 3
 	else:
 		var exit : CityExit = Global.current_region.get_room_at(box.coords)
-		var response : GameData.ConnectionResponse = Global.current_game.city_connections_register.get_corresponding(Global.current_region,exit)
+		var response : ConnectionResponse = Global.current_game.city_connections_register.get_corresponding(Global.current_region,exit)
 		if response:
 			Global.set_new_city(response.city.index,response.room.index)
 		#if exit.nextcity >= 0 and exit.corresponding_exit >= 0:

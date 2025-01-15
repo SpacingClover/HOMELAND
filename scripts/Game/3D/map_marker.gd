@@ -26,6 +26,7 @@ var city_idx : int
 var roads : Dictionary
 
 func _ready()->void:
+	tree_exiting.connect(set.bind("sprite",null))
 	sprite.frame = FRAMES.MED_ORANGE_DOT
 	global_position = Vector3(city.coords.x,0,city.coords.y) * MapView.MAP_SPACING_SCALE
 	
@@ -44,8 +45,8 @@ func mark_normal()->void:
 	sprite.frame = FRAMES.MED_ORANGE_DOT
 
 func add_roads()->void:
-	var connections : Array[GameData.ConnectionResponse] = Global.current_game.city_connections_register.get_city_connections(city)
-	for connection : GameData.ConnectionResponse in connections:
+	var connections : Array[ConnectionResponse] = Global.current_game.city_connections_register.get_city_connections(city)
+	for connection : ConnectionResponse in connections:
 		add_road(connection.city)
 
 func add_road(to:City)->void:

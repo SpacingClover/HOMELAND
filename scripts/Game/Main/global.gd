@@ -280,7 +280,7 @@ func unfocus_screens()->void:
 	titlescreen.get_node(^"HBoxContainer/VBoxContainer2").show()
 
 func create_empty_game()->void:
-	current_game = GameData.new()
+	current_game = await GameData.new()
 	current_game.create_new_city()
 	current_region = current_game.cities[0]
 	current_game.startcity = current_region
