@@ -151,7 +151,7 @@ func get_cursor_pos()->Vector3:
 		return result["position"]
 
 func display_city_info(city:City)->void:
-	markerinfotitle.text = &" "+city.name+&" "
+	markerinfotitle.text = city.get_city_string()
 	markerinfo.show()
 	markerinfohr.hide()
 	markerinfobody.hide()

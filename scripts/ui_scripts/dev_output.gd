@@ -153,9 +153,7 @@ func _input(event:InputEvent)->void:
 							var city_idx : int = Global.current_game.cities.find(Global.current_region)+1
 							if city_idx >= Global.current_game.cities.size(): city_idx = 0
 							Global.set_new_city(city_idx)
-							var city_name : String = Global.current_game.cities[city_idx].name
-							if city_name == &"": city_name = "{city "+str(city_idx)+"}"
-							push_message("set city "+city_name)
+							push_message("set city "+Global.current_game.cities[city_idx].get_city_string())
 						else:
 							push_message("not in game")
 			"refresh":

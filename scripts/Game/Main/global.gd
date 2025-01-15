@@ -81,7 +81,7 @@ func _input(event:InputEvent)->void:
 	
 	elif Input.is_action_just_pressed(&"`") and OS.is_debug_build():
 		DEV_MODE = not DEV_MODE
-		DEV_OUTPUT.current.visible = DEV_MODE
+		DEV_OUTPUT.current.visible = DEV_MODE or is_level_editor_mode_enabled
 	
 	elif Input.is_action_just_pressed(&"ui_page_up") and OS.is_debug_build():
 		selected_game_dir = current_debug_load
@@ -128,7 +128,7 @@ func set_new_city(city_idx:int,room_idx:int=-1,loading_game:bool=false)->void:
 		TransitionHandler.begin_transition(TransitionHandler.ANIM_CITY_TRANSITION_0)
 		if mapview:
 			var header : Label = MapView.current.header
-			header.text = "Entering " + current_game.cities[city_idx].name.capitalize()
+			header.text = "Entering " + current_game.cities[city_idx].get_city_string()
 			header.modulate.a = 0
 			create_tween().tween_property(header,"modulate:a",1,1)
 			header.show()

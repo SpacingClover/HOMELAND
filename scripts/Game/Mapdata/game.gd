@@ -4,7 +4,7 @@ class_name GameData extends Resource
 @export var cities : Array[City]
 @export var current_city : City
 @export var current_room : Room
-@export var city_connections_register : CityConnectionsRegister ## in mapview editor, add option to create cityconnection on city, which adds it to the register
+@export var city_connections_register : CityConnectionsRegister = CityConnectionsRegister.new() ## in mapview editor, add option to create cityconnection on city, which adds it to the register
 
 @export_subgroup("Starting Location")
 @export var startcity : City
@@ -27,11 +27,11 @@ class_name GameData extends Resource
 @export var first_created_date : String
 @export var last_accessed_date : String
 @export_multiline var description : String
-@export_subgroup("Ignore But Keep")
 
 func _init(being_generated:bool=false)->void:
 	
 	index_cities()
+	city_connections_register.update_refs()
 	
 	if demo:
 		return
@@ -45,6 +45,7 @@ func _init(being_generated:bool=false)->void:
 	first_starting = true
 
 func open()->void:
+	
 	
 	PopUps.tutorial_enabled = tutorial_enabled
 	
@@ -86,17 +87,21 @@ func remove_city(city:City)->void:
 	cities.remove_at(city.index)
 	index_cities()
 
+func save()->GameData:
+	city_connections_register.update_indecies()
+	return self
+
 class CityConnectionsRegister extends Resource:
 	@export var connections : Array[CityConnection]
-	var connection_id : String = Global.create_random_name(4)
-	func _init()->void:
-		if Global.current_game.cities.is_empty():
-			DEV_OUTPUT.push_message(r"ERROR CITYCONNECTIONSREGISTER LOADED BEFORE CITIES")
-			print(r"ERROR CITYCONNECTIONSREGISTER LOADED BEFORE CITIES")
-			breakpoint
-		update_refs()
-	func create_new_connection(fromcity:City)->void:
-		connections.append(CityConnection.new(fromcity))
+	func create_new_connection(fromcity:City,fromroom:Room)->void:
+		connections.append(CityConnection.new(fromcity,fromroom))
+	func remove_whole_connection(withcity:City)->void:
+		for connection : CityConnection in connections:
+			if connection.has_city(withcity):
+				connections.remove_at(connections.find(connection))
+				return
+	func connection_exists(city:City,room:Room)->bool:
+		return get_corresponding(city,room) != null
 	func get_corresponding(city:City,room:Room)->ConnectionResponse:
 		for connection : CityConnection in connections:
 			var response : ConnectionResponse = connection.get_corresponding(city,room)
@@ -109,6 +114,18 @@ class CityConnectionsRegister extends Resource:
 	func update_refs()->void:
 		for connection : CityConnection in connections:
 			connection.update_refs()
+	func get_open_connections()->Array[CityConnection]:
+		var array : Array[CityConnection]
+		for connection : CityConnection in connections:
+			if connection.is_open():
+				array.append(connection)
+		return array
+	func get_city_connections(city:City)->Array[ConnectionResponse]:
+		var array : Array[ConnectionResponse]
+		for connection : CityConnection in connections:
+			if connection.has_city(city):
+				array.append(connection.get_corresponding(city))
+		return array
 
 class CityConnection extends Resource:
 	@export var cityA_idx : int = -1
@@ -119,21 +136,31 @@ class CityConnection extends Resource:
 	var roomA : Room
 	var cityB : City
 	var roomB : Room
-	func _init(city:City)->void:
-		connect_city(city)
-	func connect_city(city:City)->void:
+	var connection_id : String = r"<<"+Global.create_random_name(4)+r">>"
+	func _init(city:City=null,room:Room=null)->void:
+		if not city: return
+		connect_city(city,room)
+	func connect_city(city:City,room:Room)->void:
 		if cityA:
 			cityB = city
 			cityB_idx = city.index
+			roomB = room
+			roomB_idx = room.index
 		else:
-			cityA = cityA
+			cityA = city
 			cityA_idx = city.index
-	func get_corresponding(city:City,room:Room)->ConnectionResponse:
-		if cityA == city and roomA == room:
-			return ConnectionResponse.new(cityA,roomA)
-		elif cityB == city and roomB == room:
+			roomA = room
+			roomA_idx = room.index
+	func get_corresponding(city:City,room:Room=null)->ConnectionResponse:
+		if cityA == city and (roomA == room or room == null):
 			return ConnectionResponse.new(cityB,roomB)
+		elif cityB == city and (roomB == room or room == null):
+			return ConnectionResponse.new(cityA,roomA)
 		return null
+	func has_city(city:City)->bool:
+		return cityA == city or cityB == city
+	func is_open()->bool:
+		return cityA == null or cityB == null
 	func update_indecies()->void:
 		if cityA:
 			cityA_idx = cityA.index
@@ -172,10 +199,14 @@ class CityConnection extends Resource:
 		else:
 			cityB = null
 			roomB = null
+	func get_index()->int:
+		return Global.current_game.city_connections_register.connections.find(self)
+	func get_connection_string()->String:
+		return connection_id + &":  " + cityA.get_city_string() + &"  CityExit " + str(roomA.index)
 
 class ConnectionResponse extends Resource:
 	var city : City
 	var room : Room
-	func _init(city_:City,room_:Room)->void:
+	func _init(city_:City=null,room_:Room=null)->void:
 		city = city_
 		room = room_

@@ -136,7 +136,8 @@ func Rclick()->void:
 	if selected_room:
 		drop_selected_visual()
 	elif Global.is_level_editor_mode_enabled:
-		Global.titlescreen.editorgui.open_rightclick_popup(get_clicked())
+		room_last_selected = get_clicked()
+		Global.titlescreen.editorgui.open_rightclick_popup(room_last_selected)
 
 func display_rooms()->void:
 	rooms_3D.clear()
@@ -633,6 +634,7 @@ func delete_room()->void:
 		if is_instance_valid(hightlighted_room):
 			hightlighted_room.disable_highlight()
 		hightlighted_room = null
+	room_last_selected = null
 	Global.titlescreen.editorgui.display_spawn_info()
 	Global.titlescreen.editorgui.rightclickpopup.hide()
 	Global.titlescreen.editorgui.update_display()

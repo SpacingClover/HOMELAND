@@ -52,7 +52,7 @@ extends Node
 @onready var default_spawn_setter : Button = %set_room_default_spawn
 @onready var debug_spawn_setter : Button = %set_room_debug_spawn
 @onready var new_connection : Button = %new_connection
-@onready var choose_connection : Button = %choose_connection
+@onready var choose_connection : MenuButton = %choose_connection
 @onready var remove_connection : Button = %remove_connection
 
 ##save file menu
@@ -103,8 +103,8 @@ func _ready()->void:
 	set_toexit.pressed.connect(set_cityexit_corresponding_exit)
 	gamename.text_submitted.connect(func(s:String)->void:Global.current_game.game_name=s;gamename.release_focus())
 	cityname.text_submitted.connect(func(s:String)->void:Global.current_region.name=s;index_cities();cityname.release_focus())
-	gamedescription.text_changed.connect(func(s:String)->void:Global.current_game.description=s;gamedescription.release_focus())
-	saveaddressinput.text_changed.connect(func(s:String)->void:addressbar_changed(s);saveaddressinput.release_focus())
+	gamedescription.text_changed.connect(func(s:String)->void:Global.current_game.description=s)
+	saveaddressinput.text_submitted.connect(func(s:String)->void:addressbar_changed(s);saveaddressinput.release_focus())
 	newcity.pressed.connect(create_new_city)
 	confirmsave.pressed.connect(save_game)
 	cancelsave.pressed.connect(savegamepopup.hide)
@@ -120,6 +120,10 @@ func _ready()->void:
 	open_rooms_editor.pressed.connect(open)
 	open_interior_editor.pressed.connect(open_roominterior_editor)
 	pickcity.item_selected.connect(switch_city)
+	new_connection.pressed.connect(func()->void:Global.current_game.city_connections_register.create_new_connection(Global.current_region,Global.world3D.room_last_selected.data_reference);rightclickpopup.hide())
+	choose_connection.about_to_popup.connect(populate_connection_list)
+	choose_connection.get_popup().id_pressed.connect(func(id:int)->void:Global.current_game.city_connections_register.connections[id].connect_city(Global.current_region,Global.world3D.room_last_selected.data_reference);rightclickpopup.hide())
+	remove_connection.pressed.connect(func()->void:Global.current_game.city_connections_register.remove_whole_connection(editor_selected_city);rightclickpopup.hide())
 	close()
 
 func open()->void:
@@ -138,6 +142,7 @@ func open()->void:
 	mapvieweditor = false
 	interiorview = false
 	update_display()
+	DEV_OUTPUT.current.visible = true
 
 func close()->void:
 	leftpanel.hide()
@@ -151,6 +156,7 @@ func close()->void:
 	Global.unfocus_screens()
 	Global.world3D.playermarker.hide()
 	if Global.world3D.selecting_faces_directly: edit_faces()
+	DEV_OUTPUT.current.visible = false
 
 func open_city_editor()->void:
 	Global.focus_on_screen(Global.SCREENS.BOTTOMRIGHT)
@@ -167,7 +173,7 @@ func open_roominterior_editor()->void:
 		update_display()
 
 func update_display()->void:
-	newbutton.disabled = room_isolation_mode or not Global.world3D.selected_room or Global.world3D.selecting_faces_directly or mapvieweditor or interiorview
+	newbutton.disabled = room_isolation_mode or Global.world3D.selecting_faces_directly or mapvieweditor or interiorview
 	roomtype.disabled = newbutton.disabled
 	applyscale.disabled = Global.world3D.selecting_faces_directly or mapvieweditor or interiorview or not(Global.world3D.room_last_selected and is_instance_valid(Global.world3D.room_last_selected))
 	scalex.editable = not applyscale.disabled
@@ -278,6 +284,7 @@ func open_rightclick_popup(obj:Node3D)->void:
 		default_spawn_setter.show()
 		deleteroom.show()
 		if obj.data_reference is CityExit:
+			rightclicklabel.text = r"CityExit " + str(obj.data_reference.index)
 			new_connection.show()
 			choose_connection.show()
 			remove_connection.show()
@@ -290,9 +297,7 @@ func open_rightclick_popup(obj:Node3D)->void:
 			lockspinbox.value = obj.box.get_lock(obj.dir)
 			lockinput.show()
 	elif obj is CityMarker3D:
-		var string : String = obj.city.name
-		if string == &"": string = "City " + str(obj.city.index)
-		rightclicklabel.text = string
+		rightclicklabel.text = obj.city.get_city_string()
 		rightclicklabel.show()
 		editor_selected_city = obj.city
 		deletecity.show()
@@ -319,7 +324,7 @@ func addressbar_changed(s:String)->void:
 	#confirmsave.disabled = saveaddressinput.text.is_empty()
 
 func save_game()->void:
-	var game_save : GameData = Global.current_game
+	var game_save : GameData = Global.current_game.save()
 	var filename : String = saveaddressinput.text
 	if filename.is_valid_filename():
 		DEV_OUTPUT.push_message(error_string(ResourceSaver.save(game_save,r"user://editor_levels/"+filename+r".res")))
@@ -361,12 +366,7 @@ func index_cities()->void:
 	pickcity.clear()
 	var idx : int = 0
 	for city : City in Global.current_game.cities:
-		var string : String
-		if city.name == &"":
-			string = r"city " + str(idx)
-		else:
-			string = city.name
-		pickcity.add_item(string,idx)
+		pickcity.add_item(city.get_city_string(),idx)
 		if city == Global.current_region:
 			pickcity.select(idx)
 		idx += 1
@@ -381,13 +381,14 @@ func switch_city(idx:int)->void:
 		update_display()
 
 func create_new_city()->int:
-	await Global.current_game.create_new_city()
+	var city : City = await Global.current_game.create_new_city()
+	switch_city(city.index)
 	index_cities()
 	display_spawn_info()
 	update_display()
 	return 0
 
-func delete_city()->void: ####################### doesnt FREAKING work
+func delete_city()->void:
 	if Global.current_game.cities.size() == 1:
 		create_new_city()
 	Global.current_game.remove_city(editor_selected_city)
@@ -397,13 +398,14 @@ func delete_city()->void: ####################### doesnt FREAKING work
 	index_cities()
 	display_spawn_info()
 	update_display()
+	rightclickpopup.hide()
 
 func test_level(default_spawn:bool=true)->void:
 	if Global.current_game.cities.size() == 0 or (Global.current_game.cities.size() == 1 and Global.current_game.cities[0].rooms.size() == 0):
 		DEV_OUTPUT.push_message(r"come on, make something!")
 		return
 	close()
-	ResourceSaver.save(Global.current_game,"user://temp.res")
+	DEV_OUTPUT.push_message(error_string(ResourceSaver.save(Global.current_game.save(),"user://temp.res",ResourceSaver.FLAG_BUNDLE_RESOURCES)))
 	if default_spawn:
 		Global.current_game.first_starting = true
 	else:
@@ -480,3 +482,8 @@ func set_room_debug_spawn()->void:
 	set_spawn_info()
 	rightclickpopup.hide()
 	update_display()
+
+func populate_connection_list()->void:
+	choose_connection.get_popup().clear()
+	for connection : GameData.CityConnection in Global.current_game.city_connections_register.get_open_connections():
+		choose_connection.get_popup().add_item(connection.get_connection_string(),connection.get_index())

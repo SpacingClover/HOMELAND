@@ -1,8 +1,10 @@
 extends MeshInstance2D
 
-func _input(event:InputEvent)->void:
-	if event is InputEventMouseMotion:
-		global_position = get_global_mouse_position()
+func _ready()->void:
+	get_parent().layer = 1025
+
+func _process(delta:float)->void:
+	global_position = get_global_mouse_position()
 
 func _notification(what:int)->void:
 	match what:

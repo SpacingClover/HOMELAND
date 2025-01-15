@@ -26,8 +26,6 @@
 [ext_resource type="Script" path="res://scripts/Game/Main/MusicManager.gd" id="23_ldrbm"]
 [ext_resource type="PackedScene" uid="uid://d1v1m2j033syj" path="res://ui/editorgui.tscn" id="24_0wili"]
 
-[sub_resource type="SphereMesh" id="SphereMesh_wvrte"]
-
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tq0sg"]
 bg_color = Color(1, 0.376471, 0, 1)
 
@@ -40,6 +38,8 @@ shader = ExtResource("7_fqb0w")
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_4r8kd"]
 bg_color = Color(0, 0, 0, 0.333333)
 
+[sub_resource type="SphereMesh" id="SphereMesh_wvrte"]
+
 [node name="main" type="Control"]
 layout_mode = 3
 anchors_preset = 15
@@ -49,22 +49,6 @@ grow_horizontal = 2
 grow_vertical = 2
 mouse_filter = 2
 script = ExtResource("1_g6dcv")
-
-[node name="cursor" type="MeshInstance2D" parent="."]
-process_mode = 3
-self_modulate = Color(1, 0.52549, 0, 1)
-top_level = true
-z_index = 1
-position = Vector2(155.75, 53.7602)
-scale = Vector2(18.5204, 18.5204)
-mesh = SubResource("SphereMesh_wvrte")
-script = ExtResource("2_x2uka")
-
-[node name="cursor2" type="MeshInstance2D" parent="cursor"]
-modulate = Color(0.952941, 0.294118, 0, 1)
-show_behind_parent = true
-scale = Vector2(1.215, 1.215)
-mesh = SubResource("SphereMesh_wvrte")
 
 [node name="Panel" type="Panel" parent="."]
 layout_mode = 0
@@ -738,22 +722,22 @@ process_mode = 3
 visible = false
 top_level = true
 layout_mode = 1
-anchors_preset = 2
-anchor_top = 1.0
-anchor_bottom = 1.0
-offset_top = -192.0
-offset_right = 229.0
-grow_vertical = 0
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -229.0
+offset_bottom = 192.0
+grow_horizontal = 0
 script = ExtResource("22_ok02m")
 
 [node name="VBoxContainer" type="VBoxContainer" parent="dev_output"]
 layout_mode = 1
-anchors_preset = 15
+anchors_preset = 1
+anchor_left = 1.0
 anchor_right = 1.0
-anchor_bottom = 1.0
-offset_right = 44.0
-grow_horizontal = 2
-grow_vertical = 2
+offset_left = -304.0
+offset_bottom = 628.0
+grow_horizontal = 0
 
 [node name="ScrollContainer" type="ScrollContainer" parent="dev_output/VBoxContainer"]
 layout_mode = 2
@@ -767,10 +751,9 @@ size_flags_vertical = 3
 
 [node name="TextEdit" type="LineEdit" parent="dev_output/VBoxContainer"]
 layout_mode = 2
-size_flags_vertical = 3
 size_flags_stretch_ratio = 0.31
 theme_override_font_sizes/font_size = 20
-placeholder_text = "dev input"
+placeholder_text = "console"
 
 [node name="credits" type="Control" parent="."]
 anchors_preset = 0
@@ -827,3 +810,21 @@ muted = true
 [node name="stream_1" type="AudioStreamPlayer" parent="MusicManager"]
 process_mode = 3
 max_polyphony = 10
+
+[node name="toplevel" type="CanvasLayer" parent="."]
+
+[node name="cursor" type="MeshInstance2D" parent="toplevel"]
+process_mode = 3
+self_modulate = Color(1, 0.52549, 0, 1)
+top_level = true
+z_index = 1025
+position = Vector2(155.75, 53.7602)
+scale = Vector2(18.5204, 18.5204)
+mesh = SubResource("SphereMesh_wvrte")
+script = ExtResource("2_x2uka")
+
+[node name="cursor2" type="MeshInstance2D" parent="toplevel/cursor"]
+modulate = Color(0.952941, 0.294118, 0, 1)
+show_behind_parent = true
+scale = Vector2(1.215, 1.215)
+mesh = SubResource("SphereMesh_wvrte")

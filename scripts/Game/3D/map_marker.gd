@@ -44,9 +44,9 @@ func mark_normal()->void:
 	sprite.frame = FRAMES.MED_ORANGE_DOT
 
 func add_roads()->void:
-	for exit : CityExit in city.exits:
-		if exit.nextcity > city_idx:
-			add_road(Global.current_game.cities[exit.nextcity])
+	var connections : Array[GameData.ConnectionResponse] = Global.current_game.city_connections_register.get_city_connections(city)
+	for connection : GameData.ConnectionResponse in connections:
+		add_road(connection.city)
 
 func add_road(to:City)->void:
 	var line : MeshInstance3D = MeshInstance3D.new()
