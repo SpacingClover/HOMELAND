@@ -26,7 +26,6 @@ extends Node
 @onready var newcity : Button = %create_new_city
 @onready var switchcity : Button = %switch_city_confirm
 @onready var deletecity : Button = %delete_city
-
 @onready var citypanel : PanelContainer = %citypanel
 @onready var open_mapview_editor : Button = %open_mapview_editor
 
@@ -52,6 +51,9 @@ extends Node
 @onready var exitspinbox : SpinBox = %pick_toexit_value
 @onready var default_spawn_setter : Button = %set_room_default_spawn
 @onready var debug_spawn_setter : Button = %set_room_debug_spawn
+@onready var new_connection : Button = %new_connection
+@onready var choose_connection : Button = %choose_connection
+@onready var remove_connection : Button = %remove_connection
 
 ##save file menu
 @onready var savegamepopup : PanelContainer = %savegamepopup
@@ -59,24 +61,21 @@ extends Node
 @onready var confirmsave : Button = %savegame_confirm
 @onready var cancelsave : Button = %savegame_cancel
 @onready var open_rooms_editor : Button = %open_rooms_editor
-
 @onready var open_interior_editor : Button = %open_interior_editor
 
 ##playtesting stuff
 @onready var bottomright : PanelContainer = %bottomright
 @onready var playtest : Button = %launch_game_default
 @onready var playtest_debugspawn : Button = %debug_launch
-
 @onready var spawn_room : SpinBox = %spawn_room_display
 @onready var spawn_city : SpinBox = %spawn_city_display
-
 @onready var debug_city : SpinBox = %debug_city_display
 @onready var debug_room : SpinBox = %debug_room_display
-
 @onready var playtestgui : PanelContainer = %playtestgui
 @onready var endplaytest : Button = %quit_playtest
 
 var last_selected_face : RoomInstance3D.RoomInstanceFace
+var editor_selected_city : City
 
 var interacted_room : Room
 
@@ -102,12 +101,11 @@ func _ready()->void:
 	submitbutton.pressed.connect(set_face_lock)
 	set_tocity.pressed.connect(set_cityexit_nextcity)
 	set_toexit.pressed.connect(set_cityexit_corresponding_exit)
-	switchcity.pressed.connect(switch_city)
-	gamename.text_changed.connect(func(s:String)->void:Global.current_game.game_name=s)
-	cityname.text_changed.connect(func(s:String)->void:Global.current_region.name=s)
-	gamedescription.text_changed.connect(func(s:String)->void:Global.current_game.description=s)
+	gamename.text_submitted.connect(func(s:String)->void:Global.current_game.game_name=s;gamename.release_focus())
+	cityname.text_submitted.connect(func(s:String)->void:Global.current_region.name=s;index_cities();cityname.release_focus())
+	gamedescription.text_changed.connect(func(s:String)->void:Global.current_game.description=s;gamedescription.release_focus())
+	saveaddressinput.text_changed.connect(func(s:String)->void:addressbar_changed(s);saveaddressinput.release_focus())
 	newcity.pressed.connect(create_new_city)
-	saveaddressinput.text_changed.connect(addressbar_changed)
 	confirmsave.pressed.connect(save_game)
 	cancelsave.pressed.connect(savegamepopup.hide)
 	deletecity.pressed.connect(delete_city)
@@ -121,6 +119,7 @@ func _ready()->void:
 	open_mapview_editor.pressed.connect(open_city_editor)
 	open_rooms_editor.pressed.connect(open)
 	open_interior_editor.pressed.connect(open_roominterior_editor)
+	pickcity.item_selected.connect(switch_city)
 	close()
 
 func open()->void:
@@ -168,12 +167,12 @@ func open_roominterior_editor()->void:
 		update_display()
 
 func update_display()->void:
-	newbutton.disabled = room_isolation_mode or Global.world3D.selected_room or Global.world3D.selecting_faces_directly or mapvieweditor or interiorview
+	newbutton.disabled = room_isolation_mode or not Global.world3D.selected_room or Global.world3D.selecting_faces_directly or mapvieweditor or interiorview
 	roomtype.disabled = newbutton.disabled
 	applyscale.disabled = Global.world3D.selecting_faces_directly or mapvieweditor or interiorview or not(Global.world3D.room_last_selected and is_instance_valid(Global.world3D.room_last_selected))
-	scalex.disabled = applyscale.disabled
-	scaley.disabled = applyscale.disabled
-	scalez.disabled = applyscale.disabled
+	scalex.editable = not applyscale.disabled
+	scaley.editable = not applyscale.disabled
+	scalez.editable = not applyscale.disabled
 	editfaces.disabled = mapvieweditor or interiorview or not(Global.world3D.room_last_selected and is_instance_valid(Global.world3D.room_last_selected))
 	isolateroom.disabled = editfaces.disabled
 
@@ -277,12 +276,11 @@ func open_rightclick_popup(obj:Node3D)->void:
 		contents.show()
 		debug_spawn_setter.show()
 		default_spawn_setter.show()
+		deleteroom.show()
 		if obj.data_reference is CityExit:
-			tocityinput.show()
-			toexitinput.show()
-			cityspinbox.value = obj.data_reference.nextcity
-			exitspinbox.value = obj.data_reference.corresponding_exit
-			DEV_OUTPUT.push_message(r"this would be better with dropdown menus")
+			new_connection.show()
+			choose_connection.show()
+			remove_connection.show()
 	elif obj is RoomInstance3D.RoomInstanceFace:
 		last_selected_face = obj
 		interacted_room = obj.room
@@ -291,6 +289,13 @@ func open_rightclick_popup(obj:Node3D)->void:
 		if obj.box.has_doorway(obj.dir,true,false):
 			lockspinbox.value = obj.box.get_lock(obj.dir)
 			lockinput.show()
+	elif obj is CityMarker3D:
+		var string : String = obj.city.name
+		if string == &"": string = "City " + str(obj.city.index)
+		rightclicklabel.text = string
+		rightclicklabel.show()
+		editor_selected_city = obj.city
+		deletecity.show()
 	
 	rightclickpopup.show()
 	rightclickpopup.position = get_viewport().get_mouse_position()
@@ -366,8 +371,8 @@ func index_cities()->void:
 			pickcity.select(idx)
 		idx += 1
 
-func switch_city()->void:
-	var nextcity : City = Global.current_game.cities[pickcity.selected]
+func switch_city(idx:int)->void:
+	var nextcity : City = Global.current_game.cities[idx]
 	if Global.current_region != nextcity:
 		Global.current_region = nextcity
 		Global.world3D.reset_3d_view()
@@ -385,9 +390,10 @@ func create_new_city()->int:
 func delete_city()->void: ####################### doesnt FREAKING work
 	if Global.current_game.cities.size() == 1:
 		create_new_city()
-	Global.current_game.remove_city(Global.current_region)
+	Global.current_game.remove_city(editor_selected_city)
 	Global.world3D.reset_3d_view()
 	Global.world3D.display_rooms()
+	editor_selected_city.mapvisual.queue_free()
 	index_cities()
 	display_spawn_info()
 	update_display()

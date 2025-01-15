@@ -634,3 +634,5 @@ func delete_room()->void:
 			hightlighted_room.disable_highlight()
 		hightlighted_room = null
 	Global.titlescreen.editorgui.display_spawn_info()
+	Global.titlescreen.editorgui.rightclickpopup.hide()
+	Global.titlescreen.editorgui.update_display()

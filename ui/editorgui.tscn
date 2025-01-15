@@ -58,12 +58,6 @@ popup/item_1/id = 1
 popup/item_2/text = "Feature"
 popup/item_2/id = 2
 
-[node name="delete_room" type="Button" parent="leftpanel/VBoxContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-disabled = true
-text = "delete room"
-
 [node name="PanelContainer" type="PanelContainer" parent="leftpanel/VBoxContainer"]
 layout_mode = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_2o1f6")
@@ -148,8 +142,10 @@ layout_mode = 2
 
 [node name="switch_city_confirm" type="Button" parent="citypanel/VBoxContainer/HBoxContainer"]
 unique_name_in_owner = true
+visible = false
 layout_mode = 2
 size_flags_horizontal = 3
+tooltip_text = "Choose city to edit"
 text = "switch to city"
 
 [node name="pickcity_list" type="OptionButton" parent="citypanel/VBoxContainer/HBoxContainer"]
@@ -161,11 +157,6 @@ size_flags_horizontal = 3
 unique_name_in_owner = true
 layout_mode = 2
 text = "create new city"
-
-[node name="delete_city" type="Button" parent="citypanel/VBoxContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "delete city"
 
 [node name="open_mapview_editor" type="Button" parent="citypanel/VBoxContainer"]
 unique_name_in_owner = true
@@ -249,6 +240,77 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 editable = false
+
+[node name="bottomright" type="PanelContainer" parent="."]
+unique_name_in_owner = true
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = -268.0
+offset_top = -205.0
+grow_horizontal = 0
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_tq0sg")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="bottomright"]
+layout_mode = 2
+
+[node name="launch_game_default" type="Button" parent="bottomright/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "run level from default spawn"
+
+[node name="HSeparator3" type="HSeparator" parent="bottomright/VBoxContainer"]
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxEmpty_u47yy")
+
+[node name="HSeparator7" type="HSeparator" parent="bottomright/VBoxContainer"]
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxEmpty_u47yy")
+
+[node name="HSeparator8" type="HSeparator" parent="bottomright/VBoxContainer"]
+layout_mode = 2
+theme_override_styles/separator = SubResource("StyleBoxEmpty_u47yy")
+
+[node name="HBoxContainer2" type="HBoxContainer" parent="bottomright/VBoxContainer"]
+layout_mode = 2
+
+[node name="current room" type="Label" parent="bottomright/VBoxContainer/HBoxContainer2"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "test room"
+
+[node name="debug_room_display" type="SpinBox" parent="bottomright/VBoxContainer/HBoxContainer2"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+editable = false
+
+[node name="HBoxContainer3" type="HBoxContainer" parent="bottomright/VBoxContainer"]
+layout_mode = 2
+
+[node name="current room" type="Label" parent="bottomright/VBoxContainer/HBoxContainer3"]
+layout_mode = 2
+size_flags_horizontal = 3
+text = "test city"
+
+[node name="debug_city_display" type="SpinBox" parent="bottomright/VBoxContainer/HBoxContainer3"]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+editable = false
+
+[node name="debug_launch" type="Button" parent="bottomright/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "run level from test location"
+
+[node name="close_editor" type="Button" parent="bottomright/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "close editor"
 
 [node name="opengamepopup" type="PanelContainer" parent="."]
 unique_name_in_owner = true
@@ -376,6 +438,37 @@ visible = false
 layout_mode = 2
 text = "set debug spawn"
 
+[node name="delete_room" type="Button" parent="rightclickpopup/popupvbox"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+disabled = true
+text = "delete room"
+
+[node name="delete_city" type="Button" parent="rightclickpopup/popupvbox"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+text = "delete city"
+
+[node name="new_connection" type="Button" parent="rightclickpopup/popupvbox"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+text = "new connection"
+
+[node name="choose_connection" type="Button" parent="rightclickpopup/popupvbox"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+text = "select connection"
+
+[node name="remove_connection" type="Button" parent="rightclickpopup/popupvbox"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+text = "remove connection"
+
 [node name="savegamepopup" type="PanelContainer" parent="."]
 unique_name_in_owner = true
 visible = false
@@ -413,77 +506,6 @@ text = "Write"
 unique_name_in_owner = true
 layout_mode = 2
 text = "Cancel"
-
-[node name="bottomright" type="PanelContainer" parent="."]
-unique_name_in_owner = true
-anchors_preset = 3
-anchor_left = 1.0
-anchor_top = 1.0
-anchor_right = 1.0
-anchor_bottom = 1.0
-offset_left = -268.0
-offset_top = -41.0
-grow_horizontal = 0
-grow_vertical = 0
-theme_override_styles/panel = SubResource("StyleBoxFlat_tq0sg")
-
-[node name="VBoxContainer" type="VBoxContainer" parent="bottomright"]
-layout_mode = 2
-
-[node name="launch_game_default" type="Button" parent="bottomright/VBoxContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "run level from default spawn"
-
-[node name="HSeparator3" type="HSeparator" parent="bottomright/VBoxContainer"]
-layout_mode = 2
-theme_override_styles/separator = SubResource("StyleBoxEmpty_u47yy")
-
-[node name="HSeparator7" type="HSeparator" parent="bottomright/VBoxContainer"]
-layout_mode = 2
-theme_override_styles/separator = SubResource("StyleBoxEmpty_u47yy")
-
-[node name="HSeparator8" type="HSeparator" parent="bottomright/VBoxContainer"]
-layout_mode = 2
-theme_override_styles/separator = SubResource("StyleBoxEmpty_u47yy")
-
-[node name="HBoxContainer2" type="HBoxContainer" parent="bottomright/VBoxContainer"]
-layout_mode = 2
-
-[node name="current room" type="Label" parent="bottomright/VBoxContainer/HBoxContainer2"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "test room"
-
-[node name="debug_room_display" type="SpinBox" parent="bottomright/VBoxContainer/HBoxContainer2"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-editable = false
-
-[node name="HBoxContainer3" type="HBoxContainer" parent="bottomright/VBoxContainer"]
-layout_mode = 2
-
-[node name="current room" type="Label" parent="bottomright/VBoxContainer/HBoxContainer3"]
-layout_mode = 2
-size_flags_horizontal = 3
-text = "test city"
-
-[node name="debug_city_display" type="SpinBox" parent="bottomright/VBoxContainer/HBoxContainer3"]
-unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 3
-editable = false
-
-[node name="debug_launch" type="Button" parent="bottomright/VBoxContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "run level from test location"
-
-[node name="close_editor" type="Button" parent="bottomright/VBoxContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "close editor"
 
 [node name="playtestgui" type="PanelContainer" parent="."]
 unique_name_in_owner = true

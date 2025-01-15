@@ -34,10 +34,14 @@ func _input(event:InputEvent)->void:
 			pos /= MAP_SPACING_SCALE
 			pos = round(pos)
 			pos *= MAP_SPACING_SCALE
+			for city : City in Global.current_game.cities:
+				if city != selected_node.city and city.mapvisual.global_position == pos:
+					return
 			selected_node.global_position = pos
 			return
 		var obj : PhysicsBody3D = get_cursor_object()
 		if not obj or not obj is CityMarker3D: markerinfo.hide(); return
+		if Global.is_level_editor_mode_enabled: return
 		display_city_info(obj.city)
 	elif event.is_action_pressed(&"scroll_up"):
 		camera.position /= 1.1
@@ -49,9 +53,20 @@ func _input(event:InputEvent)->void:
 				var obj : PhysicsBody3D = get_cursor_object()
 				if obj is CityMarker3D:
 					selected_node = obj
+				Global.titlescreen.editorgui.rightclickpopup.hide()
 			else:
 				selected_node.city.coords = Vector2i(Vector2(selected_node.global_position.x,selected_node.global_position.z) / MapView.MAP_SPACING_SCALE)
 				selected_node = null
+		elif event.is_action_pressed(&"rclick"):
+			if selected_node:
+				selected_node.global_position = Vector3(selected_node.city.coords.x,0,selected_node.city.coords.y)*MAP_SPACING_SCALE
+				selected_node = null
+			else:
+				var obj : PhysicsBody3D = get_cursor_object()
+				if obj is CityMarker3D:
+					Global.titlescreen.editorgui.open_rightclick_popup(obj)
+				elif obj == null:
+					Global.titlescreen.editorgui.rightclickpopup.hide()
 
 func orbit(vel:Vector2,lockvert:bool=false)->void:
 	camera_root.global_rotation_degrees.y += vel.x
