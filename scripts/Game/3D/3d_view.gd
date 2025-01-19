@@ -136,8 +136,10 @@ func Rclick()->void:
 	if selected_room:
 		drop_selected_visual()
 	elif Global.is_level_editor_mode_enabled:
-		room_last_selected = get_clicked()
-		Global.titlescreen.editorgui.open_rightclick_popup(room_last_selected)
+		var obj : PhysicsBody3D = get_clicked()
+		if obj is RoomInstance3D:
+			room_last_selected = obj
+			Global.titlescreen.editorgui.open_rightclick_popup(room_last_selected)
 
 func display_rooms()->void:
 	rooms_3D.clear()

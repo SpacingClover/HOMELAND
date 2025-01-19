@@ -1,12 +1,23 @@
 class_name WiringView extends Node2D
 static var current : WiringView
 
-@onready var camera : Camera2D = $camera
+@onready var camera : Camera2D = %camera
 var board : CircuitBoard
 
 func _init()->void:
 	Global.circuitboard = self
 	WiringView.current = self
+
+
+
+
+##TODO: add circuitboards
+##TODO: implement circuitry
+
+
+
+
+
 
 func _input(event:InputEvent)->void:
 	if event.is_action_pressed(&"scroll_up"):

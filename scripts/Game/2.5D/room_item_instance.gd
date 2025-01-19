@@ -29,8 +29,6 @@ func _process(delta:float)->void:
 	var arr : Array[Vector2]
 	for vertex : Vector3 in nav_ob.vertices:
 		arr.append(Vector2(vertex.z,vertex.x))
-	$CSGPolygon3D.polygon = PackedVector2Array(arr)
-	#update_obstacle()
 
 var original_points : Array[Vector3]
 

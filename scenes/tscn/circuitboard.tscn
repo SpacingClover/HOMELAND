@@ -6,6 +6,7 @@
 script = ExtResource("1_2vtpm")
 
 [node name="camera" type="Camera2D" parent="."]
+unique_name_in_owner = true
 
 [node name="Label" type="Label" parent="."]
 offset_right = 258.0

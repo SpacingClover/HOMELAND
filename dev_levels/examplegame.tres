@@ -1,0 +1,43 @@
+[gd_resource type="Resource" script_class="GameData" load_steps=9 format=3 uid="uid://5j1838ajt0xg"]
+
+[ext_resource type="Script" path="res://scripts/Game/Mapdata/city.gd" id="1_86t4e"]
+[ext_resource type="Script" path="res://scripts/Game/Mapdata/cityexit.gd" id="2_j27wj"]
+[ext_resource type="Script" path="res://scripts/Game/Mapdata/room.gd" id="3_6x4cf"]
+[ext_resource type="Script" path="res://scripts/Game/Mapdata/box.gd" id="4_4nup0"]
+[ext_resource type="Script" path="res://scripts/Game/Mapdata/item_data.gd" id="5_mky51"]
+[ext_resource type="Script" path="res://scripts/Game/Mapdata/game.gd" id="6_fsrb7"]
+
+[sub_resource type="Resource" id="Resource_atcti"]
+script = ExtResource("3_6x4cf")
+items = Array[ExtResource("5_mky51")]([])
+boxes = Array[ExtResource("4_4nup0")]([])
+coords = Vector3i(0, 0, 0)
+scale = Vector3i(3, 0, 2)
+original_coords = Vector3i(0, 0, 0)
+validated = false
+original_coords_set = false
+
+[sub_resource type="Resource" id="Resource_3sl2i"]
+script = ExtResource("1_86t4e")
+state = null
+type = null
+coords = Vector2i(0, 0)
+name = ""
+rooms = Array[ExtResource("3_6x4cf")]([SubResource("Resource_atcti")])
+exits = Array[ExtResource("2_j27wj")]([])
+validated = false
+
+[resource]
+script = ExtResource("6_fsrb7")
+cities = Array[ExtResource("1_86t4e")]([SubResource("Resource_3sl2i")])
+health = 50
+position = Vector3(0, 0, 0)
+current_axis = 0
+game_name = "untitled"
+demo = false
+tutorial_enabled = false
+first_starting = true
+door_entry_opening = false
+first_created_date = ""
+last_accessed_date = ""
+description = ""
