@@ -126,6 +126,9 @@ func Lclick()->void:
 		if body is RoomInstance3D.RoomInstanceFace:
 			body.set_face_type(Global.titlescreen.editorgui.setfacetype.selected,true)
 	
+	elif Global.is_level_editor_mode_enabled and Global.titlescreen.editorgui.interiorview:
+		DEV_OUTPUT.push_message(str(body))
+	
 	elif selected_room:
 		place_room()
 		
@@ -140,6 +143,8 @@ func Rclick()->void:
 		if obj is RoomInstance3D:
 			room_last_selected = obj
 			Global.titlescreen.editorgui.open_rightclick_popup(room_last_selected)
+		elif obj and Global.titlescreen.editorgui.interiorview:
+			Global.titlescreen.editorgui.open_rightclick_popup(Global.shooterscene.room3d)
 
 func display_rooms()->void:
 	rooms_3D.clear()
@@ -166,11 +171,13 @@ func set_marker_position(object:Object)->void:
 			playermarker.position += loaded_room_marker_offset/6.39
 		#camera_root.global_position = playermarker.position
 
-func recenter_camera()->void:
+func recenter_camera(time:float=1,pos:Vector3=Vector3.ZERO,override:bool=false)->void:
 	var cameratween : Tween = create_tween()
-	cameratween.tween_property(camera_root,"position",Global.current_room.get_room_center()*root.scale,1)
-	#cameratween.tween_property(camera_root,"position",Global.current_room.roomvisual.get_center(),1)
-
+	if not override:
+		cameratween.tween_property(camera_root,"position",Global.current_room.get_room_center()*root.scale,time)
+	else:
+		cameratween.tween_property(camera_root,"global_position",pos,time)
+	
 func select_room(room:RoomInstance3D)->void:
 	selected_room = room
 	selected_room.select()
@@ -543,6 +550,7 @@ func update_doors_in_moved_room(room:Room)->void:
 								#door.handle_lock_icon()
 
 func reset_3d_view()->void:
+	room_last_selected = null
 	selection_over()
 	if Global.current_region:
 		Global.current_region.clear_visuals()

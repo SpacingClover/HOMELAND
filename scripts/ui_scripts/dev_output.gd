@@ -100,15 +100,7 @@ func _input(event:InputEvent)->void:
 					"cam":
 						var args : PackedInt64Array = get_args_int(msg_parts,2)
 						if args.size() >= 2:
-							match args[0]:
-								0:
-									Global.shooterscene.camera.cull_mask = args[1]
-								1:
-									Global.world3D.camera.cull_mask = args[1]
-								2:
-									push_message("no behaviour defined")
-								3:
-									Global.mapview.camera.cull_mask = args[1]
+							Global.set_camera_layer(args[0],args[1])
 					_:
 						push_message("invalid target at pos 1")
 			"save":

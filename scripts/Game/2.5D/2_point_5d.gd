@@ -16,27 +16,31 @@ var camera : Camera3D:
 
 var viewport : GameView
 
-func load_room_interior(room:Room,make_current:bool=false)->void:
+func load_room_interior(room:Room,make_current:bool=false)->RoomInterior3D:
 	if make_current:
 		##handle old room
 		if room3d:
 			move_room_to_buffer(room3d)
 		
 		##handle new room
-		if room.is_loaded:
+		if room.is_loaded and room.roominterior and is_instance_valid(room.roominterior):
 			take_room_from_buffer(room.roominterior)
 		else:
 			room3d = RoomInterior3D.new(room)
 			root.add_child(room3d)
 		
 		##handle adjacient rooms
-		for roomindex : int in room.get_room_connections(Global.current_region):
-			load_room_interior(Global.current_region.rooms[roomindex])
-		clean_room_buffer()
+		if not Global.is_level_editor_mode_enabled:
+			for roomindex : int in room.get_room_connections(Global.current_region):
+				load_room_interior(Global.current_region.rooms[roomindex])
+			clean_room_buffer()
+		return room3d
 		
 	elif not room.is_loaded:
 		var buffroom : RoomInterior3D = RoomInterior3D.new(room)
 		room_buffer_root.add_child(buffroom)
+		return buffroom
+	return null
 
 func send_entity_to_room(entity:Node3D,room:Room,tobox:Box=null,frombox:Box=null,fromroom:Room=null)->void:
 	await get_tree().process_frame
@@ -87,8 +91,10 @@ func clean_room_buffer()->void:
 
 func reset()->void:
 	if room3d and is_instance_valid(room3d):
+		room3d.roomdata.is_loaded = false
 		room3d.queue_free()
 	for child : Node3D in root.get_children():
+		child.roomdata.is_loaded = false
 		child.queue_free()
 	room3d = null
 

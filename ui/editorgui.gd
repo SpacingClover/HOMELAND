@@ -140,9 +140,14 @@ func open()->void:
 	if not Global.current_game:
 		create_new_empty_game()
 	mapvieweditor = false
+	if interiorview: Global.world3D.recenter_camera(0)
 	interiorview = false
 	update_display()
 	DEV_OUTPUT.current.visible = true
+	Global.set_camera_layer(1,1)	
+	Global.set_camera_layer(0,2)
+	Global.shooterscene.reset()
+	Global.world3D.room_last_selected = null
 
 func close()->void:
 	leftpanel.hide()
@@ -157,6 +162,10 @@ func close()->void:
 	Global.world3D.playermarker.hide()
 	if Global.world3D.selecting_faces_directly: edit_faces()
 	DEV_OUTPUT.current.visible = false
+	Global.set_camera_layer(1,1)
+	Global.set_camera_layer(0,2)
+	Global.shooterscene.reset()
+	Global.world3D.room_last_selected = null
 
 func open_city_editor()->void:
 	Global.focus_on_screen(Global.SCREENS.BOTTOMRIGHT)
@@ -164,13 +173,21 @@ func open_city_editor()->void:
 	Global.mapview.show()
 	mapvieweditor = true
 	update_display()
+	Global.shooterscene.reset()
 
 func open_roominterior_editor()->void:
 	if Global.world3D.room_last_selected:
-		Global.focus_on_screen(Global.SCREENS.TOPLEFT)
-		Global.shooterscene.load_room_interior(Global.world3D.room_last_selected.data_reference)
-		interiorview = false
+		DEV_OUTPUT.push_message(r"yas room")
+		Global.focus_on_screen(Global.SCREENS.TOPRIGHT)
+		var room : RoomInterior3D = Global.shooterscene.load_room_interior(Global.world3D.room_last_selected.data_reference,true)
+		DEV_OUTPUT.push_message(str(room.get_roominterior_center()))
+		Global.world3D.recenter_camera(0,room.get_roominterior_center(),true)
+		Global.set_camera_layer(1,2)
+		interiorview = true
 		update_display()
+		for child : Node3D in room.get_children():
+			if child is PhysicsBody3D:
+				child.set_collision_layer_value(1,true)
 
 func update_display()->void:
 	newbutton.disabled = room_isolation_mode or Global.world3D.selecting_faces_directly or mapvieweditor or interiorview
@@ -302,6 +319,8 @@ func open_rightclick_popup(obj:Node3D)->void:
 		rightclicklabel.show()
 		editor_selected_city = obj.city
 		deletecity.show()
+	elif obj is RoomInterior3D:
+		rightclicklabel.text = r"place item"
 	
 	rightclickpopup.show()
 	rightclickpopup.position = get_viewport().get_mouse_position()
@@ -402,6 +421,7 @@ func delete_city()->void:
 	rightclickpopup.hide()
 
 func test_level(default_spawn:bool=true)->void:
+	open()
 	if Global.current_game.cities.size() == 0 or (Global.current_game.cities.size() == 1 and Global.current_game.cities[0].rooms.size() == 0):
 		DEV_OUTPUT.push_message(r"come on, make something!")
 		return

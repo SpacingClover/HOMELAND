@@ -219,3 +219,13 @@ func unload_room()->void:
 	roomdata.is_loaded = false
 	roomdata.roominterior = null
 	queue_free()
+
+func get_roominterior_center()->Vector3:
+	var vec : Vector3
+	var counter : int
+	for child : Node3D in get_children():
+		if child is StaticBody3D:
+			vec += child.global_position
+			counter += 1
+	vec /= counter
+	return vec

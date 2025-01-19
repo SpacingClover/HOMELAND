@@ -291,3 +291,14 @@ func create_random_name(length:int)->String:
 	for i : int in length:
 		string += alphabet[randi_range(0,alphabet.length()-1)]
 	return string
+
+func set_camera_layer(cam:int,mask:int)->void:
+	match cam:
+		0:
+			shooterscene.camera.cull_mask = mask
+		1:
+			world3D.camera.cull_mask = mask
+		2:
+			DEV_OUTPUT.push_message("no behaviour defined")
+		3:
+			mapview.camera.cull_mask = mask
