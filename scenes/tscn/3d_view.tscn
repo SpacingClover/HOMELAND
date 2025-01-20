@@ -36,7 +36,6 @@ process_mode = 4
 exclude_parent = false
 target_position = Vector3(0, 0, -100)
 collision_mask = 32
-hit_from_inside = true
 
 [node name="SubViewportContainer" type="SubViewportContainer" parent="camera_root/Camera3D"]
 anchors_preset = 15

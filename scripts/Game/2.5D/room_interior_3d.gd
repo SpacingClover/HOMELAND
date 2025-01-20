@@ -73,7 +73,7 @@ func create_box(box:Box)->void:
 	
 	var faces : Array[int] = box.doors
 	for i : int in range(6):
-		if City.DIRECTIONS[i] == City.UP: continue
+		#if City.DIRECTIONS[i] == City.UP: continue
 		match faces[i]:
 			Box.NONE: pass
 			_: create_face(box,City.DIRECTIONS[i],rotations[i],faces[i])
@@ -195,7 +195,7 @@ func embedded_tutorial_setup()->void:
 func save_room_objects()->void:
 	roomdata.items.clear()
 	for obj : RoomItemInstance in objects:
-		if not obj or not is_instance_valid(obj): continue
+		if not obj or not is_instance_valid(obj) or obj.global_position.y < -5000: continue
 		roomdata.items.append(obj.get_data())
 
 func get_door_leads_to_room(room:int,city_ref:City)->Door3D:

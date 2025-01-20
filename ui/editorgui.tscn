@@ -23,6 +23,7 @@ script = ExtResource("1_hptt7")
 
 [node name="leftpanel" type="PanelContainer" parent="."]
 unique_name_in_owner = true
+visible = false
 offset_left = 5.0
 offset_top = 5.0
 offset_right = 276.0
@@ -116,6 +117,7 @@ text = "enable isolate room"
 
 [node name="citypanel" type="PanelContainer" parent="."]
 unique_name_in_owner = true
+visible = false
 anchors_preset = 4
 anchor_top = 0.5
 anchor_bottom = 0.5
@@ -174,6 +176,7 @@ text = "view interior"
 
 [node name="rightpanel" type="PanelContainer" parent="."]
 unique_name_in_owner = true
+visible = false
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
@@ -244,6 +247,7 @@ editable = false
 
 [node name="bottomright" type="PanelContainer" parent="."]
 unique_name_in_owner = true
+visible = false
 anchors_preset = 3
 anchor_left = 1.0
 anchor_top = 1.0
@@ -342,6 +346,7 @@ text = "cancel"
 
 [node name="rightclickpopup" type="PanelContainer" parent="."]
 unique_name_in_owner = true
+visible = false
 offset_left = 871.0
 offset_top = 377.0
 offset_right = 1106.0
@@ -358,6 +363,18 @@ unique_name_in_owner = true
 layout_mode = 2
 text = "type - index"
 horizontal_alignment = 1
+
+[node name="move_item" type="Button" parent="rightclickpopup/popupvbox"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+text = "move item"
+
+[node name="deleteitem" type="Button" parent="rightclickpopup/popupvbox"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+text = "delete item"
 
 [node name="lockinput" type="HBoxContainer" parent="rightclickpopup/popupvbox"]
 unique_name_in_owner = true
@@ -522,3 +539,30 @@ layout_mode = 2
 unique_name_in_owner = true
 layout_mode = 2
 text = "quit to editor"
+
+[node name="interiorgui" type="PanelContainer" parent="."]
+unique_name_in_owner = true
+visible = false
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -145.5
+offset_top = -76.0
+offset_right = 145.5
+grow_horizontal = 2
+grow_vertical = 0
+theme_override_styles/panel = SubResource("StyleBoxFlat_tq0sg")
+
+[node name="VBoxContainer" type="VBoxContainer" parent="interiorgui"]
+layout_mode = 2
+
+[node name="pickroomitem" type="OptionButton" parent="interiorgui/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+
+[node name="createitem" type="Button" parent="interiorgui/VBoxContainer"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "create item"

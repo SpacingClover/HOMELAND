@@ -15,7 +15,7 @@ func _init()->void:
 
 func _input(event:InputEvent)->void:
 	if event.is_action_pressed(&"enter"):
-		var msg : String = text_edit.text; text_edit.text = &""
+		var msg : String = text_edit.text.to_lower(); text_edit.text = &""
 		var msg_parts : PackedStringArray = msg.split(" ")
 		text_edit.release_focus()
 		match msg_parts[0]:
@@ -44,26 +44,6 @@ func _input(event:InputEvent)->void:
 								push_message("mode normal")
 							_:
 								push_message("invalid mode at pos 2")
-					"all":
-						match msg_parts[2]:
-							"npc":
-								match msg_parts[3]:
-									"target_pos":
-										match msg_parts[4]:
-											"random":
-												for object : RoomItemInstance in Global.shooterscene.room3d.objects:
-													if object is StaticNPC:
-														object.go_to(object.position + Vector3(randf_range(-1,1),0,randf_range(-1,1)))
-									"step":
-										match msg_parts[4]:
-											"reset":
-												for object : RoomItemInstance in Global.shooterscene.room3d.objects:
-													if object is StaticNPC:
-														object.instruction_step_idx = 0
-									"inc_step":
-										for object : RoomItemInstance in Global.shooterscene.room3d.objects:
-											if object is StaticNPC:
-												object.inc_instruction()
 					"tags":
 						match msg_parts[2]:
 							"visible":

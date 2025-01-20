@@ -17,3 +17,5 @@ visible = false
 
 [node name="player" parent="entities" instance=ExtResource("3_fu6dm")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.0607989, 0, -0.104411)
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]

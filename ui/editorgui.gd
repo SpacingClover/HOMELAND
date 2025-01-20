@@ -74,14 +74,24 @@ extends Node
 @onready var playtestgui : PanelContainer = %playtestgui
 @onready var endplaytest : Button = %quit_playtest
 
+##roominterior
+@onready var interiorgui : PanelContainer = %interiorgui
+@onready var pickroomitem : OptionButton = %pickroomitem
+@onready var createitem : Button = %createitem
+@onready var deleteitem : Button = %deleteitem
+@onready var move_item : Button = %move_item
+
 var last_selected_face : RoomInstance3D.RoomInstanceFace
 var editor_selected_city : City
+var selected_item : RoomItemInstance
 
 var interacted_room : Room
 
 var room_isolation_mode : bool = false
 var interiorview : bool = false
 var mapvieweditor : bool = false
+var placeitemmode : bool = false
+var moving_item_inside_room : bool = false
 
 func _ready()->void:
 	newbutton.pressed.connect(func()->void:Global.world3D.create_room(roomtype.selected))
@@ -124,6 +134,9 @@ func _ready()->void:
 	choose_connection.about_to_popup.connect(populate_connection_list)
 	choose_connection.get_popup().id_pressed.connect(func(id:int)->void:Global.current_game.city_connections_register.connections[id].connect_city(Global.current_region,Global.world3D.room_last_selected.data_reference);rightclickpopup.hide())
 	remove_connection.pressed.connect(func()->void:Global.current_game.city_connections_register.remove_whole_connection(editor_selected_city);rightclickpopup.hide())
+	deleteitem.pressed.connect(func()->void:if selected_item: selected_item.queue_free();rightclickpopup.hide())
+	createitem.pressed.connect(func()->void:placeitemmode=true)
+	move_item.pressed.connect(func()->void:start_object_movement();moving_item_inside_room=true;rightclickpopup.hide())
 	close()
 
 func open()->void:
@@ -135,12 +148,16 @@ func open()->void:
 	savegamepopup.hide()
 	playtestgui.hide()
 	citypanel.show()
+	interiorgui.show()
 	Global.focus_on_screen(Global.SCREENS.TOPRIGHT)
 	Global.world3D.playermarker.hide()
 	if not Global.current_game:
 		create_new_empty_game()
 	mapvieweditor = false
-	if interiorview: Global.world3D.recenter_camera(0)
+	if interiorview:
+		Global.world3D.recenter_camera(0)
+		if Global.shooterscene.room3d:
+			save_room_interior_items()
 	interiorview = false
 	update_display()
 	DEV_OUTPUT.current.visible = true
@@ -148,6 +165,7 @@ func open()->void:
 	Global.set_camera_layer(0,2)
 	Global.shooterscene.reset()
 	Global.world3D.room_last_selected = null
+	Global.shooterscene.show()
 
 func close()->void:
 	leftpanel.hide()
@@ -158,6 +176,7 @@ func close()->void:
 	savegamepopup.hide()
 	playtestgui.hide()
 	citypanel.hide()
+	interiorgui.hide()
 	Global.unfocus_screens()
 	Global.world3D.playermarker.hide()
 	if Global.world3D.selecting_faces_directly: edit_faces()
@@ -168,6 +187,11 @@ func close()->void:
 	Global.world3D.room_last_selected = null
 
 func open_city_editor()->void:
+	mapvieweditor = false
+	if interiorview:
+		Global.world3D.recenter_camera(0)
+		if Global.shooterscene.room3d:
+			save_room_interior_items()
 	Global.focus_on_screen(Global.SCREENS.BOTTOMRIGHT)
 	Global.mapview.display_map(Global.current_game)
 	Global.mapview.show()
@@ -188,6 +212,10 @@ func open_roominterior_editor()->void:
 		for child : Node3D in room.get_children():
 			if child is PhysicsBody3D:
 				child.set_collision_layer_value(1,true)
+		pickroomitem.clear()
+		for i : int in RoomItem.item_ids.size():
+			if RoomItem.item_ids[i] != &"":
+				pickroomitem.add_item(RoomItem.item_ids[i],i)
 
 func update_display()->void:
 	newbutton.disabled = room_isolation_mode or Global.world3D.selecting_faces_directly or mapvieweditor or interiorview
@@ -319,6 +347,11 @@ func open_rightclick_popup(obj:Node3D)->void:
 		rightclicklabel.show()
 		editor_selected_city = obj.city
 		deletecity.show()
+	elif obj is RoomItemInstance:
+		selected_item = obj
+		rightclicklabel.text = RoomItem.get_item_name_by_id(obj.item_id)
+		move_item.show()
+		deleteitem.show()
 	elif obj is RoomInterior3D:
 		rightclicklabel.text = r"place item"
 	
@@ -509,3 +542,22 @@ func populate_connection_list()->void:
 	choose_connection.get_popup().clear()
 	for connection : CityConnection in Global.current_game.city_connections_register.get_open_connections():
 		choose_connection.get_popup().add_item(connection.get_connection_string(),connection.get_index())
+
+func save_room_interior_items()->void:
+	Global.shooterscene.room3d.save_room_objects()
+
+func start_object_movement()->void:
+	if selected_item:
+		for child : Node in selected_item.get_children():
+			if child is CollisionShape3D:
+				child.disabled = true
+	selected_item.freeze = true
+
+func place_moving_object()->void:
+	if selected_item:
+		for child : Node in selected_item.get_children():
+			if child is CollisionShape3D:
+				child.disabled = false
+	moving_item_inside_room = false
+	selected_item.freeze = false
+	selected_item = null

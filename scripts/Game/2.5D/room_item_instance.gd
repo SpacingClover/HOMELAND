@@ -22,13 +22,16 @@ func get_data()->RoomItem:
 func _ready()->void:
 	if nav_ob:
 		original_points.append_array(nav_ob.vertices)
-	update_obstacle()
+		update_obstacle()
+	if Global.is_level_editor_mode_enabled and Global.titlescreen.editorgui.interiorview:
+		set_collision_layer_value(1,true)
 
 func _process(delta:float)->void:
-	update_obstacle()
-	var arr : Array[Vector2]
-	for vertex : Vector3 in nav_ob.vertices:
-		arr.append(Vector2(vertex.z,vertex.x))
+	if nav_ob:
+		update_obstacle()
+		var arr : Array[Vector2]
+		for vertex : Vector3 in nav_ob.vertices:
+			arr.append(Vector2(vertex.z,vertex.x))
 
 var original_points : Array[Vector3]
 

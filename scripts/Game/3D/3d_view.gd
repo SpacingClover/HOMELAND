@@ -64,14 +64,29 @@ func _input(event:InputEvent)->void:
 	elif event.is_action_pressed(&"rclick"):
 		Rclick()
 	elif event.is_action_pressed(&"scroll_up"):
-		change_zoom_amount(-1)
+		if Global.is_level_editor_mode_enabled and Global.titlescreen.editorgui.interiorview and Global.titlescreen.editorgui.moving_item_inside_room:
+			if is_shift_held:
+				Global.titlescreen.editorgui.selected_item.global_rotation.y += 0.01
+			elif Input.is_action_pressed(&"ctrl"):
+				Global.titlescreen.editorgui.selected_item.rotation_degrees.y = (roundf(Global.titlescreen.editorgui.selected_item.rotation_degrees.y/90) * 90) + 90
+			else:
+				Global.titlescreen.editorgui.selected_item.global_rotation.y += 0.1
+		else:
+			change_zoom_amount(-1)
 	elif event.is_action_pressed(&"scroll_down"):
-		change_zoom_amount(1)
+		if Global.is_level_editor_mode_enabled and Global.titlescreen.editorgui.interiorview and Global.titlescreen.editorgui.moving_item_inside_room:
+			if is_shift_held:
+				Global.titlescreen.editorgui.selected_item.global_rotation.y -= 0.01
+			elif Input.is_action_pressed(&"ctrl"):
+				Global.titlescreen.editorgui.selected_item.rotation_degrees.y = (roundf(Global.titlescreen.editorgui.selected_item.rotation_degrees.y/90) * 90) - 90
+			else:
+				Global.titlescreen.editorgui.selected_item.global_rotation.y -= 0.1
+		else:
+			change_zoom_amount(1)
 	elif event.is_action_pressed(&"shift"):
 		is_shift_held = true
 	elif event.is_action_released(&"shift"):
 		is_shift_held = false
-		
 
 func change_zoom_amount(by:float)->void:
 	by /= 10
@@ -98,6 +113,8 @@ func mouse_motion()->void:
 				highlighted_face.disable_highlight()
 		highlighted_face = room
 		highlighted_face.highlight()
+	elif Global.is_level_editor_mode_enabled and Global.titlescreen.editorgui.interiorview and Global.titlescreen.editorgui.moving_item_inside_room and is_instance_valid(Global.titlescreen.editorgui.selected_item):
+		Global.titlescreen.editorgui.selected_item.global_position = get_click_pos()
 	elif room is RoomInstance3D:
 		if hightlighted_room and room != hightlighted_room and not hightlighted_room.is_selected:
 			hightlighted_room.disable_highlight()
@@ -127,8 +144,25 @@ func Lclick()->void:
 			body.set_face_type(Global.titlescreen.editorgui.setfacetype.selected,true)
 	
 	elif Global.is_level_editor_mode_enabled and Global.titlescreen.editorgui.interiorview:
-		DEV_OUTPUT.push_message(str(body))
-	
+		if Global.titlescreen.editorgui.placeitemmode:
+			var selecteditemid : int = Global.titlescreen.editorgui.pickroomitem.get_selected_id()
+			var selecteditemname : String = RoomItem.get_item_name_by_id(selecteditemid)
+			var path : String = "res://scenes/scn/"+selecteditemname+".scn"
+			if selecteditemid == -1: return
+			var scn : PackedScene = ResourceLoader.load(path)
+			if not scn: return
+			var obj : RoomItemInstance = scn.instantiate()
+			obj.item_id = selecteditemid
+			Global.shooterscene.room3d.add_child(obj)
+			Global.shooterscene.room3d.objects.append(obj)
+			obj.global_position = get_click_pos()
+			Global.titlescreen.editorgui.placeitemmode = false
+			Global.titlescreen.editorgui.save_room_interior_items()
+			return
+		elif not Global.titlescreen.editorgui.selected_item and body is RoomItemInstance:
+			Global.titlescreen.editorgui.selected_item = body
+		elif Global.titlescreen.editorgui.selected_item and Global.titlescreen.editorgui.moving_item_inside_room:
+			Global.titlescreen.editorgui.place_moving_object()
 	elif selected_room:
 		place_room()
 		
@@ -140,9 +174,12 @@ func Rclick()->void:
 		drop_selected_visual()
 	elif Global.is_level_editor_mode_enabled:
 		var obj : PhysicsBody3D = get_clicked()
+		DEV_OUTPUT.push_message(str(obj))
 		if obj is RoomInstance3D:
 			room_last_selected = obj
 			Global.titlescreen.editorgui.open_rightclick_popup(room_last_selected)
+		elif obj is RoomItemInstance:
+			Global.titlescreen.editorgui.open_rightclick_popup(obj)
 		elif obj and Global.titlescreen.editorgui.interiorview:
 			Global.titlescreen.editorgui.open_rightclick_popup(Global.shooterscene.room3d)
 
@@ -174,7 +211,13 @@ func set_marker_position(object:Object)->void:
 func recenter_camera(time:float=1,pos:Vector3=Vector3.ZERO,override:bool=false)->void:
 	var cameratween : Tween = create_tween()
 	if not override:
-		cameratween.tween_property(camera_root,"position",Global.current_room.get_room_center()*root.scale,time)
+		var zoomroom : Room = Global.current_room
+		if not zoomroom:
+			if Global.current_region.rooms.is_empty():
+				cameratween.tween_property(camera_root,"position",Vector3.ZERO,time)
+			else:
+				zoomroom = Global.current_region.rooms.pick_random()
+		cameratween.tween_property(camera_root,"position",zoomroom.get_room_center()*root.scale,time)
 	else:
 		cameratween.tween_property(camera_root,"global_position",pos,time)
 	
@@ -237,7 +280,7 @@ func look_for_box_at_coord(coord:Vector3i)->MeshInstance3D:
 				return i
 	return
 
-func update_raycast()->void:
+func update_raycast(except:PhysicsBody3D=null)->void:
 	var mouse_pos : Vector2 = get_viewport().get_mouse_position()#relative to subviewport
 	
 	mouse_pos -= viewport.size/2 #move (0,0) to center in viewport
@@ -246,17 +289,27 @@ func update_raycast()->void:
 	raycast.position = Vector3(mouse_pos.x,-mouse_pos.y,0)
 	
 	raycast.clear_exceptions()
-	if Global.current_room and Global.in_game:
-		raycast.add_exception(Global.current_room.roomvisual)
+	if (Global.in_game or (Global.is_level_editor_mode_enabled and Global.titlescreen.editorgui.interiorview)):
+		if except:
+			raycast.add_exception(except)
 	
 	raycast.force_raycast_update()
 
 func get_clicked()->PhysicsBody3D:
+	var col : PhysicsBody3D
 	update_raycast()
-	return raycast.get_collider()
+	col = raycast.get_collider()
+	if Global.is_level_editor_mode_enabled and Global.titlescreen.editorgui.interiorview:
+		update_raycast(col)
+		col = raycast.get_collider()
+	return col
 
 func get_click_pos()->Vector3:
+	var col : PhysicsBody3D
 	update_raycast()
+	col = raycast.get_collider()
+	if Global.is_level_editor_mode_enabled and Global.titlescreen.editorgui.interiorview:
+		update_raycast(col)
 	return raycast.get_collision_point()
 
 func place_room()->void:

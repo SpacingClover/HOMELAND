@@ -14,8 +14,7 @@ static var item_ids : PackedStringArray = PackedStringArray([
 	"",        #7 calandar
 	"",        #8 window
 	"corpse",  #9
-	"key",     #10
-	"static_npc" #11
+	"key"      #10
 ])
 
 enum{
