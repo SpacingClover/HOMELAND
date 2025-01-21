@@ -64,7 +64,7 @@ func _input(event:InputEvent)->void:
 	elif event.is_action_pressed(&"rclick"):
 		Rclick()
 	elif event.is_action_pressed(&"scroll_up"):
-		if Global.is_level_editor_mode_enabled and Global.titlescreen.editorgui.interiorview and Global.titlescreen.editorgui.moving_item_inside_room:
+		if Global.is_level_editor_mode_enabled and Global.titlescreen.editorgui.interiorview and Global.titlescreen.editorgui.moving_item_inside_room and Global.titlescreen.editorgui.selected_item:
 			if is_shift_held:
 				Global.titlescreen.editorgui.selected_item.global_rotation.y += 0.01
 			elif Input.is_action_pressed(&"ctrl"):
@@ -74,7 +74,7 @@ func _input(event:InputEvent)->void:
 		else:
 			change_zoom_amount(-1)
 	elif event.is_action_pressed(&"scroll_down"):
-		if Global.is_level_editor_mode_enabled and Global.titlescreen.editorgui.interiorview and Global.titlescreen.editorgui.moving_item_inside_room:
+		if Global.is_level_editor_mode_enabled and Global.titlescreen.editorgui.interiorview and Global.titlescreen.editorgui.moving_item_inside_room and Global.titlescreen.editorgui.selected_item:
 			if is_shift_held:
 				Global.titlescreen.editorgui.selected_item.global_rotation.y -= 0.01
 			elif Input.is_action_pressed(&"ctrl"):
@@ -113,8 +113,11 @@ func mouse_motion()->void:
 				highlighted_face.disable_highlight()
 		highlighted_face = room
 		highlighted_face.highlight()
-	elif Global.is_level_editor_mode_enabled and Global.titlescreen.editorgui.interiorview and Global.titlescreen.editorgui.moving_item_inside_room and is_instance_valid(Global.titlescreen.editorgui.selected_item):
-		Global.titlescreen.editorgui.selected_item.global_position = get_click_pos()
+	elif Global.is_level_editor_mode_enabled and Global.titlescreen.editorgui.interiorview and Global.titlescreen.editorgui.moving_item_inside_room and (is_instance_valid(Global.titlescreen.editorgui.selected_item) or Global.titlescreen.editorgui.selected_npc):
+		if Global.titlescreen.editorgui.selected_item:
+			Global.titlescreen.editorgui.selected_item.global_position = get_click_pos()
+		if Global.titlescreen.editorgui.selected_npc:
+			Global.titlescreen.editorgui.selected_npc.global_position = get_click_pos()
 	elif room is RoomInstance3D:
 		if hightlighted_room and room != hightlighted_room and not hightlighted_room.is_selected:
 			hightlighted_room.disable_highlight()
@@ -145,23 +148,33 @@ func Lclick()->void:
 	
 	elif Global.is_level_editor_mode_enabled and Global.titlescreen.editorgui.interiorview:
 		if Global.titlescreen.editorgui.placeitemmode:
-			var selecteditemid : int = Global.titlescreen.editorgui.pickroomitem.get_selected_id()
-			var selecteditemname : String = RoomItem.get_item_name_by_id(selecteditemid)
-			var path : String = "res://scenes/scn/"+selecteditemname+".scn"
-			if selecteditemid == -1: return
-			var scn : PackedScene = ResourceLoader.load(path)
-			if not scn: return
-			var obj : RoomItemInstance = scn.instantiate()
-			obj.item_id = selecteditemid
-			Global.shooterscene.room3d.add_child(obj)
-			Global.shooterscene.room3d.objects.append(obj)
-			obj.global_position = get_click_pos()
-			Global.titlescreen.editorgui.placeitemmode = false
-			Global.titlescreen.editorgui.save_room_interior_items()
-			return
+			if Global.titlescreen.editorgui.placeentitymode:
+				DEV_OUTPUT.push_message(r"spawn entity? ermm idk...")
+				var obj : NPC = ResourceLoader.load("res://scenes/tscn/npc.tscn").instantiate()
+				Global.shooterscene.room3d.add_child(obj)
+				obj.global_position = get_click_pos()
+				obj.set_collision_layer_value(1,true)
+				obj.scale /= 2
+				Global.titlescreen.editorgui.placeitemmode = false
+				Global.titlescreen.editorgui.placeentitymode = false
+			else:
+				var selecteditemid : int = Global.titlescreen.editorgui.pickroomitem.get_selected_id()
+				var selecteditemname : String = RoomItem.get_item_name_by_id(selecteditemid)
+				var path : String = "res://scenes/scn/"+selecteditemname+".scn"
+				if selecteditemid == -1: return
+				var scn : PackedScene = ResourceLoader.load(path)
+				if not scn: return
+				var obj : RoomItemInstance = scn.instantiate()
+				obj.item_id = selecteditemid
+				Global.shooterscene.room3d.add_child(obj)
+				Global.shooterscene.room3d.objects.append(obj)
+				obj.global_position = get_click_pos()
+				Global.titlescreen.editorgui.placeitemmode = false
+				Global.titlescreen.editorgui.save_room_interior_items()
+				return
 		elif not Global.titlescreen.editorgui.selected_item and body is RoomItemInstance:
 			Global.titlescreen.editorgui.selected_item = body
-		elif Global.titlescreen.editorgui.selected_item and Global.titlescreen.editorgui.moving_item_inside_room:
+		elif (Global.titlescreen.editorgui.selected_item or Global.titlescreen.editorgui.selected_npc) and Global.titlescreen.editorgui.moving_item_inside_room:
 			Global.titlescreen.editorgui.place_moving_object()
 	elif selected_room:
 		place_room()
@@ -179,6 +192,8 @@ func Rclick()->void:
 			room_last_selected = obj
 			Global.titlescreen.editorgui.open_rightclick_popup(room_last_selected)
 		elif obj is RoomItemInstance:
+			Global.titlescreen.editorgui.open_rightclick_popup(obj)
+		elif obj is NPC:
 			Global.titlescreen.editorgui.open_rightclick_popup(obj)
 		elif obj and Global.titlescreen.editorgui.interiorview:
 			Global.titlescreen.editorgui.open_rightclick_popup(Global.shooterscene.room3d)

@@ -49,9 +49,6 @@ var DEBUG_mode_place_item : bool = false
 var DEBUG_place_item_args : Array
 var DEBUG_inventory : Array[RoomItem]
 
-#relations
-var faction : int
-
 func _init()->void:
 	Global.player = self
 

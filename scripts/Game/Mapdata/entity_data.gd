@@ -8,9 +8,9 @@ func _init(faction_:int,pos:Vector3)->void:
 	faction = faction_
 
 func create_entity(city:City,room:Room)->NPC:
-	var npc : NPC = NPC.new()
+	var npc : NPC = ResourceLoader.load("res://scenes/tscn/npc.tscn").instantiate()
 	npc.inside_city = city
 	npc.inside_room = room
+	npc.position = position
 	npc.ready.connect(npc.configure.bind(faction))
-	npc.tree_entered.connect(npc.set.bind("global_position",position))
 	return npc

@@ -80,10 +80,13 @@ extends Node
 @onready var createitem : Button = %createitem
 @onready var deleteitem : Button = %deleteitem
 @onready var move_item : Button = %move_item
+@onready var createentity : Button = %createentity
+@onready var factionselect : MenuButton = %factionselect
 
 var last_selected_face : RoomInstance3D.RoomInstanceFace
 var editor_selected_city : City
 var selected_item : RoomItemInstance
+var selected_npc : NPC
 
 var interacted_room : Room
 
@@ -91,6 +94,7 @@ var room_isolation_mode : bool = false
 var interiorview : bool = false
 var mapvieweditor : bool = false
 var placeitemmode : bool = false
+var placeentitymode : bool = false
 var moving_item_inside_room : bool = false
 
 func _ready()->void:
@@ -134,9 +138,12 @@ func _ready()->void:
 	choose_connection.about_to_popup.connect(populate_connection_list)
 	choose_connection.get_popup().id_pressed.connect(func(id:int)->void:Global.current_game.city_connections_register.connections[id].connect_city(Global.current_region,Global.world3D.room_last_selected.data_reference);rightclickpopup.hide())
 	remove_connection.pressed.connect(func()->void:Global.current_game.city_connections_register.remove_whole_connection(editor_selected_city);rightclickpopup.hide())
-	deleteitem.pressed.connect(func()->void:if selected_item: selected_item.queue_free();rightclickpopup.hide())
+	deleteitem.pressed.connect(func()->void:if selected_item:selected_item.queue_free();selected_item=null;rightclickpopup.hide();
+	elif selected_npc:selected_npc.queue_free();selected_npc=null;rightclickpopup.hide())
 	createitem.pressed.connect(func()->void:placeitemmode=true)
 	move_item.pressed.connect(func()->void:start_object_movement();moving_item_inside_room=true;rightclickpopup.hide())
+	createentity.pressed.connect(func()->void:placeitemmode=true;placeentitymode=true)
+	factionselect.get_popup().id_pressed.connect(switch_npc_faction)
 	close()
 
 func open()->void:
@@ -352,6 +359,15 @@ func open_rightclick_popup(obj:Node3D)->void:
 		rightclicklabel.text = RoomItem.get_item_name_by_id(obj.item_id)
 		move_item.show()
 		deleteitem.show()
+	elif obj is NPC:
+		rightclicklabel.text = Entity.get_faction_string(obj.get_faction())
+		factionselect.show()
+		factionselect.get_popup().clear()
+		for i : int in Entity.FACTIONS_SIZE:
+			factionselect.get_popup().add_item(Entity.get_faction_string(i),i)
+		move_item.show()
+		deleteitem.show()
+		selected_npc = obj
 	elif obj is RoomInterior3D:
 		rightclicklabel.text = r"place item"
 	
@@ -545,19 +561,29 @@ func populate_connection_list()->void:
 
 func save_room_interior_items()->void:
 	Global.shooterscene.room3d.save_room_objects()
+	Global.shooterscene.room3d.save_room_entities()
 
 func start_object_movement()->void:
-	if selected_item:
-		for child : Node in selected_item.get_children():
+	var item : PhysicsBody3D = selected_item
+	if not item: item = selected_npc
+	if item:
+		for child : Node in item.get_children():
 			if child is CollisionShape3D:
 				child.disabled = true
-	selected_item.freeze = true
+	if item is RigidBody3D: item.freeze = true
 
 func place_moving_object()->void:
-	if selected_item:
-		for child : Node in selected_item.get_children():
+	var item : PhysicsBody3D = selected_item
+	if not item: item = selected_npc
+	if item:
+		for child : Node in item.get_children():
 			if child is CollisionShape3D:
 				child.disabled = false
 	moving_item_inside_room = false
-	selected_item.freeze = false
+	if item is RigidBody3D: item.freeze = false
 	selected_item = null
+	selected_npc = null
+
+func switch_npc_faction(faction:int)->void:
+	selected_npc.configure(faction)
+	rightclicklabel.hide()

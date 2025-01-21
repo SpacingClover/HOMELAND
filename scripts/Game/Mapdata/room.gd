@@ -7,6 +7,7 @@ static var TWOBYTWO : Vector3i   = Vector3i(2,1,2)
 
 @export_category("Contents")
 @export var items : Array[RoomItem]
+@export var entities : Array[RoomEntity]
 @export_category("Box Data")
 @export var boxes : Array[Box]
 @export_category("Transform")

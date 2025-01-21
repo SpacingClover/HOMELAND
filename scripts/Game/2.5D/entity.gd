@@ -155,6 +155,9 @@ var mainstate : MAINSTATES = MAINSTATES.DEBUGSTATE
 var movementstate : MOVEMENTSTATES = MOVEMENTSTATES.IDLE
 var combatmode : COMBATMODES = COMBATMODES.GUN
 
+#relations
+var faction : int = OROTOF_CIVILIAN
+
 func shoot_and_get_data()->AttackResponse:
 	mainstate = MAINSTATES.DEAD
 	sprite.frame = 6
@@ -168,6 +171,9 @@ func melee_and_get_data()->AttackResponse:
 	legs.hide()
 	DEV_OUTPUT.push_message(r"died")
 	return AttackResponse.new(true,true)
+
+func get_data()->RoomEntity:
+	return RoomEntity.new(faction,position)
 
 class AttackResponse extends Resource:
 	var hit : bool

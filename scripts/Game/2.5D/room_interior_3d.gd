@@ -64,6 +64,13 @@ func _ready()->void:
 		var obj : RoomItemInstance = item.create_instance()
 		objects.append(obj); add_child(obj)
 	
+	for npc : RoomEntity in roomdata.entities:
+		var obj : NPC = npc.create_entity(Global.current_region,roomdata)
+		if Global.is_level_editor_mode_enabled:
+			obj.set_collision_layer_value(1,true)
+		obj.scale /= 2
+		add_child(obj)
+	
 	embedded_tutorial_setup()
 	bake_navigation_mesh()
 
@@ -198,6 +205,13 @@ func save_room_objects()->void:
 		if not obj or not is_instance_valid(obj) or obj.global_position.y < -5000: continue
 		roomdata.items.append(obj.get_data())
 
+func save_room_entities()->void:
+	roomdata.entities.clear()
+	for obj : Node in get_children():
+		if obj is NPC:
+			if not obj or not is_instance_valid(obj) or obj.global_position.y < -5000: continue
+			roomdata.entities.append(obj.get_data())
+
 func get_door_leads_to_room(room:int,city_ref:City)->Door3D:
 	var connections : Array[int] = roomdata.get_room_connections(city_ref)
 	for door : Door3D in doors:
@@ -216,6 +230,7 @@ func give_player_camera_info(player:Player3D)->void:
 
 func unload_room()->void:
 	save_room_objects()
+	save_room_entities()
 	roomdata.is_loaded = false
 	roomdata.roominterior = null
 	queue_free()

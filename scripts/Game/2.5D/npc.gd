@@ -22,9 +22,6 @@ var has_nav_target : bool = false
 var is_navigating_between_rooms : bool = false
 var attack_cooldown : bool = false
 
-#relations
-var faction : int = OROTOF_CIVILIAN
-
 func _init()->void:
 	if not navagent:
 		navagent = NavigationAgent3D.new()
@@ -38,6 +35,7 @@ func _init()->void:
 		attack_cooldown_timer = Timer.new()
 		attack_cooldown_timer.one_shot = true
 		add_child(attack_cooldown_timer)
+	faction = OROTOF_CIVILIAN
 
 func configure(faction_:int=0,weapon:int=1)->void:
 	faction = faction_
