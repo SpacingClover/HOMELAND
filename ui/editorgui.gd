@@ -1,6 +1,5 @@
 extends Node
 
-##left panel
 @onready var leftpanel : PanelContainer = %leftpanel
 @onready var newbutton : Button = %create_new_room
 @onready var roomtype : OptionButton = %create_new_room_options
@@ -16,8 +15,6 @@ extends Node
 @onready var savegame : Button = %save_game
 @onready var opengame : Button = %open_game
 @onready var closeeditor : Button = %close_editor
-
-##right panel
 @onready var rightpanel : PanelContainer = %rightpanel
 @onready var gamename : LineEdit = %gamename
 @onready var gamedescription : TextEdit = %description
@@ -28,14 +25,10 @@ extends Node
 @onready var deletecity : Button = %delete_city
 @onready var citypanel : PanelContainer = %citypanel
 @onready var open_mapview_editor : Button = %open_mapview_editor
-
-##load game popup
 @onready var selectfilescontainer : PanelContainer = %opengamepopup
 @onready var fileslist : OptionButton = %loadable_games_list
 @onready var selectfilebutton : Button = %load_selected_game
 @onready var cancelfileslist : Button = %close_opengamepopup
-
-##right click menu
 @onready var rightclickpopup : PanelContainer = %rightclickpopup
 @onready var popupvbox : VBoxContainer = %popupvbox
 @onready var submitbutton : Button = %set_lock_confirm
@@ -54,27 +47,17 @@ extends Node
 @onready var new_connection : Button = %new_connection
 @onready var choose_connection : MenuButton = %choose_connection
 @onready var remove_connection : Button = %remove_connection
-
-##save file menu
 @onready var savegamepopup : PanelContainer = %savegamepopup
 @onready var saveaddressinput : LineEdit = %savegame_filename_input
 @onready var confirmsave : Button = %savegame_confirm
 @onready var cancelsave : Button = %savegame_cancel
 @onready var open_rooms_editor : Button = %open_rooms_editor
 @onready var open_interior_editor : Button = %open_interior_editor
-
-##playtesting stuff
 @onready var bottomright : PanelContainer = %bottomright
 @onready var playtest : Button = %launch_game_default
 @onready var playtest_debugspawn : Button = %debug_launch
-@onready var spawn_room : SpinBox = %spawn_room_display
-@onready var spawn_city : SpinBox = %spawn_city_display
-@onready var debug_city : SpinBox = %debug_city_display
-@onready var debug_room : SpinBox = %debug_room_display
 @onready var playtestgui : PanelContainer = %playtestgui
 @onready var endplaytest : Button = %quit_playtest
-
-##roominterior
 @onready var interiorgui : PanelContainer = %interiorgui
 @onready var pickroomitem : OptionButton = %pickroomitem
 @onready var createitem : Button = %createitem
@@ -87,8 +70,13 @@ var last_selected_face : RoomInstance3D.RoomInstanceFace
 var editor_selected_city : City
 var selected_item : RoomItemInstance
 var selected_npc : NPC
-
 var interacted_room : Room
+
+var debug_city : City
+var debug_room : Room
+var debug_position : Vector3
+
+var loaded_path : String
 
 var room_isolation_mode : bool = false
 var interiorview : bool = false
@@ -126,8 +114,6 @@ func _ready()->void:
 	playtest.pressed.connect(test_level)
 	playtest_debugspawn.pressed.connect(test_level.bind(false))
 	endplaytest.pressed.connect(exit_playtest)
-	spawn_room.value_changed.connect(set_spawn_info)
-	spawn_city.value_changed.connect(set_spawn_info)
 	default_spawn_setter.pressed.connect(set_room_default_spawn)
 	debug_spawn_setter.pressed.connect(set_room_debug_spawn)
 	open_mapview_editor.pressed.connect(open_city_editor)
@@ -147,6 +133,8 @@ func _ready()->void:
 	close()
 
 func open()->void:
+	Global.player.hide()
+	Global.player.position = Vector3(INF,INF,INF)
 	leftpanel.show()
 	rightpanel.show()
 	bottomright.show()
@@ -209,12 +197,11 @@ func open_city_editor()->void:
 func open_roominterior_editor()->void:
 	if Global.world3D.room_last_selected:
 		DEV_OUTPUT.push_message(r"yas room")
+		interiorview = true
 		Global.focus_on_screen(Global.SCREENS.TOPRIGHT)
 		var room : RoomInterior3D = Global.shooterscene.load_room_interior(Global.world3D.room_last_selected.data_reference,true)
-		DEV_OUTPUT.push_message(str(room.get_roominterior_center()))
 		Global.world3D.recenter_camera(0,room.get_roominterior_center(),true)
 		Global.set_camera_layer(1,2)
-		interiorview = true
 		update_display()
 		for child : Node3D in room.get_children():
 			if child is PhysicsBody3D:
@@ -223,6 +210,7 @@ func open_roominterior_editor()->void:
 		for i : int in RoomItem.item_ids.size():
 			if RoomItem.item_ids[i] != &"":
 				pickroomitem.add_item(RoomItem.item_ids[i],i)
+		rightclickpopup.hide()
 
 func update_display()->void:
 	newbutton.disabled = room_isolation_mode or Global.world3D.selecting_faces_directly or mapvieweditor or interiorview
@@ -308,15 +296,16 @@ func open_files_menu()->void:
 	if files.size() != 0: fileslist.selected = 0; selectfilebutton.disabled = false
 	else: selectfilebutton.disabled = true
 
-func open_game(dir:String)->void:
+func open_game(dir:String,save_path:bool=true)->void:
 	selectfilescontainer.hide()
-	Global.current_game = ResourceLoader.load(r"user://editor_levels/"+dir+".res",&"",ResourceLoader.CACHE_MODE_IGNORE)
+	var path : String = r"user://editor_levels/"+dir+r".res"
+	if save_path: loaded_path = path
+	Global.current_game = ResourceLoader.load(path,&"",ResourceLoader.CACHE_MODE_IGNORE)
 	Global.current_region = Global.current_game.cities[0]
 	Global.world3D.reset_3d_view()
 	Global.world3D.display_rooms()
 	deleteroom.disabled = true
 	fill_right_panel()
-	display_spawn_info()
 	update_display()
 
 func open_rightclick_popup(obj:Node3D)->void:
@@ -333,9 +322,13 @@ func open_rightclick_popup(obj:Node3D)->void:
 		var contents : Button = roomcontents
 		contents.text = r"Contains " + str(obj.data_reference.items.size()) + r" items"
 		contents.show()
-		debug_spawn_setter.show()
+		#set_room_debug_spawn()
+		#playtest_debugspawn.show()
+		#debug_position = Vector3.ZERO
 		default_spawn_setter.show()
 		deleteroom.show()
+		deleteroom.disabled = false
+		open_interior_editor.show()
 		if obj.data_reference is CityExit:
 			rightclicklabel.text = r"CityExit " + str(obj.data_reference.index)
 			new_connection.show()
@@ -369,7 +362,11 @@ func open_rightclick_popup(obj:Node3D)->void:
 		deleteitem.show()
 		selected_npc = obj
 	elif obj is RoomInterior3D:
-		rightclicklabel.text = r"place item"
+		set_room_debug_spawn()
+		debug_position = Global.world3D.get_click_pos()
+		debug_room = Global.shooterscene.room3d.roomdata
+		DEV_OUTPUT.push_message(r"set pos")
+		playtest_debugspawn.show()
 	
 	rightclickpopup.show()
 	rightclickpopup.position = get_viewport().get_mouse_position()
@@ -380,12 +377,11 @@ func create_new_empty_game()->void:
 	Global.world3D.reset_3d_view()
 	Global.world3D.display_rooms()
 	fill_right_panel()
-	display_spawn_info()
 	update_display()
 
 func open_save_game_popup()->void:
 	saveaddressinput.clear()
-	#confirmsave.disabled = true
+	saveaddressinput.text = loaded_path
 	savegamepopup.show()
 
 func addressbar_changed(s:String)->void:
@@ -394,11 +390,12 @@ func addressbar_changed(s:String)->void:
 
 func save_game()->void:
 	var game_save : GameData = Global.current_game.save()
-	var filename : String = saveaddressinput.text
-	if filename.is_valid_filename():
-		DEV_OUTPUT.push_message(error_string(ResourceSaver.save(game_save,r"user://editor_levels/"+filename+r".res")))
+	if saveaddressinput.text.split(&".")[1] != &"res":
+		DEV_OUTPUT.push_message(r"nice try")
 		savegamepopup.hide()
-		#DEV_OUTPUT.push_message("if you cant find your file, search \"Godot user path\"")
+		return
+	DEV_OUTPUT.push_message(error_string(ResourceSaver.save(game_save,saveaddressinput.text)))
+	savegamepopup.hide()
 	update_display()
 
 func set_face_lock()->void:
@@ -453,7 +450,6 @@ func create_new_city()->int:
 	var city : City = await Global.current_game.create_new_city()
 	switch_city(city.index)
 	index_cities()
-	display_spawn_info()
 	update_display()
 	return 0
 
@@ -465,25 +461,27 @@ func delete_city()->void:
 	Global.world3D.display_rooms()
 	editor_selected_city.mapvisual.queue_free()
 	index_cities()
-	display_spawn_info()
 	update_display()
 	rightclickpopup.hide()
 
 func test_level(default_spawn:bool=true)->void:
+	save_room_interior_items()
 	open()
 	if Global.current_game.cities.size() == 0 or (Global.current_game.cities.size() == 1 and Global.current_game.cities[0].rooms.size() == 0):
 		DEV_OUTPUT.push_message(r"come on, make something!")
 		return
 	close()
+	
 	DEV_OUTPUT.push_message(error_string(ResourceSaver.save(Global.current_game.save(),"user://editor_levels/temp.res")))
+	
 	if default_spawn:
 		Global.current_game.first_starting = true
 	else:
-		Global.current_game.current_city = Global.current_game.cities[debug_city.value]
-		Global.current_game.current_room = Global.current_game.startcity.rooms[debug_room.value]
+		Global.current_game.current_city = debug_city
+		Global.current_game.current_room = debug_room
 		Global.current_game.startcity = Global.current_game.current_city
 		Global.current_game.startroom = Global.current_game.current_room
-	Global.current_game.position = Vector3.ZERO
+		Global.current_game.position = debug_position
 	Global.enter_game_transition(Global.current_game)
 	playtestgui.show()
 	update_display()
@@ -491,66 +489,21 @@ func test_level(default_spawn:bool=true)->void:
 func exit_playtest()->void:
 	Global.end_play_session()
 	open()
-	open_game("temp")
-	#Global.current_region.clear_visuals()
-	#Global.current_game = ResourceLoader.load("user://temp.res")
-	#Global.current_region = Global.current_game.cities[0]
-	#Global.current_room = Global.current_region.rooms[0]
-	#Global.world3D.reset_3d_view()
-	#Global.world3D.display_rooms()
-	#update_display()
-
-func display_spawn_info()->void:
-	if Global.current_game.cities.size() != 0:
-		spawn_city.max_value = Global.current_game.cities.size() - 1
-		debug_city.max_value = Global.current_game.cities.size() - 1
-		if Global.current_game.startcity:
-			spawn_city.value = Global.current_game.cities.find(Global.current_game.startcity)
-		else:
-			spawn_city.value = 0
-			Global.current_game.startcity = Global.current_game.cities[0]
-		var startcity : City = Global.current_game.cities[spawn_city.value]
-		if startcity.rooms.size() != 0:
-			spawn_room.max_value = startcity.rooms.size() - 1
-			debug_room.max_value = startcity.rooms.size() - 1
-			if Global.current_game.startroom:
-				spawn_room.value = startcity.rooms.find(Global.current_game.startroom)
-			else:
-				spawn_room.value = 0
-				Global.current_game.startroom = startcity.rooms[0]
-		else:
-			spawn_room.value = 0
-			spawn_room.max_value = 0
-			debug_room.value = 0
-			debug_room.max_value = 0
-	else:
-		spawn_city.value = 0
-		spawn_city.max_value = 0
-		debug_city.value = 0
-		debug_city.max_value = 0
-	
-func set_spawn_info(v:int=-1)->void:
-	if spawn_city.value != Global.current_game.cities.find(Global.current_game.startcity):
-		Global.current_game.startcity = Global.current_game.cities[spawn_city.value]
-		Global.current_game.startroom = null
-	elif spawn_room.value != Global.current_game.startcity.rooms.find(Global.current_game.startroom):
-		Global.current_game.startroom = Global.current_game.startcity.rooms[spawn_room.value]
-	display_spawn_info()
-	update_display()
+	open_game("temp",false)
 
 func set_room_default_spawn()->void:
 	var room : Room = interacted_room
-	spawn_city.value = Global.current_game.cities.find(Global.current_region)
-	spawn_room.value = Global.current_region.rooms.find(room)
-	set_spawn_info()
+	Global.current_game.startcity = Global.current_region
+	Global.current_game.startroom = room
+	Global.current_game.position = Vector3.ZERO
 	rightclickpopup.hide()
 	update_display()
 
 func set_room_debug_spawn()->void:
 	var room : Room = interacted_room
-	debug_city.value = Global.current_game.cities.find(Global.current_region)
-	debug_room.value = Global.current_region.rooms.find(room)
-	set_spawn_info()
+	debug_city = Global.current_region
+	debug_room = room
+	debug_position = Vector3.ZERO
 	rightclickpopup.hide()
 	update_display()
 
@@ -560,12 +513,14 @@ func populate_connection_list()->void:
 		choose_connection.get_popup().add_item(connection.get_connection_string(),connection.get_index())
 
 func save_room_interior_items()->void:
-	Global.shooterscene.room3d.save_room_objects()
-	Global.shooterscene.room3d.save_room_entities()
+	if Global.shooterscene.room3d:
+		Global.shooterscene.room3d.save_room_objects()
+		Global.shooterscene.room3d.save_room_entities()
 
 func start_object_movement()->void:
 	var item : PhysicsBody3D = selected_item
 	if not item: item = selected_npc
+	else: selected_npc = null
 	if item:
 		for child : Node in item.get_children():
 			if child is CollisionShape3D:

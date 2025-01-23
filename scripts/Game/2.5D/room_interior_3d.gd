@@ -13,6 +13,7 @@ static func _static_init()->void:
 	tilecol.size = Vector3(1,0.001,1)
 
 signal room_constructed
+signal entity_entered_room(entity:Entity)
 
 var roomdata : Room
 
@@ -37,7 +38,7 @@ func _init(room:Room)->void:
 	navigation_mesh.geometry_collision_mask = 66
 	navigation_mesh.geometry_parsed_geometry_type = NavigationMesh.PARSED_GEOMETRY_STATIC_COLLIDERS
 	
-	navigation_mesh.cell_size = 0.03
+	navigation_mesh.cell_size = 0.01
 	navigation_mesh.cell_height = 0.01
 	
 	navigation_mesh.agent_height = 1.9
@@ -65,8 +66,8 @@ func _ready()->void:
 		objects.append(obj); add_child(obj)
 	
 	for npc : RoomEntity in roomdata.entities:
-		var obj : NPC = npc.create_entity(Global.current_region,roomdata)
-		if Global.is_level_editor_mode_enabled:
+		var obj : NPC = npc.create_entity(Global.current_region,roomdata,not Global.titlescreen.editorgui.interiorview)
+		if Global.titlescreen.editorgui.interiorview:
 			obj.set_collision_layer_value(1,true)
 		obj.scale /= 2
 		add_child(obj)
@@ -80,7 +81,6 @@ func create_box(box:Box)->void:
 	
 	var faces : Array[int] = box.doors
 	for i : int in range(6):
-		#if City.DIRECTIONS[i] == City.UP: continue
 		match faces[i]:
 			Box.NONE: pass
 			_: create_face(box,City.DIRECTIONS[i],rotations[i],faces[i])
@@ -167,7 +167,8 @@ func create_face(box:Box,dir:Vector3i,angle:Vector3,type:int)->void:
 	
 	if type == Box.WALL:
 		body.add_child(mesh)
-	body.add_child(col)
+	if dir != City.UP:
+		body.add_child(col)
 	body.position = box.coords - roomdata.coords
 	body.rotation_degrees = angle
 	body.collision_layer = 106

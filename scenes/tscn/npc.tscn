@@ -1,7 +1,7 @@
 [gd_scene load_steps=6 format=3 uid="uid://cbk7dxwq20ano"]
 
 [ext_resource type="Script" path="res://scripts/Game/2.5D/npc.gd" id="1_8gxpt"]
-[ext_resource type="Texture2D" uid="uid://bpepnbv13cmim" path="res://visuals/spritesheets/characters/ally-1.png" id="2_8k6w1"]
+[ext_resource type="Texture2D" uid="uid://bpepnbv13cmim" path="res://visuals/spritesheets/characters/civilian.png" id="2_8k6w1"]
 [ext_resource type="Shape3D" uid="uid://ctdv55soccak8" path="res://geometry/2point5Dcollider.shape" id="3_rnj2j"]
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_muk8t"]
@@ -10,10 +10,10 @@ radius = 0.473445
 
 [sub_resource type="CylinderShape3D" id="CylinderShape3D_t5ifd"]
 height = 1.0
-radius = 2.14075
+radius = 5.24595
 
 [node name="npc" type="CharacterBody3D"]
-collision_layer = 192
+collision_layer = 128
 collision_mask = 64
 axis_lock_angular_x = true
 axis_lock_angular_y = true
@@ -67,4 +67,3 @@ shape = SubResource("CylinderShape3D_t5ifd")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.754421, 0)
 target_position = Vector3(0, 0, -1)
 collision_mask = 234
-hit_from_inside = true

@@ -42,7 +42,10 @@ func load_room_interior(room:Room,make_current:bool=false)->RoomInterior3D:
 		return buffroom
 	return null
 
-func send_entity_to_room(entity:Node3D,room:Room,tobox:Box=null,frombox:Box=null,fromroom:Room=null)->void:
+func send_entity_to_room(entity:Node3D,room:Room,tobox:Box=null,frombox:Box=null,fromroom:Room=null,dont_set_pos:bool=false)->void:
+	
+	entity.exited_room()
+	
 	await get_tree().process_frame
 	var is_constructing_room : bool = false
 	if not room.is_loaded:
@@ -55,8 +58,9 @@ func send_entity_to_room(entity:Node3D,room:Room,tobox:Box=null,frombox:Box=null
 	if not entity is Player3D:
 		entity.get_parent().remove_child(entity)
 		room.roominterior.add_child(entity)
-	entity.global_position = topos + room.roominterior.get_parent().global_position 
-	entity.global_position.y -= 1
+	if not dont_set_pos:
+		entity.global_position = topos + room.roominterior.get_parent().global_position 
+		entity.global_position.y -= 1
 	
 	entity.entered_room()
 	
@@ -94,8 +98,9 @@ func reset()->void:
 		room3d.roomdata.is_loaded = false
 		room3d.queue_free()
 	for child : Node3D in root.get_children():
-		child.roomdata.is_loaded = false
-		child.queue_free()
+		if child is RoomInterior3D:
+			child.roomdata.is_loaded = false
+			child.queue_free()
 	room3d = null
 
 func move_room_to_buffer(roominterior:RoomInterior3D)->void:

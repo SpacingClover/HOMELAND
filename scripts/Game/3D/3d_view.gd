@@ -157,6 +157,7 @@ func Lclick()->void:
 				obj.scale /= 2
 				Global.titlescreen.editorgui.placeitemmode = false
 				Global.titlescreen.editorgui.placeentitymode = false
+				Global.shooterscene.room3d.save_room_entities()
 			else:
 				var selecteditemid : int = Global.titlescreen.editorgui.pickroomitem.get_selected_id()
 				var selecteditemname : String = RoomItem.get_item_name_by_id(selecteditemid)
@@ -187,7 +188,6 @@ func Rclick()->void:
 		drop_selected_visual()
 	elif Global.is_level_editor_mode_enabled:
 		var obj : PhysicsBody3D = get_clicked()
-		DEV_OUTPUT.push_message(str(obj))
 		if obj is RoomInstance3D:
 			room_last_selected = obj
 			Global.titlescreen.editorgui.open_rightclick_popup(room_last_selected)
@@ -232,7 +232,8 @@ func recenter_camera(time:float=1,pos:Vector3=Vector3.ZERO,override:bool=false)-
 				cameratween.tween_property(camera_root,"position",Vector3.ZERO,time)
 			else:
 				zoomroom = Global.current_region.rooms.pick_random()
-		cameratween.tween_property(camera_root,"position",zoomroom.get_room_center()*root.scale,time)
+		else:
+			cameratween.tween_property(camera_root,"position",zoomroom.get_room_center()*root.scale,time)
 	else:
 		cameratween.tween_property(camera_root,"global_position",pos,time)
 	
@@ -713,6 +714,5 @@ func delete_room()->void:
 			hightlighted_room.disable_highlight()
 		hightlighted_room = null
 	room_last_selected = null
-	Global.titlescreen.editorgui.display_spawn_info()
 	Global.titlescreen.editorgui.rightclickpopup.hide()
 	Global.titlescreen.editorgui.update_display()

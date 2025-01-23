@@ -23,7 +23,6 @@ script = ExtResource("1_hptt7")
 
 [node name="leftpanel" type="PanelContainer" parent="."]
 unique_name_in_owner = true
-visible = false
 offset_left = 5.0
 offset_top = 5.0
 offset_right = 276.0
@@ -117,13 +116,12 @@ text = "enable isolate room"
 
 [node name="citypanel" type="PanelContainer" parent="."]
 unique_name_in_owner = true
-visible = false
 anchors_preset = 4
 anchor_top = 0.5
 anchor_bottom = 0.5
-offset_top = -102.0
+offset_top = -85.0
 offset_right = 273.0
-offset_bottom = 103.0
+offset_bottom = 85.0
 grow_vertical = 2
 theme_override_styles/panel = SubResource("StyleBoxFlat_tq0sg")
 
@@ -169,14 +167,8 @@ unique_name_in_owner = true
 layout_mode = 2
 text = "view rooms"
 
-[node name="open_interior_editor" type="Button" parent="citypanel/VBoxContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "view interior"
-
 [node name="rightpanel" type="PanelContainer" parent="."]
 unique_name_in_owner = true
-visible = false
 anchors_preset = 2
 anchor_top = 1.0
 anchor_bottom = 1.0
@@ -247,14 +239,13 @@ editable = false
 
 [node name="bottomright" type="PanelContainer" parent="."]
 unique_name_in_owner = true
-visible = false
 anchors_preset = 3
 anchor_left = 1.0
 anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
 offset_left = -268.0
-offset_top = -111.0
+offset_top = -76.0
 grow_horizontal = 0
 grow_vertical = 0
 theme_override_styles/panel = SubResource("StyleBoxFlat_tq0sg")
@@ -296,11 +287,6 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 editable = false
-
-[node name="debug_launch" type="Button" parent="bottomright/VBoxContainer"]
-unique_name_in_owner = true
-layout_mode = 2
-text = "run level from test location"
 
 [node name="close_editor" type="Button" parent="bottomright/VBoxContainer"]
 unique_name_in_owner = true
@@ -364,12 +350,27 @@ layout_mode = 2
 text = "type - index"
 horizontal_alignment = 1
 
+[node name="roomcontents_display" type="Button" parent="rightclickpopup/popupvbox"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+disabled = true
+
+[node name="open_interior_editor" type="Button" parent="rightclickpopup/popupvbox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "view interior"
+
 [node name="factionselect" type="MenuButton" parent="rightclickpopup/popupvbox"]
 unique_name_in_owner = true
 visible = false
 layout_mode = 2
-size_flags_vertical = 3
 text = "switch faction"
+
+[node name="debug_launch" type="Button" parent="rightclickpopup/popupvbox"]
+unique_name_in_owner = true
+layout_mode = 2
+text = "launch from here"
 
 [node name="move_item" type="Button" parent="rightclickpopup/popupvbox"]
 unique_name_in_owner = true
@@ -433,12 +434,6 @@ unique_name_in_owner = true
 layout_mode = 2
 size_flags_horizontal = 3
 min_value = -1.0
-
-[node name="roomcontents_display" type="Button" parent="rightclickpopup/popupvbox"]
-unique_name_in_owner = true
-visible = false
-layout_mode = 2
-disabled = true
 
 [node name="set_room_default_spawn" type="Button" parent="rightclickpopup/popupvbox"]
 unique_name_in_owner = true
@@ -549,6 +544,7 @@ text = "quit to editor"
 
 [node name="interiorgui" type="PanelContainer" parent="."]
 unique_name_in_owner = true
+visible = false
 anchors_preset = 7
 anchor_left = 0.5
 anchor_top = 1.0

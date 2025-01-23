@@ -14,6 +14,7 @@ enum MOVEMENTSTATES{
 }
 
 enum COMBATMODES{
+	NONE,
 	MELEE,
 	GUN
 }
@@ -155,8 +156,11 @@ var mainstate : MAINSTATES = MAINSTATES.DEBUGSTATE
 var movementstate : MOVEMENTSTATES = MOVEMENTSTATES.IDLE
 var combatmode : COMBATMODES = COMBATMODES.GUN
 
-#relations
+##relations
 var faction : int = OROTOF_CIVILIAN
+
+##loadstate
+var active : bool = true
 
 func shoot_and_get_data()->AttackResponse:
 	mainstate = MAINSTATES.DEAD
@@ -173,7 +177,13 @@ func melee_and_get_data()->AttackResponse:
 	return AttackResponse.new(true,true)
 
 func get_data()->RoomEntity:
-	return RoomEntity.new(faction,position)
+	return RoomEntity.new(faction,position,mainstate != MAINSTATES.DEAD)
+
+func entered_room()->void:
+	pass
+
+func exited_room()->void:
+	pass
 
 class AttackResponse extends Resource:
 	var hit : bool

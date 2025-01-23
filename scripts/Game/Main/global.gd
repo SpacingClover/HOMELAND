@@ -16,7 +16,6 @@ var shooterscene : PlayerView
 var titlescreen : TitleScreen
 var world3D : CityView
 var mapview : MapView
-var music : AudioStreamPlayer
 
 var player : Player3D
 var player_controlling : GameView
@@ -51,8 +50,6 @@ func _init()->void:
 	resume_game.connect(resume)
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	Input.mouse_mode = Input.MOUSE_MODE_HIDDEN
-	#open_menu.connect(func()->void:menu_hidden=false)
-	#hide_menu.connect(func()->void:menu_hidden=true)
 
 func _ready()->void:
 	screenroots = titlescreen.get_screen_roots()
@@ -104,7 +101,7 @@ func enter_game_transition(game:GameData)->void:
 	in_game = true
 	current_game = game
 	if mapview: mapview.display_map(current_game)
-	if player: player.process_mode = Node.PROCESS_MODE_INHERIT; world3D.playermarker.show()
+	if player: player.process_mode = Node.PROCESS_MODE_INHERIT; player.show(); world3D.playermarker.show()
 	current_game.open()
 	if circuitboard: circuitboard.load_board()
 	if world3D: world3D.room_movement_axis = current_game.current_axis
@@ -159,11 +156,11 @@ func enter_room(room:Room,startbox:Box=null,frombox:Box=null,loading_game:bool=f
 	if not startbox:
 		startbox = current_room.boxes[0]
 	if shooterscene:
-		shooterscene.send_entity_to_room(player,room,startbox,frombox)
+		shooterscene.send_entity_to_room(player,room,startbox,frombox,null,true)
 	if world3D: if not world3D.is_inside_tree():
 		await world3D.tree_entered
 	if loading_game and current_game.position != Vector3.ZERO and Global.player:
-		Global.player.global_position = current_game.position
+		Global.player.position = current_game.position
 	if world3D:
 		world3D.loaded_room_marker_offset = Vector3.ZERO
 		world3D.loaded_room_marker_PREVIOUS_offset = Vector3.ZERO
@@ -221,7 +218,6 @@ func launch_level_editor()->void:
 	world3D.show()
 	hide_menu.emit()
 	menu_hidden = true
-	#if player: player.queue_free(); player = null
 	world3D.playermarker.hide()
 	titlescreen.editorgui.open()
 	titlescreen.editorgui.fill_right_panel()

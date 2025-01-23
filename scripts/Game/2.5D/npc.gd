@@ -35,32 +35,33 @@ func _init()->void:
 		attack_cooldown_timer = Timer.new()
 		attack_cooldown_timer.one_shot = true
 		add_child(attack_cooldown_timer)
-	faction = OROTOF_CIVILIAN
 
-func configure(faction_:int=0,weapon:int=1)->void:
+func configure(faction_:int=0,weapon:int=COMBATMODES.GUN)->void:
 	faction = faction_
+	var tex : CompressedTexture2D
 	match faction:
-		OROTOF_CIVILIAN: # orotof civilian
-			var tex : CompressedTexture2D = load("res://visuals/spritesheets/characters/ally-1.png")
-			sprite.texture = tex
-			legs.texture = tex
-		OROTOF_GOVERNMENT: # orotof soldier
-			var tex : CompressedTexture2D = load("res://visuals/spritesheets/characters/homeland_soldier-9.png")
-			sprite.texture = tex
-			legs.texture = tex
-		CAMTO_GOVERNMENT: # camto
-			var tex : CompressedTexture2D = load("res://visuals/spritesheets/characters/invading_soldier_9.png")
-			sprite.texture = tex
-			legs.texture = tex
+		OROTOF_CIVILIAN:      tex = load("res://visuals/spritesheets/characters/civilian.png")
+		OROTOF_GOVERNMENT:    tex = load("res://visuals/spritesheets/characters/homeland_soldier-9.png")
+		CAMTO_GOVERNMENT:     tex = load("res://visuals/spritesheets/characters/invading_soldier_9.png")
+		OROTOF_RESISTANCE:    tex = load("res://visuals/spritesheets/characters/ally-1(1).png")
+		RAKATLAND_GOVERNMENT: tex = load("res://visuals/spritesheets/characters/rakatland.png")
+		_:                    tex = load("res://visuals/spritesheets/characters/default.png")
+	sprite.texture = tex
+	legs.texture = tex
 	combatmode = weapon
+	if faction == OROTOF_CIVILIAN:
+		combatmode = COMBATMODES.NONE
 
 func _ready()->void:
-	area.area_entered.connect(area_entered_area)
-	entityarea.body_entered.connect(body_entered_area)
-	updatestatetimer.timeout.connect(pick_state)
-	attack_cooldown_timer.timeout.connect(set.bind(&"attack_cooldown",false))
 	inside_city = Global.current_region
 	inside_room = get_parent().roomdata
+	if active:
+		DEV_OUTPUT.push_message(r"entity initialized active")
+		area.area_entered.connect(area_entered_area)
+		entityarea.body_entered.connect(body_entered_area)
+		updatestatetimer.timeout.connect(pick_state)
+		attack_cooldown_timer.timeout.connect(set.bind(&"attack_cooldown",false))
+		entered_room()
 
 func _physics_process(delta:float)->void:
 	if movementstate != MOVEMENTSTATES.IDLE:
@@ -72,8 +73,8 @@ func _physics_process(delta:float)->void:
 			velocity -= global_position
 			velocity.y = 0
 			velocity = velocity.normalized() * speed
-	move_and_collide(velocity*delta)
-	velocity *= 0.85
+		move_and_collide(velocity*delta)
+		velocity *= 0.85
 
 func _process(delta:float)->void:
 	pass
@@ -84,9 +85,20 @@ func pick_state()->void:
 		return
 	match mainstate:
 		MAINSTATES.IDLE:
-			pass
+			check_bodies_in_area()
+			match combatmode:
+				COMBATMODES.NONE:
+					match MOVEMENTSTATES:
+						MOVEMENTSTATES.IDLE:
+							if target_enemy:
+								go_to_cover_from_target(target_enemy)
 		MAINSTATES.COMBAT:
 			match combatmode:
+				COMBATMODES.NONE:
+					match MOVEMENTSTATES:
+						MOVEMENTSTATES.IDLE:
+							if target_enemy:
+								go_to_cover_from_target(target_enemy)
 				COMBATMODES.MELEE:
 					match movementstate:
 						MOVEMENTSTATES.IDLE:
@@ -105,7 +117,6 @@ func pick_state()->void:
 									shoot_at_target(target_enemy)
 							else:
 								var pos : Vector3 = await find_pos_can_see_target(target_enemy)
-								DEV_OUTPUT.push_message(str(pos))
 								if pos != global_position:
 									update_target_location(pos)
 								else:
@@ -115,7 +126,7 @@ func pick_state()->void:
 						MOVEMENTSTATES.MOVE_TO_POS:
 							pass
 		MAINSTATES.DEAD:
-			pass
+			set_physics_process(false)
 		MAINSTATES.DEBUGSTATE:
 			pass
 
@@ -126,6 +137,8 @@ func react_to_entity(entity:PhysicsBody3D)->void:
 		return
 	if entity.mainstate == MAINSTATES.DEAD:
 		return
+	if entity == self:
+		return
 	
 	match get_faction_relation(get_faction(),entity.get_faction()):
 		NEUTRAL:
@@ -135,6 +148,8 @@ func react_to_entity(entity:PhysicsBody3D)->void:
 		ENEMY:
 			target_enemy = entity
 			mainstate = MAINSTATES.COMBAT
+			if target_enemy.combatmode > combatmode:
+				go_to_cover_from_target(target_enemy)
 			
 	### needs behavior for running away
 
@@ -165,12 +180,10 @@ func private_find_pos_can_or_cant_see_target(target:Node3D,checking_can_see:bool
 	
 	var points_see_target : Array[Vector3]
 	
-	for i : int in 100:
-		var pos : Vector3 = NavigationServer3D.region_get_random_point(inside_room.roominterior.get_region_rid(),0,true)
-		var cast_results : Dictionary = get_world_3d().direct_space_state.intersect_ray(PhysicsRayQueryParameters3D.create(pos+Vector3(0,shotcast.global_position.y,0),targetpos,shotcast.collision_mask))
-		if cast_results.collider == target and checking_can_see:
-			points_see_target.append(pos)
-		elif cast_results.collider != target and not checking_can_see:
+	for i : int in 1000:
+		var pos : Vector3 = NavigationServer3D.region_get_random_point(inside_room.roominterior.get_region_rid(),1,true)
+		var cast_results : Dictionary = get_world_3d().direct_space_state.intersect_ray(PhysicsRayQueryParameters3D.create(pos+Vector3(0,shotcast.global_position.y,0),targetpos,64+32+8))
+		if (cast_results.collider == target and checking_can_see) or (cast_results.collider != target and not checking_can_see):
 			points_see_target.append(pos)
 	
 	var best_point : Vector3 #point that takes the least time to walk to
@@ -199,12 +212,13 @@ func private_find_pos_can_or_cant_see_target(target:Node3D,checking_can_see:bool
 func private_aim_shotcast_at_pos(pos:Vector3,cap_length:bool=true)->void:
 	shotcast.target_position = Vector3.FORWARD
 	shotcast.look_at(pos)
-	shotcast.target_position *= shotcast.global_position.distance_to(pos) if cap_length else 99999
+	shotcast.target_position *= shotcast.global_position.distance_to(pos) if cap_length else 100
 	shotcast.force_raycast_update()
 
 func has_shot_at_target(target:Node3D)->bool:
 	var targetpos : Vector3 = target.global_position
-	if target is Player3D: targetpos.y += 1
+	#if target is Player3D: targetpos.y += 1
+	targetpos.y += 0.67
 	private_aim_shotcast_at_pos(targetpos)
 	return shotcast.get_collider() == target
 
@@ -214,7 +228,8 @@ func shoot_at_target(target:Node3D)->void:
 	targetpos.y += 0.67
 	private_aim_shotcast_at_pos(targetpos,false)
 	
-	await get_tree().create_timer(0.2).timeout #replace with a relevant shot delay
+	await get_tree().create_timer(randf_range(0.05,0.2)).timeout #replace with a relevant shot delay
+	if mainstate == MAINSTATES.DEAD: return
 	
 	Flash3D.new(shotcast.get_collision_point()) #physics should be applied to hit object, so it gets pushed
 	if shotcast.get_collider() is Entity:
@@ -285,6 +300,11 @@ func pathfind_between_rooms_to_room(room:int,target:Vector3=Vector3.ZERO)->void:
 func entered_room()->void:  ##############call every time the npc enters a room##############
 	await get_tree().create_timer(0.1).timeout
 	inside_room = get_parent().roomdata
+	inside_room.roominterior.entity_entered_room.emit(self)
+	inside_room.roominterior.entity_entered_room.connect(react_to_entity)
+	for child : Node in inside_room.roominterior.get_children():
+		if child is Entity:
+			react_to_entity(child)
 	if is_navigating_between_rooms:
 		path_between_rooms_index += 1
 		if inside_room.index == target_room:
@@ -294,7 +314,9 @@ func entered_room()->void:  ##############call every time the npc enters a room#
 			movementstate = MOVEMENTSTATES.IDLE
 			return
 		go_to_room(path_between_rooms[path_between_rooms_index])
-		
+
+func exited_room()->void:
+	inside_room.roominterior.entity_entered_room.disconnect(react_to_entity)
 
 ## utility ##
 
@@ -306,11 +328,13 @@ func area_entered_area(col_area:Area3D)->void:
 		has_nav_target = false
 		target_object = null
 
+func check_bodies_in_area()->void:
+	for body : PhysicsBody3D in entityarea.get_overlapping_bodies():
+		body_entered_area(body)
+
 func body_entered_area(col_body:PhysicsBody3D)->void:
 	if col_body is Entity and col_body.inside_room == inside_room:
 		react_to_entity(col_body)
-	#if (col_body is Player3D and col_body == Global.player and inside_room == Global.current_room)\
-		#or (col_body is NPC and col_body.inside_room == inside_room):
 
 func check_if_target_object_inside_area()->void:
 	for body : Area3D in area.get_overlapping_areas():
