@@ -69,7 +69,7 @@ extends Node
 var last_selected_face : RoomInstance3D.RoomInstanceFace
 var editor_selected_city : City
 var selected_item : RoomItemInstance
-var selected_npc : NPC
+var selected_npc : Entity
 var interacted_room : Room
 
 var debug_city : City
@@ -352,7 +352,7 @@ func open_rightclick_popup(obj:Node3D)->void:
 		rightclicklabel.text = RoomItem.get_item_name_by_id(obj.item_id)
 		move_item.show()
 		deleteitem.show()
-	elif obj is NPC:
+	elif obj is Entity:
 		rightclicklabel.text = Entity.get_faction_string(obj.get_faction())
 		factionselect.show()
 		factionselect.get_popup().clear()

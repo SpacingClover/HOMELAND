@@ -45,12 +45,14 @@ func configure(faction_:int=0,weapon:int=COMBATMODES.GUN)->void:
 		CAMTO_GOVERNMENT:     tex = load("res://visuals/spritesheets/characters/invading_soldier_9.png")
 		OROTOF_RESISTANCE:    tex = load("res://visuals/spritesheets/characters/ally-1(1).png")
 		RAKATLAND_GOVERNMENT: tex = load("res://visuals/spritesheets/characters/rakatland.png")
-		_:                    tex = load("res://visuals/spritesheets/characters/default.png")
+		_:                    tex = load("res://visuals/spritesheets/characters/default.png"); weapon = COMBATMODES.NONE
 	sprite.texture = tex
 	legs.texture = tex
 	combatmode = weapon
 	if faction == OROTOF_CIVILIAN:
 		combatmode = COMBATMODES.NONE
+	if faction == SCARY:
+		combatmode = 100
 
 func _ready()->void:
 	inside_city = Global.current_region
@@ -61,6 +63,7 @@ func _ready()->void:
 		entityarea.body_entered.connect(body_entered_area)
 		updatestatetimer.timeout.connect(pick_state)
 		attack_cooldown_timer.timeout.connect(set.bind(&"attack_cooldown",false))
+		await get_tree().create_timer(1).timeout
 		entered_room()
 
 func _physics_process(delta:float)->void:
@@ -88,14 +91,14 @@ func pick_state()->void:
 			check_bodies_in_area()
 			match combatmode:
 				COMBATMODES.NONE:
-					match MOVEMENTSTATES:
+					match movementstate:
 						MOVEMENTSTATES.IDLE:
 							if target_enemy:
 								go_to_cover_from_target(target_enemy)
 		MAINSTATES.COMBAT:
 			match combatmode:
 				COMBATMODES.NONE:
-					match MOVEMENTSTATES:
+					match movementstate:
 						MOVEMENTSTATES.IDLE:
 							if target_enemy:
 								go_to_cover_from_target(target_enemy)
@@ -178,36 +181,64 @@ func private_find_pos_can_or_cant_see_target(target:Node3D,checking_can_see:bool
 	var targetpos : Vector3 = target.global_position
 	if target is Player3D: targetpos.y += 1
 	
-	var points_see_target : Array[Vector3]
+	var points : Array[Vector3]
 	
-	for i : int in 1000:
+	for i : int in 100:
 		var pos : Vector3 = NavigationServer3D.region_get_random_point(inside_room.roominterior.get_region_rid(),1,true)
-		var cast_results : Dictionary = get_world_3d().direct_space_state.intersect_ray(PhysicsRayQueryParameters3D.create(pos+Vector3(0,shotcast.global_position.y,0),targetpos,64+32+8))
-		if (cast_results.collider == target and checking_can_see) or (cast_results.collider != target and not checking_can_see):
-			points_see_target.append(pos)
+		var ray_offset : Vector3 = ((targetpos - pos).rotated(Vector3.UP,deg_to_rad(90))/2)
+		#var cast_results : Dictionary = get_world_3d().direct_space_state.intersect_ray(PhysicsRayQueryParameters3D.create(pos,pos+ray_offset,32))
+		
+		var raycastnode : RayCast3D = RayCast3D.new()
+		inside_room.roominterior.add_child(raycastnode)
+		raycastnode.collision_mask = 32
+		raycastnode.global_position = pos + Vector3(0,0.5,0)
+		raycastnode.target_position = ray_offset + Vector3(0,0.5,0)
+		raycastnode.force_raycast_update()
+		if raycastnode.is_colliding():
+			if not checking_can_see:
+				points.append(pos)
+				raycastnode.debug_shape_custom_color = Color.RED
+		elif checking_can_see:
+			raycastnode.debug_shape_custom_color = Color.WHITE
+			points.append(pos)
+		#raycastnode.queue_free()
 	
-	var best_point : Vector3 #point that takes the least time to walk to
-	var best_path_length : float = 999999
-	if points_see_target.size() > 0:
-		best_point = points_see_target[0]
-	else:
-		state_process_mutex = false
+	if points.is_empty():
+		DEV_OUTPUT.push_message(r"didnt find")
 		return global_position
+	else:
+		DEV_OUTPUT.push_message(r"found point")
+		return points.pick_random()
 	
-	for point : Vector3 in points_see_target:
 		
-		var navpath : PackedVector3Array = NavigationServer3D.map_get_path(inside_room.roominterior.get_region_rid(),global_position,point,true,1)
-		var path_length : float = 0
-		for i : int in navpath.size():
-			if i + 1 >= navpath.size(): break
-			path_length += navpath[i].distance_to(navpath[i+1])
-		
-		if path_length < best_path_length:
-			best_point = point
-			best_path_length = path_length
+		#if not cast_results.has(&"collider"):
+			#continue
+		#raycastnode.global_position = cast_results.position
+	
+	#var best_point : Vector3 #point that takes the least time to walk to
+	#var best_path_length : float = 999999
+	#if points_see_target.size() > 0:
+		#best_point = points_see_target[0]
+	#else:
+		#state_process_mutex = false
+		#return global_position
+	
+	#best_point = points_see_target.pick_random()
+	#for point : Vector3 in points_see_target:
+		#
+		#var navpath : PackedVector3Array = NavigationServer3D.map_get_path(inside_room.roominterior.get_region_rid(),global_position,point,true,1)
+		#var path_length : float = 0
+		#for i : int in navpath.size():
+			#if i + 1 >= navpath.size(): break
+			#path_length += navpath[i].distance_to(navpath[i+1])
+		#
+		#if path_length < best_path_length:
+			#best_point = point
+			#best_path_length = path_length
 			
-	state_process_mutex = false
-	return best_point
+	#state_process_mutex = false
+	#return best_point
+	#return global_position##debug
 
 func private_aim_shotcast_at_pos(pos:Vector3,cap_length:bool=true)->void:
 	shotcast.target_position = Vector3.FORWARD

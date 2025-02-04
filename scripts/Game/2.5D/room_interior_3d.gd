@@ -66,7 +66,7 @@ func _ready()->void:
 		objects.append(obj); add_child(obj)
 	
 	for npc : RoomEntity in roomdata.entities:
-		var obj : NPC = npc.create_entity(Global.current_region,roomdata,not Global.titlescreen.editorgui.interiorview)
+		var obj : Entity = npc.create_entity(Global.current_region,roomdata,not Global.titlescreen.editorgui.interiorview)
 		if Global.titlescreen.editorgui.interiorview:
 			obj.set_collision_layer_value(1,true)
 		obj.scale /= 2
@@ -209,7 +209,7 @@ func save_room_objects()->void:
 func save_room_entities()->void:
 	roomdata.entities.clear()
 	for obj : Node in get_children():
-		if obj is NPC:
+		if obj is Entity:
 			if not obj or not is_instance_valid(obj) or obj.global_position.y < -5000: continue
 			roomdata.entities.append(obj.get_data())
 

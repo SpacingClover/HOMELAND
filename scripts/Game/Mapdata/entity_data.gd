@@ -9,7 +9,7 @@ func _init(faction_:int=-1,pos:Vector3=Vector3.ZERO,alive_:bool=true)->void:
 	faction = faction_
 	alive = alive_
 
-func create_entity(city:City=null,room:Room=null,active:bool=true)->NPC:
+func create_entity(city:City=null,room:Room=null,active:bool=true)->Entity:
 	var npc : NPC = ResourceLoader.load("res://scenes/tscn/npc.tscn").instantiate()
 	npc.mainstate = Entity.MAINSTATES.IDLE if alive else Entity.MAINSTATES.DEAD
 	npc.active = active

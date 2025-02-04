@@ -20,6 +20,7 @@ enum COMBATMODES{
 }
 
 enum{
+	SCARY,
 	OROTOF_CIVILIAN,
 	OROTOF_RESISTANCE,
 	OROTOF_GOVERNMENT,
@@ -53,6 +54,16 @@ static func private_create_default_faction_relation_data()->void:
 	for i : int in faction_relations_data.size():
 		faction_relations_data[i] = template_int_array.duplicate()
 	
+	## SCARY
+	faction_relations_data[SCARY][OROTOF_CIVILIAN] = NEUTRAL
+	faction_relations_data[SCARY][OROTOF_RESISTANCE] = NEUTRAL
+	faction_relations_data[SCARY][OROTOF_GOVERNMENT] = NEUTRAL
+	faction_relations_data[SCARY][OROTOF_WITCHES] = NEUTRAL
+	faction_relations_data[SCARY][UNDERGROUND_MONSTER] = NEUTRAL
+	faction_relations_data[SCARY][CAMTO_GOVERNMENT] = NEUTRAL
+	faction_relations_data[SCARY][RAKATLAND_GOVERNMENT] = NEUTRAL
+	faction_relations_data[SCARY][SCARY] = NEUTRAL
+	
 	## orotof civilian
 	faction_relations_data[OROTOF_CIVILIAN][OROTOF_CIVILIAN] = FRIENDLY
 	faction_relations_data[OROTOF_CIVILIAN][OROTOF_RESISTANCE] = FRIENDLY
@@ -61,6 +72,7 @@ static func private_create_default_faction_relation_data()->void:
 	faction_relations_data[OROTOF_CIVILIAN][UNDERGROUND_MONSTER] = ENEMY
 	faction_relations_data[OROTOF_CIVILIAN][CAMTO_GOVERNMENT] = ENEMY
 	faction_relations_data[OROTOF_CIVILIAN][RAKATLAND_GOVERNMENT] = NEUTRAL
+	faction_relations_data[OROTOF_CIVILIAN][SCARY] = ENEMY
 	
 	## orotof resistance
 	faction_relations_data[OROTOF_RESISTANCE][OROTOF_CIVILIAN] = FRIENDLY
@@ -79,6 +91,7 @@ static func private_create_default_faction_relation_data()->void:
 	faction_relations_data[OROTOF_GOVERNMENT][UNDERGROUND_MONSTER] = ENEMY
 	faction_relations_data[OROTOF_GOVERNMENT][CAMTO_GOVERNMENT] = ENEMY ##
 	faction_relations_data[OROTOF_GOVERNMENT][RAKATLAND_GOVERNMENT] = NEUTRAL
+	faction_relations_data[OROTOF_GOVERNMENT][SCARY] = ENEMY
 	
 	## orotof witches
 	faction_relations_data[OROTOF_WITCHES][OROTOF_CIVILIAN] = FRIENDLY
@@ -88,6 +101,7 @@ static func private_create_default_faction_relation_data()->void:
 	faction_relations_data[OROTOF_WITCHES][UNDERGROUND_MONSTER] = NEUTRAL ## theyre chill
 	faction_relations_data[OROTOF_WITCHES][CAMTO_GOVERNMENT] = ENEMY
 	faction_relations_data[OROTOF_WITCHES][RAKATLAND_GOVERNMENT] = ENEMY
+	faction_relations_data[OROTOF_WITCHES][SCARY] = ENEMY
 	
 	## underground monster
 	faction_relations_data[UNDERGROUND_MONSTER][OROTOF_CIVILIAN] = ENEMY
@@ -97,6 +111,7 @@ static func private_create_default_faction_relation_data()->void:
 	faction_relations_data[UNDERGROUND_MONSTER][UNDERGROUND_MONSTER] = ENEMY
 	faction_relations_data[UNDERGROUND_MONSTER][CAMTO_GOVERNMENT] = ENEMY
 	faction_relations_data[UNDERGROUND_MONSTER][RAKATLAND_GOVERNMENT] = ENEMY
+	faction_relations_data[UNDERGROUND_MONSTER][SCARY] = ENEMY
 	
 	## camto government
 	faction_relations_data[CAMTO_GOVERNMENT][OROTOF_CIVILIAN] = ENEMY
@@ -106,6 +121,7 @@ static func private_create_default_faction_relation_data()->void:
 	faction_relations_data[CAMTO_GOVERNMENT][UNDERGROUND_MONSTER] = ENEMY
 	faction_relations_data[CAMTO_GOVERNMENT][CAMTO_GOVERNMENT] = FRIENDLY
 	faction_relations_data[CAMTO_GOVERNMENT][RAKATLAND_GOVERNMENT] = NEUTRAL
+	faction_relations_data[CAMTO_GOVERNMENT][SCARY] = ENEMY
 	
 	## rakatland government
 	faction_relations_data[RAKATLAND_GOVERNMENT][OROTOF_CIVILIAN] = NEUTRAL
@@ -115,16 +131,21 @@ static func private_create_default_faction_relation_data()->void:
 	faction_relations_data[RAKATLAND_GOVERNMENT][UNDERGROUND_MONSTER] = NEUTRAL
 	faction_relations_data[RAKATLAND_GOVERNMENT][CAMTO_GOVERNMENT] = NEUTRAL
 	faction_relations_data[RAKATLAND_GOVERNMENT][RAKATLAND_GOVERNMENT] = FRIENDLY
+	faction_relations_data[RAKATLAND_GOVERNMENT][SCARY] = ENEMY
 
 static func get_faction_relation(own_faction:int,other_faction:int)->int:
 	if own_faction >= faction_relations_data.size():
 		return NEUTRAL
 	if other_faction >= faction_relations_data[own_faction].size():
 		return NEUTRAL
+	var fac : int = faction_relations_data[own_faction][other_faction]
+	fac
 	return faction_relations_data[own_faction][other_faction]
 
 static func get_faction_string(faction_idx:int)->StringName: #this will have to be extended to include different names that different groups call each faction
 	match faction_idx:
+		SCARY:
+			return &"Scary"
 		OROTOF_CIVILIAN:
 			return &"Civilian"
 		OROTOF_RESISTANCE:
@@ -184,6 +205,9 @@ func entered_room()->void:
 
 func exited_room()->void:
 	pass
+
+func get_faction()->int:
+	return faction
 
 class AttackResponse extends Resource:
 	var hit : bool
