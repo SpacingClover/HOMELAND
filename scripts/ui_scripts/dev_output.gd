@@ -211,10 +211,8 @@ func _input(event:InputEvent)->void:
 			"bake":
 				match msg_parts[1]:
 					"navmesh":
-						Global.current_room.roominterior.bake_navigation_mesh()
-						#Global.current_room.roominterior.hide()
-						await Global.current_room.roominterior.bake_finished
-						#Global.current_room.roominterior.show()
+						Global.shooterscene.room3d.bake_navigation_mesh()
+						await Global.shooterscene.room3d.bake_finished
 						push_message(r"bake finished")
 
 static func push_message(text:String)->void:

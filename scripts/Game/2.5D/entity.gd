@@ -16,7 +16,8 @@ enum MOVEMENTSTATES{
 enum COMBATMODES{
 	NONE,
 	MELEE,
-	GUN
+	GUN,
+	COMBATMODESSIZE
 }
 
 enum{
@@ -177,6 +178,9 @@ var mainstate : MAINSTATES = MAINSTATES.DEBUGSTATE
 var movementstate : MOVEMENTSTATES = MOVEMENTSTATES.IDLE
 var combatmode : COMBATMODES = COMBATMODES.GUN
 
+## figure out how to label this stuff
+var health : int = 10
+
 ##relations
 var faction : int = OROTOF_CIVILIAN
 
@@ -184,21 +188,32 @@ var faction : int = OROTOF_CIVILIAN
 var active : bool = true
 
 func shoot_and_get_data()->AttackResponse:
-	mainstate = MAINSTATES.DEAD
-	sprite.frame = 6
-	legs.hide()
-	DEV_OUTPUT.push_message(r"died")
-	return AttackResponse.new(true,true)
+	return damage(2)
 
 func melee_and_get_data()->AttackResponse:
+	return damage(1)
+
+func damage(amount:int)->AttackResponse:
+	health -= amount
+	if health <= 0:
+		return die()
+	else:
+		return AttackResponse.new(true,false)
+
+func die()->AttackResponse:
 	mainstate = MAINSTATES.DEAD
 	sprite.frame = 6
 	legs.hide()
+	for child : Node in get_children():
+		if child is CollisionShape3D:
+			child.disabled = true
+	set_process(false)
+	set_physics_process(false)
 	DEV_OUTPUT.push_message(r"died")
 	return AttackResponse.new(true,true)
 
 func get_data()->RoomEntity:
-	return RoomEntity.new(faction,position,mainstate != MAINSTATES.DEAD)
+	return RoomEntity.new(faction,position,mainstate != MAINSTATES.DEAD,health)
 
 func entered_room()->void:
 	pass

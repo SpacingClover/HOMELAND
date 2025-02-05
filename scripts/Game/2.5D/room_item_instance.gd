@@ -40,4 +40,4 @@ func update_obstacle()->void:
 	
 	for i : int in nav_ob.vertices.size():
 		nav_ob.vertices[i] = original_points[i] * global_transform.basis.inverse()
-		nav_ob.vertices[i] *= 2
+		#nav_ob.vertices[i] *= 2

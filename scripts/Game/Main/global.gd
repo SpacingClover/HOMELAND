@@ -101,7 +101,7 @@ func enter_game_transition(game:GameData)->void:
 	in_game = true
 	current_game = game
 	if mapview: mapview.display_map(current_game)
-	if player: player.process_mode = Node.PROCESS_MODE_INHERIT; player.show(); world3D.playermarker.show()
+	if player: player.process_mode = Node.PROCESS_MODE_INHERIT; player.show(); world3D.playermarker.show(); player.health = current_game.health; player.mainstate = Entity.MAINSTATES.IDLE
 	current_game.open()
 	if circuitboard: circuitboard.load_board()
 	if world3D: world3D.room_movement_axis = current_game.current_axis

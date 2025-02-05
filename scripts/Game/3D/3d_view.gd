@@ -151,10 +151,13 @@ func Lclick()->void:
 			if Global.titlescreen.editorgui.placeentitymode:
 				DEV_OUTPUT.push_message(r"spawn entity? ermm idk...")
 				var obj : NPC = ResourceLoader.load("res://scenes/tscn/npc.tscn").instantiate()
+				obj.active = false
 				Global.shooterscene.room3d.add_child(obj)
 				obj.global_position = get_click_pos()
 				obj.set_collision_layer_value(1,true)
 				obj.scale /= 2
+				obj.set_process(false)
+				obj.set_physics_process(false)
 				Global.titlescreen.editorgui.placeitemmode = false
 				Global.titlescreen.editorgui.placeentitymode = false
 				Global.shooterscene.room3d.save_room_entities()

@@ -65,11 +65,12 @@ extends Node
 @onready var move_item : Button = %move_item
 @onready var createentity : Button = %createentity
 @onready var factionselect : MenuButton = %factionselect
+@onready var weaponselect : MenuButton = %weaponselect
 
 var last_selected_face : RoomInstance3D.RoomInstanceFace
 var editor_selected_city : City
 var selected_item : RoomItemInstance
-var selected_npc : Entity
+var selected_npc : NPC
 var interacted_room : Room
 
 var debug_city : City
@@ -130,6 +131,7 @@ func _ready()->void:
 	move_item.pressed.connect(func()->void:start_object_movement();moving_item_inside_room=true;rightclickpopup.hide())
 	createentity.pressed.connect(func()->void:placeitemmode=true;placeentitymode=true)
 	factionselect.get_popup().id_pressed.connect(switch_npc_faction)
+	weaponselect.get_popup().id_pressed.connect(set_npc_combatmode)
 	close()
 
 func open()->void:
@@ -358,6 +360,7 @@ func open_rightclick_popup(obj:Node3D)->void:
 		factionselect.get_popup().clear()
 		for i : int in Entity.FACTIONS_SIZE:
 			factionselect.get_popup().add_item(Entity.get_faction_string(i),i)
+		weaponselect.show()
 		move_item.show()
 		deleteitem.show()
 		selected_npc = obj
@@ -541,4 +544,8 @@ func place_moving_object()->void:
 
 func switch_npc_faction(faction:int)->void:
 	selected_npc.configure(faction)
+	rightclicklabel.hide()
+
+func set_npc_combatmode(to:int)->void:
+	selected_npc.configure(selected_npc.faction,to)
 	rightclicklabel.hide()

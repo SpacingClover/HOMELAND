@@ -23,18 +23,7 @@ var is_navigating_between_rooms : bool = false
 var attack_cooldown : bool = false
 
 func _init()->void:
-	if not navagent:
-		navagent = NavigationAgent3D.new()
-		navagent.path_postprocessing = NavigationPathQueryParameters3D.PATH_POSTPROCESSING_EDGECENTERED
-		add_child(navagent)
-	if not updatestatetimer:
-		updatestatetimer = Timer.new()
-		updatestatetimer.autostart = true
-		add_child(updatestatetimer)
-	if not attack_cooldown_timer:
-		attack_cooldown_timer = Timer.new()
-		attack_cooldown_timer.one_shot = true
-		add_child(attack_cooldown_timer)
+	pass
 
 func configure(faction_:int=0,weapon:int=COMBATMODES.GUN)->void:
 	faction = faction_
@@ -58,6 +47,18 @@ func _ready()->void:
 	inside_city = Global.current_region
 	inside_room = get_parent().roomdata
 	if active:
+		if not navagent:
+			navagent = NavigationAgent3D.new()
+			navagent.path_postprocessing = NavigationPathQueryParameters3D.PATH_POSTPROCESSING_EDGECENTERED
+			add_child(navagent)
+		if not updatestatetimer:
+			updatestatetimer = Timer.new()
+			updatestatetimer.autostart = true
+			add_child(updatestatetimer)
+		if not attack_cooldown_timer:
+			attack_cooldown_timer = Timer.new()
+			attack_cooldown_timer.one_shot = true
+			add_child(attack_cooldown_timer)
 		DEV_OUTPUT.push_message(r"entity initialized active")
 		area.area_entered.connect(area_entered_area)
 		entityarea.body_entered.connect(body_entered_area)
@@ -65,6 +66,9 @@ func _ready()->void:
 		attack_cooldown_timer.timeout.connect(set.bind(&"attack_cooldown",false))
 		await get_tree().create_timer(1).timeout
 		entered_room()
+	else:
+		set_process(false)
+		set_physics_process(false)
 
 func _physics_process(delta:float)->void:
 	if movementstate != MOVEMENTSTATES.IDLE:
@@ -84,6 +88,9 @@ func _process(delta:float)->void:
 
 var state_process_mutex : bool = false
 func pick_state()->void:
+	if (target_enemy and target_enemy.mainstate == Entity.MAINSTATES.DEAD) or (target_enemy and not is_instance_valid(target_enemy)) or not target_enemy:
+		target_enemy = null
+		check_bodies_in_area()
 	if state_process_mutex:
 		return
 	match mainstate:
@@ -111,23 +118,7 @@ func pick_state()->void:
 					if not attack_cooldown:
 						try_attack_melee()
 				COMBATMODES.GUN:
-					match movementstate:
-						MOVEMENTSTATES.IDLE:
-							if target_enemy.inside_room != inside_room: ##give player inside_room property
-								pathfind_between_rooms_to_room(target_enemy.inside_room.index,target_enemy.global_position)
-							elif has_shot_at_target(target_enemy):
-								if not attack_cooldown:
-									shoot_at_target(target_enemy)
-							else:
-								var pos : Vector3 = await find_pos_can_see_target(target_enemy)
-								if pos != global_position:
-									update_target_location(pos)
-								else:
-									shoot_at_target(target_enemy) #shooting anyway
-						MOVEMENTSTATES.MOVE_TO_ENTITY:
-							pass
-						MOVEMENTSTATES.MOVE_TO_POS:
-							pass
+					handle_shooting_at_enemy()
 		MAINSTATES.DEAD:
 			set_physics_process(false)
 		MAINSTATES.DEBUGSTATE:
@@ -192,7 +183,7 @@ func private_find_pos_can_or_cant_see_target(target:Node3D,checking_can_see:bool
 		inside_room.roominterior.add_child(raycastnode)
 		raycastnode.collision_mask = 32
 		raycastnode.global_position = pos + Vector3(0,0.5,0)
-		raycastnode.target_position = ray_offset + Vector3(0,0.5,0)
+		raycastnode.target_position = ray_offset# + Vector3(0,0.5,0)
 		raycastnode.force_raycast_update()
 		if raycastnode.is_colliding():
 			if not checking_can_see:
@@ -201,44 +192,31 @@ func private_find_pos_can_or_cant_see_target(target:Node3D,checking_can_see:bool
 		elif checking_can_see:
 			raycastnode.debug_shape_custom_color = Color.WHITE
 			points.append(pos)
-		#raycastnode.queue_free()
+		raycastnode.queue_free()
 	
 	if points.is_empty():
 		DEV_OUTPUT.push_message(r"didnt find")
+		state_process_mutex = false
 		return global_position
 	else:
 		DEV_OUTPUT.push_message(r"found point")
+		state_process_mutex = false
 		return points.pick_random()
-	
-		
-		#if not cast_results.has(&"collider"):
-			#continue
-		#raycastnode.global_position = cast_results.position
-	
-	#var best_point : Vector3 #point that takes the least time to walk to
-	#var best_path_length : float = 999999
-	#if points_see_target.size() > 0:
-		#best_point = points_see_target[0]
-	#else:
-		#state_process_mutex = false
-		#return global_position
-	
-	#best_point = points_see_target.pick_random()
-	#for point : Vector3 in points_see_target:
-		#
-		#var navpath : PackedVector3Array = NavigationServer3D.map_get_path(inside_room.roominterior.get_region_rid(),global_position,point,true,1)
-		#var path_length : float = 0
-		#for i : int in navpath.size():
-			#if i + 1 >= navpath.size(): break
-			#path_length += navpath[i].distance_to(navpath[i+1])
-		#
-		#if path_length < best_path_length:
-			#best_point = point
-			#best_path_length = path_length
-			
-	#state_process_mutex = false
-	#return best_point
-	#return global_position##debug
+
+func handle_shooting_at_enemy()->void:
+	if not target_enemy: check_bodies_in_area(); return
+	if not is_instance_valid(target_enemy): target_enemy = null; check_bodies_in_area(); return
+	if target_enemy.inside_room != inside_room: ##give player inside_room property
+		pathfind_between_rooms_to_room(target_enemy.inside_room.index,target_enemy.global_position)
+	elif has_shot_at_target(target_enemy):
+		if not attack_cooldown:
+			shoot_at_target(target_enemy)
+	else:
+		var pos : Vector3 = await find_pos_can_see_target(target_enemy)
+		if pos != global_position:
+			update_target_location(pos)
+		else:
+			shoot_at_target(target_enemy) #shooting anyway
 
 func private_aim_shotcast_at_pos(pos:Vector3,cap_length:bool=true)->void:
 	shotcast.target_position = Vector3.FORWARD

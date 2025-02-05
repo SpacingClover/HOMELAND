@@ -367,6 +367,18 @@ visible = false
 layout_mode = 2
 text = "switch faction"
 
+[node name="weaponselect" type="MenuButton" parent="rightclickpopup/popupvbox"]
+unique_name_in_owner = true
+visible = false
+layout_mode = 2
+text = "combat mode"
+item_count = 3
+popup/item_0/text = "None"
+popup/item_1/text = "Melee"
+popup/item_1/id = 1
+popup/item_2/text = "Gun"
+popup/item_2/id = 2
+
 [node name="debug_launch" type="Button" parent="rightclickpopup/popupvbox"]
 unique_name_in_owner = true
 layout_mode = 2
