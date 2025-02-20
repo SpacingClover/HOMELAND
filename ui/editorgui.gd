@@ -221,7 +221,7 @@ func update_display()->void:
 	scalex.editable = not applyscale.disabled
 	scaley.editable = not applyscale.disabled
 	scalez.editable = not applyscale.disabled
-	editfaces.disabled = mapvieweditor or interiorview or not(Global.world3D.room_last_selected and is_instance_valid(Global.world3D.room_last_selected))
+	editfaces.disabled = false
 	isolateroom.disabled = editfaces.disabled
 
 func rescale_room()->void:

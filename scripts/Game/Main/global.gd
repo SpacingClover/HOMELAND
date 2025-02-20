@@ -117,7 +117,7 @@ func enter_game_transition(game:GameData)->void:
 	TransitionHandler.end_transition()
 	await get_tree().create_timer(1).timeout
 	loading_finished.emit()
-	MusicManager.play_song("ambience")
+	MusicManager.play_song("action")
 
 func set_new_city(city_idx:int,room_idx:int=-1,loading_game:bool=false)->void:
 	pass
@@ -156,7 +156,7 @@ func enter_room(room:Room,startbox:Box=null,frombox:Box=null,loading_game:bool=f
 	if not startbox:
 		startbox = current_room.boxes[0]
 	if shooterscene:
-		shooterscene.send_entity_to_room(player,room,startbox,frombox,null,true)
+		shooterscene.send_entity_to_room(player,room,startbox,frombox,null,loading_game)
 	if world3D: if not world3D.is_inside_tree():
 		await world3D.tree_entered
 	if loading_game and current_game.position != Vector3.ZERO and Global.player:
