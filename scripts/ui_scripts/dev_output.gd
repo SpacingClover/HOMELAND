@@ -214,6 +214,12 @@ func _input(event:InputEvent)->void:
 						Global.shooterscene.room3d.bake_navigation_mesh()
 						await Global.shooterscene.room3d.bake_finished
 						push_message(r"bake finished")
+			"inventory":
+				match msg_parts[1]:
+					"additem":
+						Global.playeritemsinventory.add_item(InventoryItem.new(56))
+					"rmvitem":
+						Global.playeritemsinventory.inventoryitems.pop_back()
 
 static func push_message(text:String)->void:
 	var label : Label = Label.new()

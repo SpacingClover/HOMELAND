@@ -13,3 +13,6 @@ offset_right = 258.0
 offset_bottom = 45.0
 theme_override_font_sizes/font_size = 32
 text = "circuitboard WIP"
+
+[node name="inventory" type="Node2D" parent="."]
+unique_name_in_owner = true

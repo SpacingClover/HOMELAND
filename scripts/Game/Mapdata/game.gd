@@ -13,6 +13,7 @@ class_name GameData extends Resource
 @export_category("Player Data")
 @export var health : int = 50
 @export var position : Vector3 = Vector3.ZERO
+@export var inventory : ItemsInventory = ItemsInventory.new()
 
 @export_category("UI Data")
 @export_subgroup("World_3D")
@@ -49,7 +50,6 @@ func _init(being_generated:bool=false)->void:
 
 func open()->void:
 	
-	
 	PopUps.tutorial_enabled = tutorial_enabled
 	
 	for city : City in cities:
@@ -62,6 +62,8 @@ func open()->void:
 		if not startroom:
 			startroom = current_city.rooms[0]
 		current_room = startroom
+	
+	Global.playeritemsinventory = inventory
 	
 	Global.set_new_city(cities.find(current_city),current_city.rooms.find(current_room),true)
 	first_starting = false

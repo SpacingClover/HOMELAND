@@ -27,6 +27,8 @@ var current_game : GameData
 var current_region : City
 var current_room : Room
 
+var playeritemsinventory : ItemsInventory
+
 var local_mouse_pos : Vector2
 
 var locked : bool = false
@@ -75,6 +77,8 @@ func _input(event:InputEvent)->void:
 		else:
 			pause_game.emit()
 	
+	elif event.is_action_pressed(&"tab"):
+		circuitboard.toggle_display()
 	
 	elif Input.is_action_just_pressed(&"`") and OS.is_debug_build():
 		DEV_MODE = not DEV_MODE
@@ -108,7 +112,7 @@ func enter_game_transition(game:GameData)->void:
 	
 	if mapview: mapview.show()
 	if shooterscene: shooterscene.show()
-	if circuitboard: circuitboard.show()
+	if circuitboard: circuitboard.show(); circuitboard.refresh_display()
 	if world3D: world3D.show()
 	
 	hide_menu.emit()
@@ -196,6 +200,7 @@ func end_play_session()->void:
 	PopUps.prompt.hide()
 	world3D.reset_3d_view()
 	shooterscene.reset()
+	circuitboard.save_inventory()
 	circuitboard.clear_board()
 	mapview.reset_map()
 	debug_reset()
