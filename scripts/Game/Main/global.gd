@@ -202,6 +202,7 @@ func end_play_session()->void:
 	shooterscene.reset()
 	circuitboard.save_inventory()
 	circuitboard.clear_board()
+	circuitboard.unload_inventory()
 	mapview.reset_map()
 	debug_reset()
 	in_game = false
@@ -303,3 +304,8 @@ func set_camera_layer(cam:int,mask:int)->void:
 			DEV_OUTPUT.push_message("no behaviour defined")
 		3:
 			mapview.camera.cull_mask = mask
+
+func get_key_color(type:int)->Color:
+	var img : Image = load("res://visuals/spritesheets/items/keys.png")
+	var color : Color = img.get_pixel(1,type*4)
+	return color

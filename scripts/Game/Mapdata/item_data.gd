@@ -14,7 +14,8 @@ static var item_ids : PackedStringArray = PackedStringArray([
 	"",        #7 calandar
 	"",        #8 window
 	"corpse",  #9
-	"key"      #10
+	"key",     #10
+	"circuitboard" #11
 ])
 
 enum{
@@ -41,7 +42,9 @@ func _init(type_:int=0,pos:Vector3=Vector3.ZERO,rot:Vector3=Vector3.ZERO,extrada
 
 func create_instance()->RoomItemInstance:
 	var obj : RoomItemInstance
-	obj = load(SCN_PATH+get_item_name_by_id(type)+SCN).instantiate()
+	var path : String = SCN_PATH+get_item_name_by_id(type)+SCN
+	DirAccess.dir_exists_absolute(path)
+	obj = load(path).instantiate()
 	obj.position = position
 	obj.rotation = rotation
 	obj.item_id = type

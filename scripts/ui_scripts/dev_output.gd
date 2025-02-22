@@ -220,6 +220,11 @@ func _input(event:InputEvent)->void:
 						Global.playeritemsinventory.add_item(InventoryItem.new(56))
 					"rmvitem":
 						Global.playeritemsinventory.inventoryitems.pop_back()
+			#"drop":
+				#match msg_parts[1]:
+					#"item":
+						#var item : InventoryItem3DInstance = InventoryItem3DInstance.new()
+						#Global.shooterscene.room3d.add_child()
 
 static func push_message(text:String)->void:
 	var label : Label = Label.new()

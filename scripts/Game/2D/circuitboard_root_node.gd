@@ -2,6 +2,8 @@ class_name WiringView extends Node2D
 static var current : WiringView
 
 @onready var camera : Camera2D = %camera
+@onready var raycast : RayCast2D = $RayCast2D
+
 var board : CircuitBoard
 
 var inventoryview : bool = false
@@ -13,9 +15,9 @@ func _init()->void:
 
 
 
+
 ##TODO: add circuitboards
 ##TODO: implement circuitry
-
 
 
 
@@ -28,6 +30,33 @@ func _input(event:InputEvent)->void:
 	if event.is_action_pressed(&"scroll_down"):
 		camera.zoom *= 0.9
 		if camera.zoom.x < 0.78: camera.zoom = Vector2(0.78,0.78)
+	if event.is_action_pressed(&"click"):
+		raycast.global_position = get_mouse_position()
+		raycast.force_raycast_update()
+		if raycast.is_colliding():
+			var inventoryitem2d : InventoryItem2DInstance = raycast.get_collider()
+			var inventoryitem : InventoryItem = inventoryitem2d.get_data()
+			Global.playeritemsinventory.remove_item_by_inventory_item_idx(inventoryitem.inventoryitemid)
+			inventoryitem2d.queue_free()
+			#refresh_display()
+			
+			var selecteditemid : int = 11
+			var selecteditemname : String = RoomItem.get_item_name_by_id(selecteditemid)
+			var scnpath : String = "res://scenes/scn/"
+			var path : String = scnpath+selecteditemname+".scn"
+			if selecteditemid == -1: return
+			if not DirAccess.open(scnpath).file_exists(selecteditemname+".scn"):
+				DEV_OUTPUT.push_message(path)
+				DEV_OUTPUT.push_message("missing scn file for: "+selecteditemname)
+				return
+			var scn : PackedScene = ResourceLoader.load(path)
+			if not scn: return
+			var obj : RoomItemInstance = scn.instantiate()
+			obj.item_id = selecteditemid
+			Global.shooterscene.room3d.add_child(obj)
+			Global.shooterscene.room3d.objects.append(obj)
+			obj.global_position = Global.player.global_position
+			#obj.pass_args(inventoryitem.)
 
 func load_board()->void:
 	clear_board()
@@ -52,13 +81,20 @@ func load_inventory()->void:
 	if board:
 		clear_board()
 	
+	var i : int = 0
 	for inventoryitem : InventoryItem in Global.playeritemsinventory.inventoryitems:
 		var item2d : InventoryItem2DInstance = InventoryItem2DInstance.new(inventoryitem)
 		var sprite : Sprite2D = Sprite2D.new()
 		sprite.texture = preload("res://visuals/spritesheets/misc/icon.svg")
 		item2d.add_child(sprite)
+		var col : CollisionShape2D = CollisionShape2D.new()
+		col.shape = RectangleShape2D.new()
+		col.scale *= 6.465
+		item2d.add_child(col)
 		%inventory.add_child(item2d)
 		DEV_OUTPUT.push_message(r"item - id: "+str(inventoryitem.inventoryitemid))
+		item2d.position.x = i * 150
+		i += 1
 
 func unload_inventory()->void:
 	save_inventory()
@@ -70,7 +106,7 @@ func toggle_display()->void:
 	refresh_display()
 
 func refresh_display()->void:
-	DEV_OUTPUT.push_message(r"inventory" if inventoryview else r"circuitboard")
+	#DEV_OUTPUT.push_message(r"inventory" if inventoryview else r"circuitboard")
 	if inventoryview:
 		clear_board()
 		load_inventory()

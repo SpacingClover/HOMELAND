@@ -135,20 +135,20 @@ func mouse_motion()->void:
 			pass
 
 func e_interaction()->void:
-	if DEBUG_mode_place_item and OS.is_debug_build():
-		if not DEBUG_place_item_type:
-			DEV_OUTPUT.current.push_message("no item type set"); return
-		var scn : PackedScene = ResourceLoader.load("res://scenes/scn/"+DEBUG_place_item_type+".scn",&"",ResourceLoader.CACHE_MODE_IGNORE)
-		if not scn: return
-		var obj : RoomItemInstance = scn.instantiate()
-		obj.item_id = RoomItem.item_ids.find(DEBUG_place_item_type)
-		obj.pass_args(DEBUG_place_item_args)
-		Global.shooterscene.room3d.add_child(obj)
-		Global.shooterscene.room3d.objects.append(obj)
-		obj.global_position = get_cursor_position()
-		interacted_this_frame = true
-		DEV_OUTPUT.push_message(DEBUG_place_item_type+" created")
-		return
+	#if DEBUG_mode_place_item and OS.is_debug_build():
+		#if not DEBUG_place_item_type:
+			#DEV_OUTPUT.current.push_message("no item type set"); return
+		#var scn : PackedScene = ResourceLoader.load("res://scenes/scn/"+DEBUG_place_item_type+".scn",&"",ResourceLoader.CACHE_MODE_IGNORE)
+		#if not scn: return
+		#var obj : RoomItemInstance = scn.instantiate()
+		#obj.item_id = RoomItem.item_ids.find(DEBUG_place_item_type)
+		#obj.pass_args(DEBUG_place_item_args)
+		#Global.shooterscene.room3d.add_child(obj)
+		#Global.shooterscene.room3d.objects.append(obj)
+		#obj.global_position = get_cursor_position()
+		#interacted_this_frame = true
+		#DEV_OUTPUT.push_message(DEBUG_place_item_type+" created")
+		#return
 	
 	var closest : Node3D
 	for body : Node3D in area.get_overlapping_areas() + area.get_overlapping_bodies():
@@ -163,6 +163,10 @@ func e_interaction()->void:
 			closest.get_parent().toggle_door()
 			interacted_this_frame = true
 			return
+		elif closest is InventoryItem3DInstance:
+			Global.playeritemsinventory.add_item(closest.get_inventoryitem_data())
+			closest.queue_free()
+			Global.circuitboard.refresh_display()
 		elif closest is RoomItemInstance:
 			if closest.is_interactable:
 				closest.interact()

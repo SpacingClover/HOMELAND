@@ -30,7 +30,7 @@ func load_room_interior(room:Room,make_current:bool=false)->RoomInterior3D:
 			root.add_child(room3d)
 		
 		##handle adjacient rooms
-		if not Global.is_level_editor_mode_enabled:
+		if not (Global.is_level_editor_mode_enabled and not Global.in_game):
 			for roomindex : int in room.get_room_connections(Global.current_region):
 				load_room_interior(Global.current_region.rooms[roomindex])
 			clean_room_buffer()
@@ -92,6 +92,7 @@ func clean_room_buffer()->void:
 	for bufferroom : RoomInterior3D in room_buffer_root.get_children():
 		if can_unload_room(bufferroom.roomdata):
 			bufferroom.unload_room()
+			DEV_OUTPUT.push_message("unloaded room")
 
 func reset()->void:
 	if room3d and is_instance_valid(room3d):

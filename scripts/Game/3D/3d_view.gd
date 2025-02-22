@@ -164,8 +164,13 @@ func Lclick()->void:
 			else:
 				var selecteditemid : int = Global.titlescreen.editorgui.pickroomitem.get_selected_id()
 				var selecteditemname : String = RoomItem.get_item_name_by_id(selecteditemid)
-				var path : String = "res://scenes/scn/"+selecteditemname+".scn"
+				var scnpath : String = "res://scenes/scn/"
+				var path : String = scnpath+selecteditemname+".scn"
 				if selecteditemid == -1: return
+				if not DirAccess.open(scnpath).file_exists(selecteditemname+".scn"):
+					DEV_OUTPUT.push_message(path)
+					DEV_OUTPUT.push_message("missing scn file for: "+selecteditemname)
+					return
 				var scn : PackedScene = ResourceLoader.load(path)
 				if not scn: return
 				var obj : RoomItemInstance = scn.instantiate()
@@ -174,8 +179,10 @@ func Lclick()->void:
 				Global.shooterscene.room3d.objects.append(obj)
 				obj.global_position = get_click_pos()
 				Global.titlescreen.editorgui.placeitemmode = false
-				Global.titlescreen.editorgui.save_room_interior_items()
+				if obj is InventoryItem3DInstance:
+					obj.inventoryitemid = rid_allocate_id()
 				return
+				Global.titlescreen.editorgui.save_room_interior_items()
 		elif not Global.titlescreen.editorgui.selected_item and body is RoomItemInstance:
 			Global.titlescreen.editorgui.selected_item = body
 		elif (Global.titlescreen.editorgui.selected_item or Global.titlescreen.editorgui.selected_npc) and Global.titlescreen.editorgui.moving_item_inside_room:

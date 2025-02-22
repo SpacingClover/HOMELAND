@@ -237,14 +237,14 @@ func handle_lock_icon()->void:
 	
 	if corresponding_locked: ##if connected to locked door
 		var color : Color
-		color = KeyInstance.get_key_color(adj_box.get_lock(-direction))
+		color = Global.get_key_color(adj_box.get_lock(-direction))
 		if direction == City.BOTTOM:
 			color.a = 0.5
 		lock_icon.modulate = color
 		lock_icon.show()
 	elif lock_id != Box.NO_LOCK: ##if connected isnt locked, but this one is
 		var color : Color
-		color = KeyInstance.get_key_color(lock_id)
+		color = Global.get_key_color(lock_id)
 		if direction == City.BOTTOM:
 			color.a = 0.5
 		lock_icon.modulate = color

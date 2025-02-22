@@ -10,7 +10,7 @@
 [ext_resource type="Texture2D" uid="uid://cec8ciklin8ok" path="res://visuals/spritesheets/ui/subtitle.png" id="8_hsgpq"]
 [ext_resource type="Script" path="res://ui/pausescreen.gd" id="9_myjrj"]
 [ext_resource type="Texture2D" uid="uid://clam76w2ghcwa" path="res://visuals/spritesheets/animations/spinny_outline.png" id="10_ibory"]
-[ext_resource type="PackedScene" uid="uid://tw37dldaisdv" path="res://scenes/tscn/circuitboard.tscn" id="10_o6hli"]
+[ext_resource type="PackedScene" uid="uid://tw37dldaisdv" path="res://scenes/tscn/itemsview.tscn" id="10_o6hli"]
 [ext_resource type="Script" path="res://scripts/ui_scripts/lists.gd" id="11_syu00"]
 [ext_resource type="Theme" uid="uid://3ijvhmp2ffkw" path="res://visuals/themes/new_theme.tres" id="12_k1pjk"]
 [ext_resource type="FontFile" uid="uid://dwyueijbfacs3" path="res://visuals/fonts/PixeloidSans.ttf" id="13_3wi7r"]
@@ -201,7 +201,7 @@ layout_mode = 2
 omniscroll = true
 clicking2d = true
 
-[node name="circuitboard" parent="HBoxContainer/VBoxContainer/GameView2" instance=ExtResource("10_o6hli")]
+[node name="itemsview" parent="HBoxContainer/VBoxContainer/GameView2" instance=ExtResource("10_o6hli")]
 visible = false
 
 [node name="lists" type="ScrollContainer" parent="HBoxContainer/VBoxContainer/GameView2"]

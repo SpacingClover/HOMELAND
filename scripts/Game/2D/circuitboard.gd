@@ -46,13 +46,6 @@ func _ready()->void:
 			point_mesh_instance.modulate = WIRECOLOR
 			add_child(point_mesh_instance)
 			pointmeshes.append(point_mesh_instance)
-			
-			if randi_range(0,100) == 50:
-				var spriteinst : Sprite2D = Sprite2D.new()
-				spriteinst.texture = load("res://visuals/spritesheets/circuits/shieldchip.png")
-				spriteinst.scale /= 2
-				spriteinst.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
-				point_mesh_instance.add_child(spriteinst)
 	
 	#connect points in envelope shape
 	for point1 : CircuitPointData in points:
