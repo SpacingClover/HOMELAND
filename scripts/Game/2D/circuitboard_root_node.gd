@@ -7,6 +7,7 @@ static var current : WiringView
 var board : CircuitBoard
 
 var inventoryview : bool = false
+var selecteditem : InventoryItem2DInstance
 
 func _init()->void:
 	Global.circuitboard = self
@@ -24,39 +25,61 @@ func _init()->void:
 
 
 func _input(event:InputEvent)->void:
+	
 	if event.is_action_pressed(&"scroll_up"):
 		camera.zoom *= 1.1
 		if camera.zoom.x > 2.1: camera.zoom = Vector2(2.1,2.1)
+		
 	if event.is_action_pressed(&"scroll_down"):
 		camera.zoom *= 0.9
 		if camera.zoom.x < 0.78: camera.zoom = Vector2(0.78,0.78)
+		
 	if event.is_action_pressed(&"click"):
 		raycast.global_position = get_mouse_position()
 		raycast.force_raycast_update()
-		if raycast.is_colliding():
-			var inventoryitem2d : InventoryItem2DInstance = raycast.get_collider()
-			var inventoryitem : InventoryItem = inventoryitem2d.get_data()
-			Global.playeritemsinventory.remove_item_by_inventory_item_idx(inventoryitem.inventoryitemid)
-			inventoryitem2d.queue_free()
-			#refresh_display()
+		if selecteditem:
+			selecteditem = null
+		elif raycast.is_colliding():
+			if not selecteditem:
+				selecteditem = raycast.get_collider()
 			
-			var selecteditemid : int = 11
-			var selecteditemname : String = RoomItem.get_item_name_by_id(selecteditemid)
-			var scnpath : String = "res://scenes/scn/"
-			var path : String = scnpath+selecteditemname+".scn"
-			if selecteditemid == -1: return
-			if not DirAccess.open(scnpath).file_exists(selecteditemname+".scn"):
-				DEV_OUTPUT.push_message(path)
-				DEV_OUTPUT.push_message("missing scn file for: "+selecteditemname)
-				return
-			var scn : PackedScene = ResourceLoader.load(path)
-			if not scn: return
-			var obj : RoomItemInstance = scn.instantiate()
-			obj.item_id = selecteditemid
-			Global.shooterscene.room3d.add_child(obj)
-			Global.shooterscene.room3d.objects.append(obj)
-			obj.global_position = Global.player.global_position
-			#obj.pass_args(inventoryitem.)
+	if event.is_action_pressed(&"rclick"):
+		if not selecteditem:
+			raycast.global_position = get_mouse_position()
+			raycast.force_raycast_update()
+			if raycast.is_colliding():
+				var inventoryitem2d : InventoryItem2DInstance = raycast.get_collider()
+				var inventoryitem : InventoryItem = inventoryitem2d.get_data()
+				Global.playeritemsinventory.remove_item_by_inventory_item_idx(inventoryitem.inventoryitemid)
+				inventoryitem2d.queue_free()
+				
+				var selecteditemid : int = inventoryitem.item_id
+				var selecteditemname : String = RoomItem.get_item_name_by_id(selecteditemid)
+				var scnpath : String = "res://scenes/scn/"
+				var path : String = scnpath+selecteditemname+".scn"
+				if selecteditemid == -1: return
+				if not DirAccess.open(scnpath).file_exists(selecteditemname+".scn"):
+					DEV_OUTPUT.push_message(path)
+					DEV_OUTPUT.push_message("missing scn file for: "+selecteditemname)
+					return
+				var scn : PackedScene = ResourceLoader.load(path)
+				if not scn: return
+				var obj : RoomItemInstance = scn.instantiate()
+				obj.item_id = selecteditemid
+				Global.shooterscene.room3d.add_child(obj)
+				Global.shooterscene.room3d.objects.append(obj)
+				obj.global_position = Global.player.global_position
+				obj.pass_args([inventoryitem.inventoryitemid])
+				#selecteditem = null
+	
+	if event is InputEventMouseMotion:
+		if selecteditem:
+			var pos : Vector2 = get_mouse_position().snapped(Vector2(150,150)).clamp(Vector2i.ZERO,Global.playeritemsinventory.gridsize*150)
+			for i : Node2D in %inventory.get_children():
+				if i is InventoryItem2DInstance:
+					if pos == i.position:
+						return
+			selecteditem.position = pos
 
 func load_board()->void:
 	clear_board()
@@ -92,14 +115,21 @@ func load_inventory()->void:
 		col.scale *= 6.465
 		item2d.add_child(col)
 		%inventory.add_child(item2d)
-		DEV_OUTPUT.push_message(r"item - id: "+str(inventoryitem.inventoryitemid))
-		item2d.position.x = i * 150
+		item2d.position = inventoryitem.position * 150
+		DEV_OUTPUT.push_message(str(inventoryitem.position * 150))
 		i += 1
+	var back : MeshInstance2D = MeshInstance2D.new()
+	back.mesh = QuadMesh.new()
+	back.scale = Vector2(Global.playeritemsinventory.gridsize*150) + Vector2(150,150)
+	back.z_index = -1
+	back.position = Vector2(Global.playeritemsinventory.gridsize)*75
+	%inventory.add_child(back)
 
 func unload_inventory()->void:
 	save_inventory()
-	for child : InventoryItem2DInstance in %inventory.get_children():
+	for child : Node2D in %inventory.get_children():
 		child.queue_free()
+	selecteditem = null
 
 func toggle_display()->void:
 	inventoryview = not inventoryview
@@ -116,6 +146,7 @@ func refresh_display()->void:
 
 func save_inventory()->void:
 	Global.playeritemsinventory.inventoryitems.clear()
-	for child : InventoryItem2DInstance in %inventory.get_children():
-		Global.playeritemsinventory.add_item(InventoryItem.new(child.inventoryitemid,child.position))
-		DEV_OUTPUT.push_message(r"save - item: "+str(child.inventoryitemid))
+	for child : Node2D in %inventory.get_children():
+		if child is InventoryItem2DInstance:
+			Global.playeritemsinventory.add_item(child.get_data())
+			DEV_OUTPUT.push_message(r"save - item: "+str(child.inventoryitemid))

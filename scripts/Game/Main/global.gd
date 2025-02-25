@@ -213,8 +213,8 @@ func debug_reset()->void:
 	if inv:
 		for child : Node in inv.get_children():
 			child.queue_free()
-	if Global.player:
-		Global.player.DEBUG_inventory.clear()
+	#if Global.player:
+		#Global.player.DEBUG_inventory.clear()
 
 func launch_level_editor()->void:
 	is_level_editor_mode_enabled = true
