@@ -118,16 +118,36 @@ func load_inventory()->void:
 		item2d.position = inventoryitem.position * 150
 		DEV_OUTPUT.push_message(str(inventoryitem.position * 150))
 		i += 1
+	
 	var back : MeshInstance2D = MeshInstance2D.new()
 	back.mesh = QuadMesh.new()
 	back.scale = Vector2(Global.playeritemsinventory.gridsize*150) + Vector2(150,150)
 	back.z_index = -1
 	back.position = Vector2(Global.playeritemsinventory.gridsize)*75
+	back.modulate = Color.PURPLE
 	%inventory.add_child(back)
+	
+	var offset : Vector2i = Vector2i(-3*150,0)
+	for inventoryitem : InventoryItem in Global.playerweaponsinventory.inventoryitems:
+		var item2d : InventoryItem2DInstance = InventoryItem2DInstance.new(inventoryitem)
+		var sprite : Sprite2D = Sprite2D.new()
+		sprite.texture = preload("res://visuals/spritesheets/misc/icon.svg")
+		item2d.add_child(sprite)
+		item2d.position += Vector2(offset)
+		%inventory2.add_child(item2d)
+	
+	back = MeshInstance2D.new()
+	back.mesh = QuadMesh.new()
+	back.scale = Vector2(Global.playerweaponsinventory.gridsize*150) + Vector2(150,150)
+	back.z_index = -1
+	back.position = (Vector2(Global.playerweaponsinventory.gridsize)*75) + Vector2(offset)
+	%inventory2.add_child(back)
 
 func unload_inventory()->void:
 	save_inventory()
 	for child : Node2D in %inventory.get_children():
+		child.queue_free()
+	for child : Node2D in %inventory2.get_children():
 		child.queue_free()
 	selecteditem = null
 
@@ -145,6 +165,7 @@ func refresh_display()->void:
 		load_board()
 
 func save_inventory()->void:
+	if not Global.playeritemsinventory: return
 	Global.playeritemsinventory.inventoryitems.clear()
 	for child : Node2D in %inventory.get_children():
 		if child is InventoryItem2DInstance:

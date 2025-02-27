@@ -1,23 +1,20 @@
 class_name ItemsInventory extends Resource
 
 @export var inventoryitems : Array[InventoryItem]
-@export var gridsize : Vector2i = Vector2i(5,3)
+@export var gridsize : Vector2i
 
-#func _init()->void:
-	#gridsize = Vector2i(10,7)
+func _init(size:Vector2i=Vector2i.ZERO)->void:
+	gridsize = size
 
 func add_item(item:InventoryItem)->void:
 	inventoryitems.append(item)
-	pass
 
 func remove_item(item:InventoryItem)->void:
 	var idx : int = inventoryitems.find(item)
 	if idx != -1: inventoryitems.remove_at(idx)
-	else: DEV_OUTPUT.push_message("didnt remove")
 
 func remove_item_by_inventory_item_idx(idx:int)->void:
 	for inventoryitem : InventoryItem in inventoryitems:
 		if inventoryitem.inventoryitemid == idx:
 			inventoryitems.remove_at(inventoryitems.find(inventoryitem))
 			return
-	DEV_OUTPUT.push_message("didnt remove")

@@ -17,6 +17,9 @@ text = "circuitboard WIP"
 [node name="inventory" type="Node2D" parent="."]
 unique_name_in_owner = true
 
+[node name="inventory2" type="Node2D" parent="."]
+unique_name_in_owner = true
+
 [node name="RayCast2D" type="RayCast2D" parent="."]
 target_position = Vector2(0, 0)
 hit_from_inside = true

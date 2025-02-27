@@ -28,6 +28,7 @@ var current_region : City
 var current_room : Room
 
 var playeritemsinventory : ItemsInventory
+var playerweaponsinventory : ItemsInventory
 
 var local_mouse_pos : Vector2
 
@@ -38,7 +39,7 @@ var DEV_MODE : bool = false
 var is_level_editor_mode_enabled : bool = false
 
 signal loading_finished
-signal hide_menu ## menu is titlescreen
+signal hide_menu # menu is titlescreen
 signal open_menu
 signal pause_game
 signal resume_game
