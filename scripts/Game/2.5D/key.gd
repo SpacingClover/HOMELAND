@@ -1,4 +1,4 @@
-class_name KeyInstance extends GrabbableItemInstance
+class_name KeyInstance extends InventoryItem3DInstance
 
 @export var key_type : int
 

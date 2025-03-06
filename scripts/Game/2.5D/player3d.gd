@@ -43,11 +43,11 @@ var interacted_this_frame : bool = false
 var camera_shaking : bool = false
 var center_camera_in_room : bool = false
 
-var DEBUG_selected_object : RoomItemInstance
-var DEBUG_place_item_type : String
-var DEBUG_mode_place_item : bool = false
-var DEBUG_place_item_args : Array
-var DEBUG_inventory : Array[RoomItem]
+#var DEBUG_selected_object : RoomItemInstance
+#var DEBUG_place_item_type : String
+#var DEBUG_mode_place_item : bool = false
+#var DEBUG_place_item_args : Array
+#var DEBUG_inventory : Array[RoomItem]
 
 func _init()->void:
 	Global.player = self
@@ -87,30 +87,30 @@ func _input(event:InputEvent)->void:
 	elif event.is_action_pressed(&"space"):
 		jump()
 	
-	if DEBUG_selected_object and is_instance_valid(DEBUG_selected_object):
-		if event.is_action_pressed(&"arrow_keys_all"):
-			if not Input.is_action_pressed(&"shift"):
-				var vec : Vector2 = Input.get_vector(&"ui_left",&"ui_right",&"ui_up",&"ui_down")
-				DEBUG_selected_object.apply_central_impulse(Vector3(vec.x,0,vec.y)*0.5)
-			else:
-				if Input.is_action_just_pressed(&"ui_left"):
-					DEBUG_selected_object.apply_torque_impulse(Vector3(0,0.5,0))
-				elif Input.is_action_just_pressed(&"ui_right"):
-					DEBUG_selected_object.apply_torque_impulse(Vector3(0,-0.5,0))
-				elif Input.is_action_just_pressed(&"ui_up"):
-					DEBUG_selected_object.apply_torque_impulse(Vector3(0,0,0.5))
-				elif Input.is_action_just_pressed(&"ui_down"):
-					DEBUG_selected_object.apply_torque_impulse(Vector3(0,0,-0.5))
+	#if DEBUG_selected_object and is_instance_valid(DEBUG_selected_object):
+		#if event.is_action_pressed(&"arrow_keys_all"):
+			#if not Input.is_action_pressed(&"shift"):
+				#var vec : Vector2 = Input.get_vector(&"ui_left",&"ui_right",&"ui_up",&"ui_down")
+				#DEBUG_selected_object.apply_central_impulse(Vector3(vec.x,0,vec.y)*0.5)
+			#else:
+				#if Input.is_action_just_pressed(&"ui_left"):
+					#DEBUG_selected_object.apply_torque_impulse(Vector3(0,0.5,0))
+				#elif Input.is_action_just_pressed(&"ui_right"):
+					#DEBUG_selected_object.apply_torque_impulse(Vector3(0,-0.5,0))
+				#elif Input.is_action_just_pressed(&"ui_up"):
+					#DEBUG_selected_object.apply_torque_impulse(Vector3(0,0,0.5))
+				#elif Input.is_action_just_pressed(&"ui_down"):
+					#DEBUG_selected_object.apply_torque_impulse(Vector3(0,0,-0.5))
 					
 					
-		elif event.is_action_pressed(&"ui_text_delete"):
-			Global.shooterscene.room3d.objects.remove_at(Global.shooterscene.room3d.objects.find(DEBUG_selected_object))
-			DEBUG_selected_object.queue_free(); DEBUG_selected_object = null; DEV_OUTPUT.push_message("item removed")
+		#elif event.is_action_pressed(&"ui_text_delete"):
+			#Global.shooterscene.room3d.objects.remove_at(Global.shooterscene.room3d.objects.find(DEBUG_selected_object))
+			#DEBUG_selected_object.queue_free(); DEBUG_selected_object = null; DEV_OUTPUT.push_message("item removed")
 
 func left_click()->void:
 	var collider : Node3D = get_clicked_object()
-	if collider is RoomItemInstance:
-		DEBUG_selected_object = collider
+	#if collider is RoomItemInstance:
+		#DEBUG_selected_object = collider
 	report_click_position.emit(get_cursor_position())
 
 func mouse_motion()->void:
@@ -135,30 +135,17 @@ func mouse_motion()->void:
 			pass
 
 func e_interaction()->void:
-	#if DEBUG_mode_place_item and OS.is_debug_build():
-		#if not DEBUG_place_item_type:
-			#DEV_OUTPUT.current.push_message("no item type set"); return
-		#var scn : PackedScene = ResourceLoader.load("res://scenes/scn/"+DEBUG_place_item_type+".scn",&"",ResourceLoader.CACHE_MODE_IGNORE)
-		#if not scn: return
-		#var obj : RoomItemInstance = scn.instantiate()
-		#obj.item_id = RoomItem.item_ids.find(DEBUG_place_item_type)
-		#obj.pass_args(DEBUG_place_item_args)
-		#Global.shooterscene.room3d.add_child(obj)
-		#Global.shooterscene.room3d.objects.append(obj)
-		#obj.global_position = get_cursor_position()
-		#interacted_this_frame = true
-		#DEV_OUTPUT.push_message(DEBUG_place_item_type+" created")
-		#return
 	
 	var closest : Node3D
+	
 	for body : Node3D in area.get_overlapping_areas() + area.get_overlapping_bodies():
 		if body is Player3D: continue
 		if not closest:
 			closest = body; continue
 		elif global_position.distance_to(body.global_position) < global_position.distance_to(closest.global_position):
 			closest = body
+			
 	if closest:
-	
 		if closest.get_parent() is Door3D:
 			closest.get_parent().toggle_door()
 			interacted_this_frame = true
@@ -298,12 +285,12 @@ func get_coords_for_3D_view()->Vector3:
 func entered_room()->void:
 	inside_room = Global.current_room
 
-func DEBUG_add_item_to_inventory(item:GrabbableItemInstance)->void:
-	var icon : Sprite2D = item.get_as_sprite()
-	icon.position.x = 100 * DEBUG_inventory.size()
-	icon.scale *= 10
-	Global.titlescreen.get_node("25d_topbar_root").add_child(icon)
-	DEBUG_inventory.append(item.get_data())
+#func DEBUG_add_item_to_inventory(item:GrabbableItemInstance)->void:
+	#var icon : Sprite2D = item.get_as_sprite()
+	#icon.position.x = 100 * DEBUG_inventory.size()
+	#icon.scale *= 10
+	#Global.titlescreen.get_node("25d_topbar_root").add_child(icon)
+	#DEBUG_inventory.append(item.get_data())
 
 func get_faction()->int:
 	return faction

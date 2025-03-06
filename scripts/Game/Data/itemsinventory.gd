@@ -1,13 +1,10 @@
 class_name ItemsInventory extends Resource
 
 @export var inventoryitems : Array[InventoryItem]
-<<<<<<< HEAD
 @export var gridsize : Vector2i
 
 func _init(size:Vector2i=Vector2i.ZERO)->void:
 	gridsize = size
-=======
->>>>>>> parent of 7eded40 (improved inventory interface, added differing item types as inventory items)
 
 func add_item(item:InventoryItem)->void:
 	inventoryitems.append(item)

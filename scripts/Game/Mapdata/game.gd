@@ -13,10 +13,7 @@ class_name GameData extends Resource
 @export_category("Player Data")
 @export var health : int = 50
 @export var position : Vector3 = Vector3.ZERO
-@export var inventory : ItemsInventory = ItemsInventory.new(Vector2i(5,3)):
-	set(x):
-		inventory = x
-@export var weaponsinventory : ItemsInventory = ItemsInventory.new(Vector2i(1,1))
+@export var inventory : ItemsInventory = ItemsInventory.new(Vector2i(5,3))
 
 @export_category("UI Data")
 @export_subgroup("World_3D")
@@ -67,9 +64,7 @@ func open()->void:
 		current_room = startroom
 	
 	if not inventory: inventory = ItemsInventory.new(Vector2i(5,3))
-	if not weaponsinventory: weaponsinventory = ItemsInventory.new(Vector2i(1,1))
 	Global.playeritemsinventory = inventory
-	Global.playerweaponsinventory = weaponsinventory
 	
 	Global.set_new_city(cities.find(current_city),current_city.rooms.find(current_room),true)
 	first_starting = false
@@ -100,6 +95,5 @@ func remove_city(city:City)->void:
 
 func save()->GameData:
 	inventory = Global.playeritemsinventory
-	weaponsinventory = Global.playerweaponsinventory
 	#city_connections_register.update_indecies()
 	return self

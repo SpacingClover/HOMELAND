@@ -301,6 +301,7 @@ func open_files_menu()->void:
 func open_game(dir:String,save_path:bool=true)->void:
 	selectfilescontainer.hide()
 	var path : String = r"user://editor_levels/"+dir+r".res"
+	DEV_OUTPUT.push_message(path)
 	if save_path: loaded_path = path
 	Global.current_game = ResourceLoader.load(path,&"",ResourceLoader.CACHE_MODE_IGNORE)
 	Global.current_region = Global.current_game.cities[0]

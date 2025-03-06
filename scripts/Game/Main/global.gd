@@ -28,7 +28,6 @@ var current_region : City
 var current_room : Room
 
 var playeritemsinventory : ItemsInventory
-var playerweaponsinventory : ItemsInventory
 
 var local_mouse_pos : Vector2
 
@@ -98,7 +97,7 @@ func _input(event:InputEvent)->void:
 			DEV_OUTPUT.push_message("room incremented")
 
 func enter_game_transition(game:GameData)->void:
-	debug_reset()
+	#debug_reset()
 	TransitionHandler.begin_transition(TransitionHandler.ANIM_SQUIGGLES_VERT)
 	await get_tree().create_timer(1).timeout
 	MusicManager.stop_song()
@@ -202,20 +201,21 @@ func end_play_session()->void:
 	world3D.reset_3d_view()
 	shooterscene.reset()
 	circuitboard.save_inventory()
+	playeritemsinventory = null
 	circuitboard.clear_board()
 	circuitboard.unload_inventory()
 	mapview.reset_map()
-	debug_reset()
+	#debug_reset()
 	in_game = false
 	player.process_mode = Node.PROCESS_MODE_DISABLED
 
-func debug_reset()->void:
-	var inv : Node2D = titlescreen.get_node_or_null(^"25d_topbar_root")
-	if inv:
-		for child : Node in inv.get_children():
-			child.queue_free()
-	if Global.player:
-		Global.player.DEBUG_inventory.clear()
+#func debug_reset()->void:
+	#var inv : Node2D = titlescreen.get_node_or_null(^"25d_topbar_root")
+	#if inv:
+		#for child : Node in inv.get_children():
+			#child.queue_free()
+	#if Global.player:
+		#Global.player.DEBUG_inventory.clear()
 
 func launch_level_editor()->void:
 	is_level_editor_mode_enabled = true
