@@ -2,6 +2,7 @@ class_name WiringView extends Node2D
 static var current : WiringView
 
 @onready var camera : Camera2D = %camera
+@onready var inventory : Node2D = %inventory
 @onready var raycast : RayCast2D = $RayCast2D
 
 var board : CircuitBoard
@@ -13,20 +14,12 @@ func _init()->void:
 	Global.circuitboard = self
 	WiringView.current = self
 
-
-
-
-
 ##TODO: add circuitboards
 ##TODO: implement circuitry
 
 
-
-
-
-
 func _input(event:InputEvent)->void:
-
+	
 	if event.is_action_pressed(&"scroll_up"):
 		camera.zoom *= 1.1
 		if camera.zoom.x > 2.1: camera.zoom = Vector2(2.1,2.1)
@@ -65,12 +58,16 @@ func _input(event:InputEvent)->void:
 					return
 				var scn : PackedScene = ResourceLoader.load(path)
 				if not scn: return
-				var obj : RoomItemInstance = scn.instantiate()
+				var obj : InventoryItem3DInstance = scn.instantiate()
 				obj.item_id = selecteditemid
 				Global.shooterscene.room3d.add_child(obj)
 				Global.shooterscene.room3d.objects.append(obj)
 				obj.global_position = Global.player.global_position
-				obj.pass_args([inventoryitem.inventoryitemid])
+				#obj.pass_args([inventoryitem.inventoryitemid])
+				obj.inventoryitemid = inventoryitem.inventoryitemid
+				var arr : Array = [inventoryitem.inventoryitemid]
+				arr.append_array(inventoryitem.extra_data)
+				obj.pass_args(arr)
 				
 				Global.playeritemsinventory.remove_item_by_inventory_item_idx(inventoryitem.inventoryitemid)
 				inventoryitem2d.queue_free()
@@ -81,7 +78,7 @@ func _input(event:InputEvent)->void:
 	if event is InputEventMouseMotion:
 		if selecteditem:
 			var pos : Vector2 = get_mouse_position().snapped(Vector2(150,150)).clamp(Vector2i.ZERO,Global.playeritemsinventory.gridsize*150)
-			for i : Node2D in %inventory.get_children():
+			for i : Node2D in inventory.get_children():
 				if i is InventoryItem2DInstance:
 					if pos == i.position:
 						return
@@ -110,6 +107,8 @@ func load_inventory()->void:
 	if board:
 		clear_board()
 	
+	unload_inventory()
+	
 	var i : int = 0
 	for inventoryitem : InventoryItem in Global.playeritemsinventory.inventoryitems:
 		var item2d : InventoryItem2DInstance = InventoryItem2DInstance.new(inventoryitem)
@@ -120,23 +119,32 @@ func load_inventory()->void:
 		col.shape = RectangleShape2D.new()
 		col.scale *= 6.465
 		item2d.add_child(col)
-		%inventory.add_child(item2d)
+		inventory.add_child(item2d)
 		DEV_OUTPUT.push_message(r"item - id: "+str(inventoryitem.inventoryitemid))
-		item2d.position = inventoryitem.position
+		item2d.position = inventoryitem.position * 150
 		i += 1
+	
+	#var back : Panel = Panel.new()
+	#back.scale = Vector2(Global.playeritemsinventory.gridsize * 150) + Vector2(150,150)
+	#back.z_index = -1
+	#back.position = Vector2(Global.playeritemsinventory.gridsize) * 75
+	##back.add_theme_stylebox_override(&"",preload("res://visuals/themes/inventorybox.tres"))
+	#back.set("theme_override_styles/panel",preload("res://visuals/themes/inventorybox.tres"))
+	#inventory.add_child(back)
 	
 	var back : MeshInstance2D = MeshInstance2D.new()
 	back.mesh = QuadMesh.new()
-	back.scale = Vector2(Global.playeritemsinventory.gridsize*150) + Vector2(150,150)
+	back.scale = Vector2(Global.playeritemsinventory.gridsize * 150) + Vector2(150,150)
 	back.z_index = -1
-	back.position = Vector2(Global.playeritemsinventory.gridsize)*75
-	back.modulate = Color.ORANGE
-	%inventory.add_child(back)
+	back.position = Vector2(Global.playeritemsinventory.gridsize) * 75
+	back.modulate = Color.DARK_ORANGE
+	inventory.add_child(back)
 
 func unload_inventory()->void:
 	#save_inventory()
-	for child : Node2D in %inventory.get_children():
+	for child : Node in inventory.get_children():
 		#if child is InventoryItem2DInstance:
+		DEV_OUTPUT.push_message("free")
 		child.queue_free()
 	selecteditem = null
 
@@ -156,7 +164,7 @@ func refresh_display()->void:
 func save_inventory()->void:
 	if not Global.playeritemsinventory: return
 	Global.playeritemsinventory.inventoryitems.clear()
-	for child : Node2D in %inventory.get_children():
+	for child : Node2D in inventory.get_children():
 		if child is InventoryItem2DInstance:
-			Global.playeritemsinventory.add_item(InventoryItem.new(child.inventoryitemid,child.item_id,child.position))
+			Global.playeritemsinventory.add_item(InventoryItem.new(child.inventoryitemid,child.item_id,child.position/150))
 			DEV_OUTPUT.push_message(r"save - item: "+str(child.inventoryitemid))

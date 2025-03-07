@@ -15,7 +15,8 @@ static var item_ids : PackedStringArray = PackedStringArray([
 	"",        #8 window
 	"corpse",  #9
 	"key",     #10
-	"circuitboard" #11
+	"circuitboard", #11
+	"pistol"
 ])
 
 enum{
