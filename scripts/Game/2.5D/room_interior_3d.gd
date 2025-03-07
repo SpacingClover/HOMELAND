@@ -167,8 +167,10 @@ func create_face(box:Box,dir:Vector3i,angle:Vector3,type:int)->void:
 	
 	if type == Box.WALL:
 		body.add_child(mesh)
-	if dir != City.UP:
+	
+	if dir != City.UP or Global.is_level_editor_mode_enabled:
 		body.add_child(col)
+	
 	body.position = box.coords - roomdata.coords
 	body.rotation_degrees = angle
 	body.collision_layer = 106
