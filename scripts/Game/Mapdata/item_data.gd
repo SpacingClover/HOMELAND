@@ -16,7 +16,7 @@ static var item_ids : PackedStringArray = PackedStringArray([
 	"corpse",  #9
 	"key",     #10
 	"circuitboard", #11
-	"pistol"
+	"pistol"    #12
 ])
 
 enum{
@@ -60,3 +60,8 @@ static func get_item_name_by_id(id:int)->String:
 	else:
 		name = ""
 	return name
+
+static func itemid_is_weapon(id:int)->bool:
+	match id:
+		12: return true
+	return false

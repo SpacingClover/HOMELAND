@@ -8,6 +8,7 @@ static var current : WiringView
 var board : CircuitBoard
 
 var inventoryview : bool = false
+var viewingplayerinventory : bool = true
 var selecteditem : InventoryItem2DInstance
 
 func _init()->void:
@@ -24,21 +25,11 @@ func _input(event:InputEvent)->void:
 		camera.zoom *= 1.1
 		if camera.zoom.x > 2.1: camera.zoom = Vector2(2.1,2.1)
 
-	if event.is_action_pressed(&"scroll_down"):
+	elif event.is_action_pressed(&"scroll_down"):
 		camera.zoom *= 0.9
 		if camera.zoom.x < 0.78: camera.zoom = Vector2(0.78,0.78)
 
-	if event.is_action_pressed(&"click"):
-		raycast.global_position = get_mouse_position()
-		raycast.force_raycast_update()
-		if selecteditem:
-			selecteditem = null
-			save_inventory()
-		elif raycast.is_colliding():
-			if not selecteditem:
-				selecteditem = raycast.get_collider()
-
-	if event.is_action_pressed(&"rclick"):
+	elif event.is_action_pressed(&"click") and Input.is_action_pressed(&"shift"):
 		if not selecteditem:
 			raycast.global_position = get_mouse_position()
 			raycast.force_raycast_update()
@@ -75,7 +66,40 @@ func _input(event:InputEvent)->void:
 				await get_tree().process_frame
 				save_inventory()
 
-	if event is InputEventMouseMotion:
+	elif event.is_action_pressed(&"click"):
+		raycast.global_position = get_mouse_position()
+		raycast.force_raycast_update()
+		if selecteditem:
+			selecteditem = null
+			save_inventory()
+		elif raycast.is_colliding():
+			if not selecteditem:
+				selecteditem = raycast.get_collider()
+	
+	elif event.is_action_pressed(&"rclick"):
+		DEV_OUTPUT.push_message("Rclicked")
+		if not selecteditem:
+			raycast.global_position = get_mouse_position()
+			raycast.force_raycast_update()
+			if raycast.is_colliding():
+				var inventoryitem2d : InventoryItem2DInstance = raycast.get_collider()
+				var selecteditemid : int = inventoryitem2d.item_id
+				var inventoryitem : InventoryItem = inventoryitem2d.get_data()
+				var dselecteditemid : int = inventoryitem.item_id
+				
+				if Global.player.selectedweapon: if Global.player.selectedweapon.inventoryitemid == inventoryitem2d.inventoryitemid:
+					Global.player.selectedweapon = null
+					inventoryitem2d.modulate = Color.WHITE
+					return
+				
+				if RoomItem.itemid_is_weapon(dselecteditemid) and viewingplayerinventory:
+					Global.player.selectedweapon = inventoryitem2d
+					inventoryitem2d.modulate = Color.RED
+					DEV_OUTPUT.push_message("weapon selected")
+				
+				DEV_OUTPUT.push_message("click accepted")
+
+	elif event is InputEventMouseMotion:
 		if selecteditem:
 			var pos : Vector2 = get_mouse_position().snapped(Vector2(150,150)).clamp(Vector2i.ZERO,Global.playeritemsinventory.gridsize*150)
 			for i : Node2D in inventory.get_children():

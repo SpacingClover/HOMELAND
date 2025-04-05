@@ -18,11 +18,15 @@ static var textureatlas : CompressedTexture2D = preload("res://visuals/spriteshe
 
 @onready var camera : Camera3D = $cam
 @onready var area   : Area3D   = $area
+@onready var bodysprite : Sprite3D = $body
+@onready var legssprite : Sprite3D = $legs
 
 signal report_click_position(pos:Vector3)
 
 var legstween : Tween
 var camerashaketween : Tween
+
+var selectedweapon : InventoryItem2DInstance
 
 var walking_direction : Vector3
 var camerashakepos : Vector2
@@ -63,6 +67,8 @@ func _process(delta:float)->void:
 	if walking and Global.world3D:
 		Global.world3D.set_marker_position(self)
 	place_camera()
+	if selectedweapon:
+		bodysprite.frame = 8
 
 func _input(event:InputEvent)->void:
 	if Global.shooterscene: if Global.shooterscene.viewport.has_control():
@@ -78,6 +84,8 @@ func _input(event:InputEvent)->void:
 		
 	elif event.is_action(&"motion"):
 		player_motion()
+		if selectedweapon:
+			bodysprite.frame = 8
 	
 	elif event.is_action_pressed(&"shift"):
 		running = true
